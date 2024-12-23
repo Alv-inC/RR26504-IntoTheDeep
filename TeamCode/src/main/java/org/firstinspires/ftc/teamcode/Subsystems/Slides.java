@@ -72,7 +72,7 @@ public class Slides{
     public void resetSlides() {
         slideL.setMode(RunMode.STOP_AND_RESET_ENCODER);
         slideR.setMode(RunMode.STOP_AND_RESET_ENCODER);
-        moveSlides(0);
+        moveSlides(SLIDES_RETRACTED);
     }
 
     public class slidesExtend implements Action {
@@ -80,7 +80,10 @@ public class Slides{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             moveSlides(SLIDES_EXTENDED);
+            telemetryPacket.put("Slide Left Position", slideL.getCurrentPosition());
+            telemetryPacket.put("Slide Right Position", slideR.getCurrentPosition());
             return false;
+            //return slideL.isBusy() && slideR.isBusy();
         }
     }
     public Action slidesExtend(){
@@ -91,7 +94,10 @@ public class Slides{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             moveSlides(SLIDES_RETRACTED);
+            telemetryPacket.put("Slide Left Position", slideL.getCurrentPosition());
+            telemetryPacket.put("Slide Right Position", slideR.getCurrentPosition());
             return false;
+            //return slideL.isBusy() && slideR.isBusy();
         }
     }
     public Action slidesRetract(){
