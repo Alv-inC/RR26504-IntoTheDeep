@@ -26,7 +26,7 @@ public class testAuto extends LinearOpMode {
         if(isStopRequested()) return;
 
         TrajectoryActionBuilder trajectory = drive.actionBuilder(startPose)
-                .afterTime(0, lift.setTargetPositionAction(550))
+                .afterTime(0, lift.setTargetPositionAction(500))
                 .endTrajectory();
 
 

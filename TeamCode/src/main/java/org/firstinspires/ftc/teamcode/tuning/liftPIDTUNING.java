@@ -18,12 +18,12 @@ public class liftPIDTUNING extends OpMode {
 
     @Override
     public void loop() {
-        if(gamepad1.dpad_up){
-            lift.setTargetPosition(500);
-        }
-        else if(gamepad1.dpad_down){
-            lift.setTargetPosition(0);
-        }
+//        if(gamepad1.dpad_up){
+//            lift.setTargetPosition(100);
+//        }
+//        else if(gamepad1.dpad_down){
+//            lift.setTargetPosition(0);
+//        }
         lift.update();
     }
 
