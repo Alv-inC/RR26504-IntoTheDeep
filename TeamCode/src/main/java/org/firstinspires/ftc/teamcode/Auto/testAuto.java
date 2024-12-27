@@ -9,12 +9,14 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
+import org.firstinspires.ftc.teamcode.Subsystems.ChainActions;
 import org.firstinspires.ftc.teamcode.Subsystems.IDK;
 import org.firstinspires.ftc.teamcode.Subsystems.Lift;
 
 @Autonomous(name = "Testing Auto")
 public class testAuto extends LinearOpMode {
     private Lift lift = new Lift(hardwareMap);
+    private ChainActions chain = new ChainActions(hardwareMap);
 
     @Override
     public void runOpMode() throws InterruptedException {
