@@ -12,6 +12,7 @@ import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import dev.frozenmilk.dairy.cachinghardware.CachingDcMotorEx;
@@ -34,6 +35,7 @@ public class Lift {
             lift2 = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "lift2"), 0.005);
             lift1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             lift1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            lift1.setDirection(DcMotorSimple.Direction.REVERSE);
             telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         }
 
