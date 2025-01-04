@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.Lift;
 @Autonomous(name = "Testing Auto")
 public class testAuto extends LinearOpMode {
     private Lift lift = new Lift(hardwareMap, telemetry);
-    private ChainActions chain = new ChainActions(hardwareMap);
+    private ChainActions chain = new ChainActions(hardwareMap, telemetry);
 
     @Override
     public void runOpMode() throws InterruptedException {
