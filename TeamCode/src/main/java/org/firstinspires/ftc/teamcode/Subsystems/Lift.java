@@ -15,6 +15,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 import dev.frozenmilk.dairy.cachinghardware.CachingDcMotorEx;
 
 @Config
@@ -26,9 +28,10 @@ public class Lift {
 
         public static double p = 0, i = 0, d = 0;
         public static double targetPosition;
+        private Telemetry telemetry;
 
 
-        public Lift(HardwareMap hardwareMap){
+        public Lift(HardwareMap hardwareMap, Telemetry telemetry){
             liftPID = new PIDController(p, i, d);
             liftPID.setPID(p,i,d);
             lift1 = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "lift1"), 0.005);
@@ -36,7 +39,7 @@ public class Lift {
             lift1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             lift1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             lift1.setDirection(DcMotorSimple.Direction.REVERSE);
-            telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+            this.telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         }
 
         public void update(){
@@ -47,12 +50,8 @@ public class Lift {
 
             //to tune the PID
             // Send telemetry data
-            telemetry.addData("P", p);
-            telemetry.addData("I", i);
-            telemetry.addData("D", d);
             telemetry.addData("Target Position", targetPosition);
             telemetry.addData("Current Position", pos);
-            telemetry.addData("Power", power);
             telemetry.update();
 
             lift1.setPower(power);

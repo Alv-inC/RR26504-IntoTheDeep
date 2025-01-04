@@ -13,7 +13,7 @@ public class liftPIDTUNING extends OpMode {
 
     @Override
     public void init() {
-        lift = new Lift(hardwareMap);
+        lift = new Lift(hardwareMap, telemetry);
     }
 
     @Override

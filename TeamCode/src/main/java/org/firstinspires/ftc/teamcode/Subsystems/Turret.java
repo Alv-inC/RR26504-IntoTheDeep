@@ -15,6 +15,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 import dev.frozenmilk.dairy.cachinghardware.CachingDcMotorEx;
 
 @Config
@@ -23,18 +25,21 @@ public class Turret {
     CachingDcMotorEx turretMotor;
 
 
-    public static double p = 0, i = 0, d = 0;
-    public static double targetPosition;
 
 
-    public Turret(HardwareMap hardwareMap){
+    public static double p = 0.001, i = 0, d = 0;
+    public static double targetPosition = 0;
+    private Telemetry telemetry;
+
+
+    public Turret(HardwareMap hardwareMap, Telemetry telemetry){
         turretPID = new PIDController(p, i, d);
         turretPID.setPID(p,i,d);
         turretMotor = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "lift1"), 0.005);
         turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         turretMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        this.telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
     }
 
     public void update(){
@@ -43,14 +48,10 @@ public class Turret {
 
         double power = turretPID.calculate(pos, targetPosition);
 
-        //to tune the PID
+        //to tune the PID, test P-0.00#, D-0.0001
         // Send telemetry data
-        telemetry.addData("P", p);
-        telemetry.addData("I", i);
-        telemetry.addData("D", d);
-        telemetry.addData("Target Position", targetPosition);
         telemetry.addData("Current Position", pos);
-        telemetry.addData("Power", power);
+        telemetry.addData("Target Position", targetPosition);
         telemetry.update();
 
         turretMotor.setPower(power);
