@@ -27,7 +27,7 @@ public class Turret {
 
 
 
-    public static double p = 0.001, i = 0, d = 0;
+    public static double p = 0, i = 0, d = 0;
     public static double targetPosition = 0;
     private Telemetry telemetry;
 
