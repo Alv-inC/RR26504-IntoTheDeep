@@ -27,15 +27,18 @@ public class Turret {
 
 
 
-    public static double p = 0, i = 0, d = 0;
+    public static double p = 0.0098, i = 0, d = 0.0001;
     public static double targetPosition = 0;
+    //0 is the start position
+    //-1250 is the 180 position
+    //negative is going clockwise direction
     private Telemetry telemetry;
 
 
     public Turret(HardwareMap hardwareMap, Telemetry telemetry){
         turretPID = new PIDController(p, i, d);
         turretPID.setPID(p,i,d);
-        turretMotor = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "lift1"), 0.005);
+        turretMotor = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "turret"), 0.005);
         turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         turretMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -46,7 +49,7 @@ public class Turret {
         turretPID.setPID(p, i, d);
         int pos = turretMotor.getCurrentPosition();
 
-        double power = turretPID.calculate(pos, targetPosition);
+        double power = (turretPID.calculate(pos, targetPosition) / 2);
 
         //to tune the PID, test P-0.00#, D-0.0001
         // Send telemetry data

@@ -20,7 +20,7 @@ public class Slides{
     private DcMotorEx slideL;
     private DcMotorEx slideR;
     public static int SLIDE_VELOCITY = 5000;
-    public static int SLIDES_EXTENDED = 0;
+    public static int SLIDES_EXTENDED = 600;
     public static int SLIDES_RETRACTED = 0;
     public static int SLIDES_MAX = 0;
 
@@ -36,8 +36,8 @@ public class Slides{
             hub.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
 
-        slideL = hardwareMap.get(DcMotorEx.class, "slideLeft");
-        slideR = hardwareMap.get(DcMotorEx.class, "slideRight");
+        slideL = hardwareMap.get(DcMotorEx.class, "lift1");
+        slideR = hardwareMap.get(DcMotorEx.class, "lift2");
 
 // Config slides
         slideL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
@@ -55,7 +55,6 @@ public class Slides{
 
         //may need to change this
         slideL.setDirection(DcMotorSimple.Direction.REVERSE);
-        slideR.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     public void moveSlides(int targetPosition){
