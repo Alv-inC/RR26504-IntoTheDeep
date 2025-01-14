@@ -35,7 +35,7 @@ public class Turret {
     private Telemetry telemetry;
 
 
-    public Turret(HardwareMap hardwareMap, Telemetry telemetry){
+    public Turret(HardwareMap hardwareMap){
         turretPID = new PIDController(p, i, d);
         turretPID.setPID(p,i,d);
         turretMotor = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "turret"), 0.005);

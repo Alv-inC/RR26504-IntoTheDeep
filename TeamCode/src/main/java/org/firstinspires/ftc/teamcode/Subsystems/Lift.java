@@ -39,7 +39,7 @@ public class Lift {
 
 
     //the max is 2700
-        public Lift(HardwareMap hardwareMap, Telemetry telemetry){
+        public Lift(HardwareMap hardwareMap){
             liftPID = new PIDController(p, i, d);
             liftPID.setPID(p,i,d);
             lift1 = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "lift1"), 0.005);

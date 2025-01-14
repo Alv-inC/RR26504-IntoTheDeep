@@ -12,9 +12,11 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class ChainActions {
     //initialize stuffs
     private Lift lift;
+    private Turret turret;
 
-    public ChainActions(HardwareMap hardwareMap, Telemetry telemetry){
-        lift = new Lift(hardwareMap, telemetry);
+    public ChainActions(HardwareMap hardwareMap){
+        lift = new Lift(hardwareMap);
+        turret = new Turret(hardwareMap);
     }
 
     public Action liftUpScore(double position){
