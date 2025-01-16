@@ -45,7 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Config
-@TeleOp
+@TeleOp(name="theteleop")
 public class OpenCVTEST extends LinearOpMode {
     public static boolean clawgo, rotationgo, extensiongo, secondarygo = false;
     public static double width, height = 0;
@@ -217,36 +217,40 @@ public class OpenCVTEST extends LinearOpMode {
                 .addProcessor(processor)
                 .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
                 .build();
-        //initialize servos
+        //initializeservos
         Servo rotation = hardwareMap.get(Servo.class, "rotation");
         rotation.setPosition(0.47);
         Servo lext = hardwareMap.get(Servo.class, "lext");
         Servo rext = hardwareMap.get(Servo.class, "rext");
         lext.setDirection(Servo.Direction.REVERSE);
+        waitWithoutStoppingRobot(300);
         lext.setPosition(0.15);
         rext.setPosition(0.15);
         Servo lsecondary = hardwareMap.get(Servo.class, "lsecondary");
         Servo rsecondary = hardwareMap.get(Servo.class, "rsecondary");
         lsecondary.setDirection(Servo.Direction.REVERSE);
+        waitWithoutStoppingRobot(300);
         lsecondary.setPosition(0.34);
         rsecondary.setPosition(0.34);
+        waitWithoutStoppingRobot(300);
         Servo primary = hardwareMap.get(Servo.class, "primary");
-        Servo outtake = hardwareMap.get(Servo.class, "outtake");
-        outtake.setPosition(0.67);
-        Servo transfer = hardwareMap.get(Servo.class, "transfer");
-        transfer.setPosition(0);
+        primary.setPosition(0.33);
+//        Servo outtake = hardwareMap.get(Servo.class, "outtake");
+//        outtake.setPosition(0.67);
+//        Servo transfer = hardwareMap.get(Servo.class, "transfer");
+//        transfer.setPosition(0);
         Servo claw = hardwareMap.get(Servo.class, "claw");
 
 
-        //initialize motors
-        DcMotor fr, fl, br, bl, turret;
-        turret = hardwareMap.get(DcMotor.class, "turret");
-        fr = hardwareMap.get(DcMotor.class, "fr");
-        fl = hardwareMap.get(DcMotor.class, "fl");
-        br = hardwareMap.get(DcMotor.class, "br");
-        bl = hardwareMap.get(DcMotor.class, "bl");
-        fr.setDirection(DcMotorSimple.Direction.REVERSE);
-        br.setDirection(DcMotorSimple.Direction.REVERSE);
+//        //initialize motors
+//        DcMotor fr, fl, br, bl, turret;
+//        turret = hardwareMap.get(DcMotor.class, "turret");
+//        fr = hardwareMap.get(DcMotor.class, "fr");
+//        fl = hardwareMap.get(DcMotor.class, "fl");
+//        br = hardwareMap.get(DcMotor.class, "br");
+//        bl = hardwareMap.get(DcMotor.class, "bl");
+//        fr.setDirection(DcMotorSimple.Direction.REVERSE);
+//        br.setDirection(DcMotorSimple.Direction.REVERSE);
 
         waitForStart();
 
@@ -283,6 +287,7 @@ public class OpenCVTEST extends LinearOpMode {
                 waitWithoutStoppingRobot(300);
                 lsecondary.setPosition(0.34);
                 rsecondary.setPosition(0.34);
+                waitWithoutStoppingRobot(300);
                 primary.setPosition(0.7);
             }
             //execute intake
@@ -308,25 +313,26 @@ public class OpenCVTEST extends LinearOpMode {
                 rsecondary.setPosition(0.34);
                 waitWithoutStoppingRobot(300);
                 primary.setPosition(0.33);
-                waitWithoutStoppingRobot(30);
+                waitWithoutStoppingRobot(300);
                 lext.setPosition(0);
                 rext.setPosition(0);
             }
             //transfer
             if(gamepad1.dpad_left){
                 claw.setPosition(0.72);
+                waitWithoutStoppingRobot(300);
                 lext.setPosition(0.07);
                 lext.setPosition(0.07);
             }
             //score basket
             if(gamepad1.dpad_up){
-                transfer.setPosition(0.7);
-                waitWithoutStoppingRobot(300);
-                outtake.setPosition(0.72);
-                waitWithoutStoppingRobot(300);
-                outtake.setPosition(0.67);
-                waitWithoutStoppingRobot(300);
-                transfer.setPosition(0);
+//                transfer.setPosition(0.7);
+//                waitWithoutStoppingRobot(300);
+//                outtake.setPosition(0.72);
+//                waitWithoutStoppingRobot(300);
+//                //outtake.setPosition(0.67);
+//                waitWithoutStoppingRobot(300);
+//                //transfer.setPosition(0);
             }
             //score specimen
             if(gamepad1.dpad_down){
@@ -334,8 +340,8 @@ public class OpenCVTEST extends LinearOpMode {
 
 
             }
-            if(gamepad1.right_trigger>0) turret.setPower(gamepad1.right_trigger);
-            else if(gamepad1.left_trigger>0) turret.setPower(-gamepad1.left_trigger);
+//            if(gamepad1.right_trigger>0) turret.setPower(gamepad1.right_trigger);
+//            else if(gamepad1.left_trigger>0) turret.setPower(-gamepad1.left_trigger);
 
             //drive train
             double frontLeftPower;
@@ -362,14 +368,14 @@ public class OpenCVTEST extends LinearOpMode {
             }
             List<Double> list = Arrays.asList(1.0, Math.abs(frontLeftPower), Math.abs(frontRightPower), Math.abs(backLeftPower), Math.abs(backRightPower));
             double maximum = Collections.max(list); // returns the greatest number
-            fl.setPower((frontLeftPower / maximum) * 0.7); // set the max power to 0.6
-            if(fl.isBusy()){fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);} else {fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);}
-            fr.setPower((frontRightPower / maximum) * 0.7);
-            if(fr.isBusy()){fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);} else {fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);}
-            bl.setPower((backLeftPower / maximum) * 0.7);
-            if(bl.isBusy()){bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);} else {bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);}
-            br.setPower((backRightPower / maximum) * 0.7);
-            if(br.isBusy()){br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);} else {br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);}
+//            fl.setPower((frontLeftPower / maximum) * 0.7); // set the max power to 0.6
+//            if(fl.isBusy()){fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);} else {fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);}
+//            fr.setPower((frontRightPower / maximum) * 0.7);
+//            if(fr.isBusy()){fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);} else {fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);}
+//            bl.setPower((backLeftPower / maximum) * 0.7);
+//            if(bl.isBusy()){bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);} else {bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);}
+//            br.setPower((backRightPower / maximum) * 0.7);
+//            if(br.isBusy()){br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);} else {br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);}
 
 
             telemetry.addData("Servo adjustment: ", processor.getServoAdjustment());
