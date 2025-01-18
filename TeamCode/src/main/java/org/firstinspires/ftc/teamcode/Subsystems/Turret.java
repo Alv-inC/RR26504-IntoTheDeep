@@ -27,7 +27,7 @@ public class Turret {
 
 
 
-    public static double p = 0.0098, i = 0, d = 0.0001;
+    public static double p = 0.0008, i = 0, d = 0.0001;
     public static double targetPosition = 0;
     //0 is the start position
     //-1250 is the 180 position
@@ -42,7 +42,7 @@ public class Turret {
         turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         turretMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        this.telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+//        this.telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
     }
 
     public void update(){
@@ -53,15 +53,16 @@ public class Turret {
 
         //to tune the PID, test P-0.00#, D-0.0001
         // Send telemetry data
-        telemetry.addData("Current Position", pos);
-        telemetry.addData("Target Position", targetPosition);
-        telemetry.update();
+//        telemetry.addData("Current Position", pos);
+//        telemetry.addData("Target Position", targetPosition);
+//        telemetry.update();
 
         turretMotor.setPower(power);
 
     }
 
     public void setTargetPosition(double targetPosition){
+
         this.targetPosition = targetPosition;
     }
 

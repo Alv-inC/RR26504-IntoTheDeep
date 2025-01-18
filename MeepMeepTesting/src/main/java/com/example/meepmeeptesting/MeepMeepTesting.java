@@ -17,7 +17,7 @@ public class MeepMeepTesting {
 
         myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(8.75, -62.75, Math.toRadians(90)))
                 .waitSeconds(0.2)
-                .setTangent(135)
+               // .setTangent(135)
                 .strafeTo(new Vector2d(8.75, -35.5))
 
 

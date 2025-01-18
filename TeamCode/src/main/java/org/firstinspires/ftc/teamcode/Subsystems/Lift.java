@@ -47,7 +47,7 @@ public class Lift {
             lift1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             lift1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             lift1.setDirection(DcMotorSimple.Direction.REVERSE);
-            this.telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+            //this.telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         }
 
         public void update(){
@@ -62,9 +62,9 @@ public class Lift {
 
             //to tune the PID
             // Send telemetry data
-            telemetry.addData("Target Position", targetPosition);
-            telemetry.addData("Current Position", pos);
-            telemetry.update();
+//            telemetry.addData("Target Position", targetPosition);
+//            telemetry.addData("Current Position", pos);
+//            telemetry.update();
             power = Math.max(-0.8, Math.min(0.8, power));
             lift1.setPower(power + feedforward);
             lift2.setPower(power + feedforward);
