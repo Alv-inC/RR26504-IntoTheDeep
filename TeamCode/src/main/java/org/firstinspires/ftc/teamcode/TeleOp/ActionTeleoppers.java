@@ -26,6 +26,7 @@ import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibra
 import org.firstinspires.ftc.teamcode.Subsystems.InitializeTeleOp;
 import org.firstinspires.ftc.teamcode.Subsystems.Lift;
 import org.firstinspires.ftc.teamcode.Subsystems.Turret;
+import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
@@ -88,6 +89,7 @@ public class ActionTeleoppers extends ActionOpMode {
     public static int exPositionState = 0;
     public static boolean clawtoggle = false;
     public static int clawPositionState = 0;
+    private CameraStreamProcessor processor;
 
 
     public static class CameraStreamProcessor implements VisionProcessor, CameraStreamSource {
@@ -232,6 +234,14 @@ public class ActionTeleoppers extends ActionOpMode {
         lift = new Lift(hardwareMap);
         turret = new Turret(hardwareMap);
         //initialize motors
+        //init cameras
+        processor = new CameraStreamProcessor();
+
+        new VisionPortal.Builder()
+                .addProcessor(processor)
+                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
+                .build();
+
         fr = hardwareMap.get(DcMotor.class, "rightFront");
         fl = hardwareMap.get(DcMotor.class, "leftFront");
         br = hardwareMap.get(DcMotor.class, "rightBack");
@@ -336,7 +346,6 @@ public class ActionTeleoppers extends ActionOpMode {
         }
 
         if(gamepad1.b){
-            CameraStreamProcessor processor = new CameraStreamProcessor();
             runningActions.add(new SequentialAction(
                     //turret.setTargetPosition(turret.getCurrentPosition()+ processor.calculateTurretAdjustment);
                     new InstantAction(() -> externTele.lext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
@@ -407,7 +416,6 @@ public class ActionTeleoppers extends ActionOpMode {
 
         //
         if(gamepad1.a){
-            CameraStreamProcessor processor = new CameraStreamProcessor();
             runningActions.add(new SequentialAction(
                     new InstantAction(() -> externTele.lext.setPosition(0.15)),
                     new InstantAction(() -> externTele.rext.setPosition(0.15)),
