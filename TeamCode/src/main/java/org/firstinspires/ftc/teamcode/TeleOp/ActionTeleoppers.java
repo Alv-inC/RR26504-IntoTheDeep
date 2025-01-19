@@ -245,10 +245,10 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
         //init cameras
         processor = new CameraStreamProcessor();
 
-        new VisionPortal.Builder()
-                .addProcessor(processor)
-                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
-                .build();
+//        new VisionPortal.Builder()
+//                .addProcessor(processor)
+//                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
+//                .build();
 
         fr = hardwareMap.get(DcMotor.class, "rightFront");
         fl = hardwareMap.get(DcMotor.class, "leftFront");
@@ -258,9 +258,9 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
         br.setDirection(DcMotorSimple.Direction.REVERSE);
         externTele = new InitializeTeleOp();
        externTele.initialize(hardwareMap, telemetry);
-       externTele.lext.setPosition(0);
-       externTele.rext.setPosition(0);
-        externTele.claw.setPosition(0.8);
+       externTele.lext.setPosition(0.05);
+       externTele.rext.setPosition(0.05);
+        externTele.claw.setPosition(0.75);
         turret.setTargetPosition(0);
        lift.setTargetPosition(30);
 
@@ -310,7 +310,13 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
                     //turret.setTargetPosition(turretPosition);
                     new InstantAction(() -> externTele.lsecondary.setPosition(0.16)),
                     new InstantAction(() -> externTele.rsecondary.setPosition(0.16)),
-                    new InstantAction(() -> externTele.primary.setPosition(0.3))
+                    new InstantAction(() -> externTele.primary.setPosition(0.3)),
+                    new InstantAction(() -> turret.setTargetPosition(0)),
+                    new InstantAction(() -> lift.setTargetPosition(30))
+
+                    //       externTele.claw.setPosition(0.75);
+                    //        turret.setTargetPosition(0);
+                    //       lift.setTargetPosition(30);
             ));
         }
 
@@ -319,11 +325,14 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
         if(gamepad1.y){
             runningActions.add(new SequentialAction(
 
-                    new InstantAction(() -> externTele.lsecondary.setPosition(0.18)),
-                    new InstantAction(() -> externTele.rsecondary.setPosition(0.18)),
+                    new InstantAction(() -> externTele.lsecondary.setPosition(0.16)),
+                    new InstantAction(() -> externTele.rsecondary.setPosition(0.16)),
                     new InstantAction(() -> externTele.primary.setPosition(0.3)),
                       new InstantAction(() -> externTele.rotation.setPosition(0.47)),
-                    new InstantAction(() -> lift.setTargetPosition(30))
+                    new InstantAction(() -> lift.setTargetPosition(744)),
+                    new SleepAction(1),
+                    new InstantAction(() -> externTele.claw.setPosition(0.75))
+
 
             ));
         }
@@ -340,13 +349,16 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
             // Change the lift position state based on the current state
             if (liftPositionState == 0) {
                 liftPositionState = 1;  // Move to position 1
-                lift.setTargetPosition(876);
+                lift.setTargetPosition(835);
             } else if (liftPositionState == 2) {
                 liftPositionState = 0;  // Move to position 2
                 lift.setTargetPosition(1700);
             } else if (liftPositionState == 1) {
                 liftPositionState = 0;  // Move back to position 0
-                lift.setTargetPosition(30);
+                if(lift.getPosition() > 1000){
+                    lift.setTargetPosition(30);
+                }
+
             }
         } else if (!gamepad1.dpad_up && toggle) {  // Button is released and toggle is true
             toggle = false;  // Reset toggle to allow future button presses
@@ -356,10 +368,9 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
             runningActions.add(new SequentialAction(
                     //turret.setTargetPosition(turret.getCurrentPosition()+ processor.calculateTurretAdjustment);
                     //new InstantAction(() -> externTele.rotation.setPosition(externTele.rotation.getPosition()+processor.getServoAdjustment())),
-                    new InstantAction(() -> externTele.lsecondary.setPosition(0.14)),
-                    new InstantAction(() -> externTele.rsecondary.setPosition(0.14)),
-                    new SleepAction(1),
-                    new InstantAction(() -> externTele.claw.setPosition(0.6))
+                    new InstantAction(() -> externTele.lsecondary.setPosition(0.125)),
+                    new InstantAction(() -> externTele.rsecondary.setPosition(0.125))
+
 
 //                    new InstantAction(() -> externTele.rsecondary.setPosition(0.7)),
 //                    //wait
@@ -371,46 +382,46 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
         }
 
         ////score specimen
-        if(gamepad1.dpad_down){
+
             if (gamepad1.dpad_down && !clawRotationToggle) {  // Check if the button is pressed and toggle is false
                 clawRotationToggle = true;  // Prevent spamming, now the toggle is true
                 // Change the claw rotation state based on the current state
                 if (clawRotationState == 0) {
                     clawRotationState = 1;
-                    externTele.rotation.setPosition(0.25); // Set rotation to 90 degrees (adjust value as needed)
+                    externTele.rotation.setPosition(0.18); // Set rotation to 90 degrees (adjust value as needed)
                 } else if (clawRotationState == 1) {
                     clawRotationState = 0;
-                    externTele.rotation.setPosition(0); // Set rotation to 0 degrees (adjust value as needed)
+                    externTele.rotation.setPosition(0.47); // Set rotation to 0 degrees (adjust value as needed)
                 }
             } else if (!gamepad1.dpad_down && clawRotationToggle) {  // Button is released and toggle is true
                 clawRotationToggle = false;  // Reset toggle to allow future button presses
             }
-        }
+
         if (gamepad1.dpad_right && !dPadtoggle) {  // Check if the button is pressed and toggle is false
             dPadtoggle = true;  // Prevents spamming, now the toggle is true
             // Change the lift position state based on the current state
             if (exPositionState == 0){
                 exPositionState = 1;
-                externTele.lext.setPosition(0); // Move to position when toggle is on
-                externTele.rext.setPosition(0); // Move to position when toggle is on
+                externTele.lext.setPosition(0.05); // Move to position when toggle is on
+                externTele.rext.setPosition(0.05); // Move to position when toggle is on
             } else if (exPositionState == 1) {
                 exPositionState = 0;
-                externTele.lext.setPosition(0.3); // Move to position when toggle is off
-                externTele.rext.setPosition(0.3); // Move to position when toggle is off
+                externTele.lext.setPosition(0.25); // Move to position when toggle is off
+                externTele.rext.setPosition(0.25); // Move to position when toggle is off
                 if(lift.getPosition() > 500 && !actionsRunning) {
                     actionsRunning = true;
 
                     runningActions.add(new SequentialAction(
                             new SleepAction(1.5),
-                            new InstantAction(() -> externTele.claw.setPosition(0.82)),
+                            new InstantAction(() -> externTele.claw.setPosition(0.75)),
                             new InstantAction(() -> externTele.rotation.setPosition(0.47)),
                             new SleepAction(1),
                             //turret.setTargetPosition(turretPosition);
                             new InstantAction(() -> externTele.lsecondary.setPosition(0.16)),
                             new InstantAction(() -> externTele.rsecondary.setPosition(0.16)),
                             new InstantAction(() -> externTele.primary.setPosition(0.3)),
-                            new InstantAction(() -> externTele.lext.setPosition(0)),
-                            new InstantAction(() -> externTele.rext.setPosition(0))
+                            new InstantAction(() -> externTele.lext.setPosition(0.05)),
+                            new InstantAction(() -> externTele.rext.setPosition(0.05))
                     ));
                     exPositionState = 1;
 
@@ -419,7 +430,7 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
         } else if (!gamepad1.dpad_right && dPadtoggle) {  // Button is released and toggle is true
             dPadtoggle = false;  // Reset toggle to allow future button presses
         }
-        if (gamepad1.right_bumper && !IDKtoggle) {  // Check if the button is pressed and toggle is false
+        if (gamepad1.dpad_left && !IDKtoggle) {  // Check if the button is pressed and toggle is false
             IDKtoggle = true;  // Prevents spamming, now the toggle is true
             // Change the lift position state based on the current state
             if (IDKPositionState == 0){
@@ -430,28 +441,33 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
                 lift.setTargetPosition(30);
 
             }
-        } else if (!gamepad1.right_bumper && IDKtoggle) {  // Button is released and toggle is true
+        } else if (!gamepad1.dpad_left && IDKtoggle) {  // Button is released and toggle is true
             IDKtoggle = false;  // Reset toggle to allow future button presses
         }
 
 
-        if(gamepad1.left_trigger == 1){
-            externTele.claw.setPosition(0.8);  // Open the claw
+        if(gamepad1.left_bumper){
+            externTele.claw.setPosition(0.75);  // Open the claw
         }
 
 
+if(gamepad1.left_trigger == 1){
+    lift.setTargetPosition(lift.getPosition() + 10);
+}
 
 
-        if(gamepad1.right_trigger == 1){
-            externTele.claw.setPosition(0.5);  // Close the claw
-            if(externTele.lsecondary.getPosition() > 0.165 && externTele.rsecondary.getPosition() > 0.165){
+        if(gamepad1.right_bumper){
+            externTele.claw.setPosition(0.65);  // Close the claw
+            if(externTele.lsecondary.getPosition() > 0.15 && externTele.rsecondary.getPosition() > 0.15){
                 runningActions.add(new SequentialAction(
-                new InstantAction(() -> lift.setTargetPosition(876)),
-                new InstantAction(() -> externTele.lsecondary.setPosition(0.16)),
-                        new InstantAction(() -> externTele.rsecondary.setPosition(0.16)),
+                new InstantAction(() -> lift.setTargetPosition(1150)),
+                new InstantAction(() -> externTele.lsecondary.setPosition(0.17)),
+                        new InstantAction(() -> externTele.rsecondary.setPosition(0.17)),
                         //wait
-                        new InstantAction(() -> externTele.primary.setPosition(0.02)),
-                        new InstantAction(() -> externTele.rotation.setPosition(0.47))
+                        new InstantAction(() -> externTele.primary.setPosition(0.2)),
+                        new InstantAction(() -> externTele.rotation.setPosition(0.47)),
+                        new InstantAction(() -> externTele.lext.setPosition(0.15)),
+                        new InstantAction(() -> externTele.rext.setPosition(0.15))
                         ));
             }
         }
