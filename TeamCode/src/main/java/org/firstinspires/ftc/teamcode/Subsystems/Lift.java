@@ -78,6 +78,11 @@ public class Lift {
             return Math.abs(lift1.getCurrentPosition() - targetPosition) < 45;
         }
 
+        public double getPosition(){
+
+            return lift1.getCurrentPosition();
+        }
+
 
         public Action setTargetPositionAction(double targetPosition){
             return t -> {

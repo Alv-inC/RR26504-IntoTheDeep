@@ -52,8 +52,11 @@ public class ActionTeleoppers extends ActionOpMode {
     public static boolean clawgo, rotationgo, extensiongo, secondarygo = false;
     public static double width, height = 0;
     public static boolean MASK_TOGGLE = true;
-    public static Scalar RANGE_LOW = new Scalar(170, 100, 0, 0);
-    public static Scalar RANGE_HIGH = new Scalar(255, 255, 230, 255);
+//    public static Scalar RANGE_LOW = new Scalar(170, 100, 0, 0);
+//    public static Scalar RANGE_HIGH = new Scalar(255, 255, 230, 255);
+public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
+    public static Scalar RANGE_HIGH = new Scalar(180, 255, 255, 255); // Maximum HSV values
+
     public static double rotpos = 0.5;
 
 
@@ -74,10 +77,10 @@ public class ActionTeleoppers extends ActionOpMode {
     boolean toggleArm = false;
     boolean toggleClaw = false;
 
-    boolean previousDpadUpState = false; // For tracking previous state of the dpad_up button
-    boolean previousDpadLeftState = false; // For tracking previous state of the dpad_left button
-    boolean previousDpadRightState = false; // For tracking previous state of the dpad_right button
-    boolean previousLeftBumperState = false; // For tracking previous state of left bumper
+//    boolean previousDpadUpState = false; // For tracking previous state of the dpad_up button
+//    boolean previousDpadLeftState = false; // For tracking previous state of the dpad_left button
+//    boolean previousDpadRightState = false; // For tracking previous state of the dpad_right button
+//    boolean previousLeftBumperState = false; // For tracking previous state of left bumper
 
     // Declare the states of each mechanism (lift, arm, claw)
     boolean clawOpen = false;  // State of the claw, true for open, false for closed
@@ -86,10 +89,15 @@ public class ActionTeleoppers extends ActionOpMode {
     // Declare the toggle state and previous state for dpad_right
     boolean toggleState = false;  // Toggle state for the specimen mechanism
     public static boolean dPadtoggle = false;
-    public static int exPositionState = 0;
-    public static boolean clawtoggle = false;
-    public static int clawPositionState = 0;
+    public static int exPositionState;
+    public static boolean clawtoggle;
+    public static int clawPositionState;
     private CameraStreamProcessor processor;
+    private boolean actionsRunning;
+    private boolean IDKtoggle;
+    private int IDKPositionState;
+    private boolean clawRotationToggle;
+    private int clawRotationState;
 
 
     public static class CameraStreamProcessor implements VisionProcessor, CameraStreamSource {
@@ -250,11 +258,13 @@ public class ActionTeleoppers extends ActionOpMode {
         br.setDirection(DcMotorSimple.Direction.REVERSE);
         externTele = new InitializeTeleOp();
        externTele.initialize(hardwareMap, telemetry);
-       turret.setTargetPosition(0);
-       lift.setTargetPosition(0);
+       externTele.lext.setPosition(0);
+       externTele.rext.setPosition(0);
+        externTele.claw.setPosition(0.8);
+        turret.setTargetPosition(0);
+       lift.setTargetPosition(30);
 
         // Re-initialize the variables to reset their values
-        clawOpen = false;  // State of the claw, true for open, false for closed
         liftPositionState = 0; // Lift states: 0 = lowest, 1 = mid, 2 = highest
         armPositionState = 0;  // Arm states: 0 = retracted, 1 = extended
 
@@ -263,6 +273,10 @@ public class ActionTeleoppers extends ActionOpMode {
         exPositionState = 0;
         clawtoggle = false;
         clawPositionState = 0;
+        IDKtoggle = false;
+        IDKPositionState = 0;
+        clawRotationToggle = false;
+        clawRotationState = 0;
 
         // Initialize externTele at the class level
           // Initialize using hardwareMap and telemetry
@@ -296,9 +310,7 @@ public class ActionTeleoppers extends ActionOpMode {
                     //turret.setTargetPosition(turretPosition);
                     new InstantAction(() -> externTele.lsecondary.setPosition(0.16)),
                     new InstantAction(() -> externTele.rsecondary.setPosition(0.16)),
-                    new InstantAction(() -> externTele.primary.setPosition(0.53)),
-                    new InstantAction(() -> externTele.lext.setPosition(0)),
-                    new InstantAction(() -> externTele.rext.setPosition(0))
+                    new InstantAction(() -> externTele.primary.setPosition(0.3))
             ));
         }
 
@@ -307,21 +319,16 @@ public class ActionTeleoppers extends ActionOpMode {
         if(gamepad1.y){
             runningActions.add(new SequentialAction(
 
-                    new InstantAction(() -> externTele.lsecondary.setPosition(0.22)),
-                    new InstantAction(() -> externTele.rsecondary.setPosition(0.22)),
-                    new InstantAction(() -> externTele.primary.setPosition(0.53)),
-                      new InstantAction(() -> externTele.rotation.setPosition(0.47))
+                    new InstantAction(() -> externTele.lsecondary.setPosition(0.18)),
+                    new InstantAction(() -> externTele.rsecondary.setPosition(0.18)),
+                    new InstantAction(() -> externTele.primary.setPosition(0.3)),
+                      new InstantAction(() -> externTele.rotation.setPosition(0.47)),
+                    new InstantAction(() -> lift.setTargetPosition(30))
 
             ));
         }
         //transfer
-        if(gamepad1.dpad_left){
-            runningActions.add(new SequentialAction(
-                    new InstantAction(() -> externTele.claw.setPosition(0.72)),
-                    new InstantAction(() -> externTele.lext.setPosition(0.07)),
-                    new InstantAction(() -> externTele.lext.setPosition(0.07))
-            ));
-        }
+
 
 
         // Declare a variable to track the current lift position state
@@ -333,13 +340,13 @@ public class ActionTeleoppers extends ActionOpMode {
             // Change the lift position state based on the current state
             if (liftPositionState == 0) {
                 liftPositionState = 1;  // Move to position 1
-                lift.setTargetPosition(1000);
-            } else if (liftPositionState == 1) {
-                liftPositionState = 2;  // Move to position 2
-                lift.setTargetPosition(1700);
+                lift.setTargetPosition(876);
             } else if (liftPositionState == 2) {
+                liftPositionState = 0;  // Move to position 2
+                lift.setTargetPosition(1700);
+            } else if (liftPositionState == 1) {
                 liftPositionState = 0;  // Move back to position 0
-                lift.setTargetPosition(0);
+                lift.setTargetPosition(30);
             }
         } else if (!gamepad1.dpad_up && toggle) {  // Button is released and toggle is true
             toggle = false;  // Reset toggle to allow future button presses
@@ -348,13 +355,11 @@ public class ActionTeleoppers extends ActionOpMode {
         if(gamepad1.b){
             runningActions.add(new SequentialAction(
                     //turret.setTargetPosition(turret.getCurrentPosition()+ processor.calculateTurretAdjustment);
-                    new InstantAction(() -> externTele.lext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
-                    new InstantAction(() -> externTele.rext.setPosition(externTele.rext.getPosition()+processor.getExtensionAdjustment())),
-                    new InstantAction(() -> externTele.rotation.setPosition(externTele.rotation.getPosition()+processor.getServoAdjustment())),
+                    //new InstantAction(() -> externTele.rotation.setPosition(externTele.rotation.getPosition()+processor.getServoAdjustment())),
                     new InstantAction(() -> externTele.lsecondary.setPosition(0.14)),
                     new InstantAction(() -> externTele.rsecondary.setPosition(0.14)),
-                    new SleepAction(2.5),
-                    new InstantAction(() -> externTele.claw.setPosition(0.5))
+                    new SleepAction(1),
+                    new InstantAction(() -> externTele.claw.setPosition(0.6))
 
 //                    new InstantAction(() -> externTele.rsecondary.setPosition(0.7)),
 //                    //wait
@@ -367,46 +372,102 @@ public class ActionTeleoppers extends ActionOpMode {
 
         ////score specimen
         if(gamepad1.dpad_down){
-            runningActions.add(new SequentialAction(
-                    new InstantAction(() -> externTele.lsecondary.setPosition(0.16)),
-                    new InstantAction(() -> externTele.rsecondary.setPosition(0.16)),
-                    //wait
-                    new InstantAction(() -> externTele.primary.setPosition(0.25)),
-                    new InstantAction(() -> externTele.rotation.setPosition(0.47))
-                    //slide raise
-                    //driver move bot forward to attach
-            ));
+            if (gamepad1.dpad_down && !clawRotationToggle) {  // Check if the button is pressed and toggle is false
+                clawRotationToggle = true;  // Prevent spamming, now the toggle is true
+                // Change the claw rotation state based on the current state
+                if (clawRotationState == 0) {
+                    clawRotationState = 1;
+                    externTele.rotation.setPosition(0.25); // Set rotation to 90 degrees (adjust value as needed)
+                } else if (clawRotationState == 1) {
+                    clawRotationState = 0;
+                    externTele.rotation.setPosition(0); // Set rotation to 0 degrees (adjust value as needed)
+                }
+            } else if (!gamepad1.dpad_down && clawRotationToggle) {  // Button is released and toggle is true
+                clawRotationToggle = false;  // Reset toggle to allow future button presses
+            }
         }
         if (gamepad1.dpad_right && !dPadtoggle) {  // Check if the button is pressed and toggle is false
             dPadtoggle = true;  // Prevents spamming, now the toggle is true
             // Change the lift position state based on the current state
-            if (exPositionState == 0) {
+            if (exPositionState == 0){
                 exPositionState = 1;
                 externTele.lext.setPosition(0); // Move to position when toggle is on
                 externTele.rext.setPosition(0); // Move to position when toggle is on
             } else if (exPositionState == 1) {
                 exPositionState = 0;
-                externTele.lext.setPosition(0.25); // Move to position when toggle is off
-                externTele.rext.setPosition(0.25); // Move to position when toggle is off
+                externTele.lext.setPosition(0.3); // Move to position when toggle is off
+                externTele.rext.setPosition(0.3); // Move to position when toggle is off
+                if(lift.getPosition() > 500 && !actionsRunning) {
+                    actionsRunning = true;
+
+                    runningActions.add(new SequentialAction(
+                            new SleepAction(1.5),
+                            new InstantAction(() -> externTele.claw.setPosition(0.82)),
+                            new InstantAction(() -> externTele.rotation.setPosition(0.47)),
+                            new SleepAction(1),
+                            //turret.setTargetPosition(turretPosition);
+                            new InstantAction(() -> externTele.lsecondary.setPosition(0.16)),
+                            new InstantAction(() -> externTele.rsecondary.setPosition(0.16)),
+                            new InstantAction(() -> externTele.primary.setPosition(0.3)),
+                            new InstantAction(() -> externTele.lext.setPosition(0)),
+                            new InstantAction(() -> externTele.rext.setPosition(0))
+                    ));
+                    exPositionState = 1;
+
+                }
             }
         } else if (!gamepad1.dpad_right && dPadtoggle) {  // Button is released and toggle is true
             dPadtoggle = false;  // Reset toggle to allow future button presses
         }
-
-
-        if (gamepad1.left_bumper && !clawtoggle) {  // Check if the button is pressed and toggle is false
-            clawtoggle = true;  // Prevents spamming, now the toggle is true
+        if (gamepad1.right_bumper && !IDKtoggle) {  // Check if the button is pressed and toggle is false
+            IDKtoggle = true;  // Prevents spamming, now the toggle is true
             // Change the lift position state based on the current state
-            if (clawPositionState == 0) {
-                clawPositionState = 1;
-                externTele.claw.setPosition(0.15);  // Close the claw
-            } else if (clawPositionState == 1) {
-                clawPositionState = 0;
-                externTele.claw.setPosition(0.72);  // Open the claw
+            if (IDKPositionState == 0){
+                IDKPositionState = 1;
+               lift.setTargetPosition(1700);
+            } else if (IDKPositionState == 1) {
+                IDKPositionState = 0;
+                lift.setTargetPosition(30);
+
             }
-        } else if (!gamepad1.left_bumper && clawtoggle) {  // Button is released and toggle is true
-            clawtoggle = false;  // Reset toggle to allow future button presses
+        } else if (!gamepad1.right_bumper && IDKtoggle) {  // Button is released and toggle is true
+            IDKtoggle = false;  // Reset toggle to allow future button presses
         }
+
+
+        if(gamepad1.left_trigger == 1){
+            externTele.claw.setPosition(0.8);  // Open the claw
+        }
+
+
+
+
+        if(gamepad1.right_trigger == 1){
+            externTele.claw.setPosition(0.5);  // Close the claw
+            if(externTele.lsecondary.getPosition() > 0.165 && externTele.rsecondary.getPosition() > 0.165){
+                runningActions.add(new SequentialAction(
+                new InstantAction(() -> lift.setTargetPosition(876)),
+                new InstantAction(() -> externTele.lsecondary.setPosition(0.16)),
+                        new InstantAction(() -> externTele.rsecondary.setPosition(0.16)),
+                        //wait
+                        new InstantAction(() -> externTele.primary.setPosition(0.02)),
+                        new InstantAction(() -> externTele.rotation.setPosition(0.47))
+                        ));
+            }
+        }
+//        if (gamepad1.left_bumper && !clawtoggle) {  // Check if the button is pressed and toggle is false
+//            clawtoggle = true;  // Prevents spamming, now the toggle is true
+//            // Change the lift position state based on the current state
+//            if (clawPositionState == 0) {
+//                clawPositionState = 1;
+//                externTele.claw.setPosition(0.18);  // Close the claw
+//            } else if (clawPositionState == 1) {
+//                clawPositionState = 0;
+//                externTele.claw.setPosition(0.6);  // Open the claw
+//            }
+//        } else if (!gamepad1.left_bumper && clawtoggle) {  // Button is released and toggle is true
+//            clawtoggle = false;  // Reset toggle to allow future button presses
+//        }
 
 
 
@@ -417,11 +478,9 @@ public class ActionTeleoppers extends ActionOpMode {
         //
         if(gamepad1.a){
             runningActions.add(new SequentialAction(
-                    new InstantAction(() -> externTele.lext.setPosition(0.15)),
-                    new InstantAction(() -> externTele.rext.setPosition(0.15)),
                     new InstantAction(() -> externTele.lsecondary.setPosition(0.22)),
                     new InstantAction(() -> externTele.rsecondary.setPosition(0.22)),
-                    new InstantAction(() -> externTele.primary.setPosition(0.9))
+                    new InstantAction(() -> externTele.primary.setPosition(0.67))
 
 
                         ));
