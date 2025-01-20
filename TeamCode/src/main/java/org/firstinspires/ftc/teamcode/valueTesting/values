@@ -1,0 +1,26 @@
+COLOR MASKING:
+yellow: 170, 100, 0,0; 255, 255, 230,255
+
+red: 150, 0, 0,0; 255, 5, 230,255
+
+blue: 10, 30, 140, 0; 100, 150, 255, 255
+
+
+SERVOS:
+
+horizontal extension: min 0, max 0.33
+primary: up 0.02 specimen score, straight 0.3, down 0.67
+secondary: inttake 0.15, mid 0.16, 0.22 specimen wall, 0.32 up
+claw: open 0.68, closed 0.6
+transfer: down 0.05, up 0.7
+outtake: closed 0.67, open 0.72
+rotation: mid 0.47
+
+MOTORS:
+turret: 1250 180 degreess
+
+
+MEASUREMENTS:
+Horizontal extension: 303 mm
+camera height (pri down, sec high): 152 mm, 480 px
+camera width (pri down, sec high): 203 mm, 640 px
