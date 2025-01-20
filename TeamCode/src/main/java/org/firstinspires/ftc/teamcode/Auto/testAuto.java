@@ -35,11 +35,14 @@ private InitializeTeleOp externTele;
         lift = new Lift(hardwareMap);
         turret = new Turret(hardwareMap);
         externTele.initialize(hardwareMap, telemetry);
-        externTele.lext.setPosition(0.05);
-        externTele.rext.setPosition(0.05);
-        externTele.claw.setPosition(0.75);
-        turret.setTargetPosition(0);
-        lift.setTargetPosition(30);
+        externTele.claw.setPosition(0.65);
+        lift.setTargetPosition(1150);
+        externTele.lsecondary.setPosition(0.17);
+        externTele.rsecondary.setPosition(0.17);
+        externTele.primary.setPosition(0.2);
+        externTele.rotation.setPosition(0.47);
+        externTele.lext.setPosition(0.15);
+        externTele.rext.setPosition(0.15);
 
 
         waitForStart();
@@ -50,82 +53,74 @@ private InitializeTeleOp externTele;
                 .waitSeconds(3)
                 //.setTangent(135)
                 .strafeTo(new Vector2d(8.75, -38.5))
-//                .afterTime(0.5, new SequentialAction(
-//                        new InstantAction(() -> externTele.claw.setPosition(0.6)),
-//                        new InstantAction(() -> externTele.lsecondary.setPosition(0.16)),
-//                        new InstantAction(() -> externTele.rsecondary.setPosition(0.16)),
-//                //wait
-//                        new InstantAction(() -> externTele.primary.setPosition(0.25)),
-//                        new InstantAction(() -> externTele.rotation.setPosition(0.47)),
+                .afterTime(0.5, new SequentialAction(
+                        new InstantAction(() -> externTele.lsecondary.setPosition(0.16)),
+                        new InstantAction(() -> externTele.rsecondary.setPosition(0.16)),
+                        new InstantAction(() -> externTele.primary.setPosition(0.3)),
+                        new InstantAction(() -> externTele.rotation.setPosition(0.47)),
+                        new InstantAction(() -> lift.setTargetPosition(744)),
+                        new SleepAction(1),
+                        new InstantAction(() -> externTele.claw.setPosition(0.75))
+
+                        ))
+//                .setReversed(true)
 //
 //
 //
-//                        new InstantAction(() -> lift.setTargetPosition(820)),
-//                        new InstantAction(() -> externTele.lext.setPosition(0.3)),
-//                        new InstantAction(() -> externTele.rext.setPosition(0.3)),
-//                        new SleepAction(1),
-//                        new InstantAction(() -> externTele.lext.setPosition(0)),
-//                        new InstantAction(() -> externTele.rext.setPosition(0))
 //
-//                        ))
-                .setReversed(true)
-
-
-
-
-                .splineToConstantHeading(new Vector2d(25, -44), Math.toRadians(0))
-
-
-                .splineToConstantHeading(new Vector2d(33, -34), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(37, -22), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(44, -7), Math.toRadians(270))
-                .splineToConstantHeading(new Vector2d(44, -54), Math.toRadians(270))
-
-                .splineToConstantHeading(new Vector2d(44, -20), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(55, -7), Math.toRadians(270))
-                .splineToConstantHeading(new Vector2d(55, -54), Math.toRadians(270))
-
-                .splineToConstantHeading(new Vector2d(55, -34), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(56, -22), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(63, -7), Math.toRadians(270))
-                .splineToConstantHeading(new Vector2d(63, -54), Math.toRadians(270))
-
-
-                .splineToConstantHeading(new Vector2d(30, -62), Math.toRadians(270))
-                //grab
-                //turn 180
-                .waitSeconds(0.2)
-                .splineToConstantHeading(new Vector2d(8.75, -35.5), Math.toRadians(90))
-                //turn 180;
-                //score
-                .waitSeconds(0.2)
-                //end of first iteration
-
-                .setReversed(true)
-                .splineToConstantHeading(new Vector2d(30, -62), Math.toRadians(270))
-                .waitSeconds(0.2)
-                .setReversed(false)
-                .splineToConstantHeading(new Vector2d(8.75, -35.5), Math.toRadians(90))
-                .waitSeconds(0.2)
-
-                .setReversed(true)
-                .splineToConstantHeading(new Vector2d(30, -62), Math.toRadians(270))
-                .waitSeconds(0.2)
-                .setReversed(false)
-                .splineToConstantHeading(new Vector2d(8.75, -35.5), Math.toRadians(90))
-                .waitSeconds(0.2)
-
-                .setReversed(true)
-                .splineToConstantHeading(new Vector2d(30, -62), Math.toRadians(270))
-                .waitSeconds(0.2)
-                .setReversed(false)
-                .splineToConstantHeading(new Vector2d(8.75, -35.5), Math.toRadians(90))
-                .waitSeconds(0.2)
-
-                .setReversed(true)
-                .splineToConstantHeading(new Vector2d(30, -62), Math.toRadians(270))
-                .waitSeconds(0.2)
-                .setReversed(false)
+//                .splineToConstantHeading(new Vector2d(25, -44), Math.toRadians(0))
+//
+//
+//                .splineToConstantHeading(new Vector2d(33, -34), Math.toRadians(90))
+//                .splineToConstantHeading(new Vector2d(37, -22), Math.toRadians(90))
+//                .splineToConstantHeading(new Vector2d(44, -7), Math.toRadians(270))
+//                .splineToConstantHeading(new Vector2d(44, -54), Math.toRadians(270))
+//
+//                .splineToConstantHeading(new Vector2d(44, -20), Math.toRadians(90))
+//                .splineToConstantHeading(new Vector2d(55, -7), Math.toRadians(270))
+//                .splineToConstantHeading(new Vector2d(55, -54), Math.toRadians(270))
+//
+//                .splineToConstantHeading(new Vector2d(55, -34), Math.toRadians(90))
+//                .splineToConstantHeading(new Vector2d(56, -22), Math.toRadians(90))
+//                .splineToConstantHeading(new Vector2d(63, -7), Math.toRadians(270))
+//                .splineToConstantHeading(new Vector2d(63, -54), Math.toRadians(270))
+//
+//
+//                .splineToConstantHeading(new Vector2d(30, -62), Math.toRadians(270))
+//                //grab
+//                //turn 180
+//                .waitSeconds(0.2)
+//                .splineToConstantHeading(new Vector2d(8.75, -35.5), Math.toRadians(90))
+//                //turn 180;
+//                //score
+//                .waitSeconds(0.2)
+//                //end of first iteration
+//
+//                .setReversed(true)
+//                .splineToConstantHeading(new Vector2d(30, -62), Math.toRadians(270))
+//                .waitSeconds(0.2)
+//                .setReversed(false)
+//                .splineToConstantHeading(new Vector2d(8.75, -35.5), Math.toRadians(90))
+//                .waitSeconds(0.2)
+//
+//                .setReversed(true)
+//                .splineToConstantHeading(new Vector2d(30, -62), Math.toRadians(270))
+//                .waitSeconds(0.2)
+//                .setReversed(false)
+//                .splineToConstantHeading(new Vector2d(8.75, -35.5), Math.toRadians(90))
+//                .waitSeconds(0.2)
+//
+//                .setReversed(true)
+//                .splineToConstantHeading(new Vector2d(30, -62), Math.toRadians(270))
+//                .waitSeconds(0.2)
+//                .setReversed(false)
+//                .splineToConstantHeading(new Vector2d(8.75, -35.5), Math.toRadians(90))
+//                .waitSeconds(0.2)
+//
+//                .setReversed(true)
+//                .splineToConstantHeading(new Vector2d(30, -62), Math.toRadians(270))
+//                .waitSeconds(0.2)
+//                .setReversed(false)
 
                 .endTrajectory();
 
