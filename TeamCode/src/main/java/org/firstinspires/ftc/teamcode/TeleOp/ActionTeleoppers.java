@@ -485,6 +485,14 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
 
                         ));
                     }
+        if(gamepad2.x){
+            RANGE_HIGH = new Scalar(100, 150, 255, 255);
+            RANGE_LOW = new Scalar(10, 30, 140, 0);
+        }
+        if(gamepad2.b){
+            RANGE_HIGH = new Scalar(255, 5, 230,255);
+            RANGE_LOW = new Scalar(150, 0, 0,0);
+        }
 
 
         //drivetrain code
