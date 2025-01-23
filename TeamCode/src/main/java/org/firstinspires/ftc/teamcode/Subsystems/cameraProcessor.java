@@ -24,10 +24,14 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class cameraProcessor implements VisionProcessor, CameraStreamSource {
+    //    cameraProcessor(Scalar range_low, Scalar range_high){
+//        Scalar low = range_low;
+//        Scalar high = range_high;
+//    }
     public static double width, height = 0;
     public static boolean MASK_TOGGLE = true;
-    public static Scalar RANGE_LOW = new Scalar(170, 100, 0, 0);
-    public static Scalar RANGE_HIGH = new Scalar(255, 255, 230, 255);
+    public static Scalar RANGE_LOW = new Scalar(150, 0, 0,0);
+    public static Scalar RANGE_HIGH = new Scalar(255, 5, 230,255);
     public static double rotpos = 0.5;
     Mat peopleMask = new Mat();
     private final AtomicReference<Double> servoAdjustment = new AtomicReference<>(0.0);
@@ -103,7 +107,7 @@ public class cameraProcessor implements VisionProcessor, CameraStreamSource {
             RotatedRect rotatedRect = Imgproc.minAreaRect(new MatOfPoint2f(largestContour.toArray()));
             servoAdjustment.set(calculateServoAdjustment(rotatedRect));
             extensionAdjustment.set(calculateExtensionAdjustment(rotatedRect));
-            //turretAdjustment.set(calculateTurretAdjustment(rotatedRect));
+            turretAdjustment.set(calculateTurretAdjustment(rotatedRect));
         }
 
 
@@ -148,30 +152,26 @@ public class cameraProcessor implements VisionProcessor, CameraStreamSource {
         double offsetTicks = offsetMM*0.33/303;
         offsetTicks *= -1;
         offsetTicks /= 2;
-        offsetTicks += 0.03;
-        if(offsetTicks< 0) offsetTicks -= 0.01
-                ;
-        //else offsetTicks += 0.03;
+        //offsetTicks += 0.03;
+        if(offsetTicks< 0) offsetTicks -= 0.01;
+        else offsetTicks += 0.015;
         return offsetTicks;
     }
 
-//    public double TurretAdjustment(MatOfPoint contour) {
-//        // Calculate the pixel offset from the center
-//        double offsetY = contourCenterY - CENTER_Y;
-//
-//        // Convert pixel offset to required slide extension in millimeters
-//        double targetExtensionMM = offsetY / PIXELS_PER_MM;
-//
-//        // Clamp the extension to the valid slide range
-//        targetExtensionMM = Math.max(SLIDE_MIN_EXTENSION_MM,
-//                Math.min(SLIDE_MAX_EXTENSION_MM, targetExtensionMM));
-//
-//        // Map the slide extension in mm to servo positions (0.0 - 1.0)
-//        return map(targetExtensionMM,
-//                SLIDE_MIN_EXTENSION_MM,
-//                SLIDE_MAX_EXTENSION_MM,
-//                FULL_RETRACTION_POSITION,
-//                FULL_EXTENSION_POSITION);
-//
-//    }
+    public double calculateTurretAdjustment(RotatedRect rotatedRect) {
+        // Get the X-coordinate of the object's center
+        double objectX = rotatedRect.center.x;
+
+        // Calculate the horizontal offset from the center of the camera frame
+        double offsetX = objectX - (640 / 2);
+
+        // Convert the offset in pixels to an angle in degrees
+        double angleOffset = (offsetX / 640) * 78;
+
+        // Convert the angle offset to motor ticks
+        double ticksOffset = (angleOffset / 360) * (1250*2);
+
+        // Return the calculated turret adjustment in motor ticks
+        return ticksOffset/3.2;
+    }
 }
