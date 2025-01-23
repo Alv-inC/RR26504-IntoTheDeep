@@ -10,8 +10,11 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.InstantAction;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -23,6 +26,7 @@ import org.firstinspires.ftc.robotcore.external.function.Continuation;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
+import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.Subsystems.InitializeTeleOp;
 import org.firstinspires.ftc.teamcode.Subsystems.Lift;
 import org.firstinspires.ftc.teamcode.Subsystems.Turret;
@@ -98,6 +102,7 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
     private int IDKPositionState;
     private boolean clawRotationToggle;
     private int clawRotationState;
+    private MecanumDrive drive;
 
 
     public static class CameraStreamProcessor implements VisionProcessor, CameraStreamSource {
@@ -250,12 +255,7 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
 //                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
 //                .build();
 
-        fr = hardwareMap.get(DcMotor.class, "rightFront");
-        fl = hardwareMap.get(DcMotor.class, "leftFront");
-        br = hardwareMap.get(DcMotor.class, "rightBack");
-        bl = hardwareMap.get(DcMotor.class, "leftBack");
-        fr.setDirection(DcMotorSimple.Direction.REVERSE);
-        br.setDirection(DcMotorSimple.Direction.REVERSE);
+        drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
         externTele = new InitializeTeleOp();
        externTele.initialize(hardwareMap, telemetry);
        externTele.lext.setPosition(0.05);
@@ -466,8 +466,8 @@ if(gamepad1.left_trigger == 1){
                         //wait
                         new InstantAction(() -> externTele.primary.setPosition(0.2)),
                         new InstantAction(() -> externTele.rotation.setPosition(0.47)),
-                        new InstantAction(() -> externTele.lext.setPosition(0.15)),
-                        new InstantAction(() -> externTele.rext.setPosition(0.15))
+                        new InstantAction(() -> externTele.lext.setPosition(0.12)),
+                        new InstantAction(() -> externTele.rext.setPosition(0.12))
                         ));
             }
         }
@@ -504,40 +504,15 @@ if(gamepad1.left_trigger == 1){
 
 
         //drivetrain code
-        //drive train
-        double frontLeftPower;
-        double frontRightPower;
-        double backLeftPower;
-        double backRightPower;
-        double drive_y = gamepad1.left_stick_y;
-        double drive_x = gamepad1.left_stick_x;
-        double turn = -gamepad1.right_stick_x;
-        double theta = Math.atan2(drive_y, drive_x);
-        double power = Math.hypot(drive_x,drive_y);
-        double sin = Math.sin(theta-PI/4);
-        double cos = Math.cos(theta-PI/4);
-        double max = Math.max(Math.abs(sin), Math.abs(cos));
-        frontLeftPower = power * cos/max + turn;
-        frontRightPower = power * sin/max - turn;
-        backLeftPower = power*sin/max + turn;
-        backRightPower = power *cos/max - turn;
-        if((power+Math.abs(turn))>1) {
-            frontLeftPower /= power+turn;
-            frontRightPower /= power+turn;
-            backLeftPower /= power+turn;
-            backRightPower /= power+turn;
-        }
-        List<Double> list = Arrays.asList(1.0, Math.abs(frontLeftPower), Math.abs(frontRightPower), Math.abs(backLeftPower), Math.abs(backRightPower));
-        double maximum = Collections.max(list); // returns the greatest number
-        fl.setPower((frontLeftPower / maximum) * 0.7); // set the max power to 0.6
-        if(fl.isBusy()){fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);} else {fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);}
-        fr.setPower((frontRightPower / maximum) * 0.7);
-        if(fr.isBusy()){fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);} else {fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);}
-        bl.setPower((backLeftPower / maximum) * 0.7);
-        if(bl.isBusy()){bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);} else {bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);}
-        br.setPower((backRightPower / maximum) * 0.7);
-        if(br.isBusy()){br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);} else {br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);}
+        drive.setDrivePowers(new PoseVelocity2d(
+                new Vector2d(
+                        -gamepad1.left_stick_y,
+                        -gamepad1.left_stick_x
+                ),
+                -gamepad1.right_stick_x
+        ));
 
+        drive.updatePoseEstimate();
 
 
         turret.update();
