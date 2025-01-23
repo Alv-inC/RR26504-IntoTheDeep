@@ -12,9 +12,7 @@ public class InitializeTeleOp {
     public Servo rotation, lext, rext, lsecondary, rsecondary, primary, claw;
     public MultipleTelemetry telemetry;
 
-    public void initialize(HardwareMap hardwareMap, Telemetry telemetry) {
-        // Initialize telemetry and vision
-        this.telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+    public void initialize(HardwareMap hardwareMap) {
 
         // Initialize servos
         rotation = hardwareMap.get(Servo.class, "rotation");
@@ -41,10 +39,6 @@ public class InitializeTeleOp {
         ElapsedTime timer = new ElapsedTime(); // Create a timer instance
         timer.reset(); // Reset the timer to start at 0
 
-        while (timer.milliseconds() < milliseconds) {
-            // Perform other tasks or keep the robot running smoothly
-            telemetry.addData("Waiting", "%.2f seconds remaining", milliseconds - timer.seconds());
-            telemetry.update();
-        }
+
     }
 }

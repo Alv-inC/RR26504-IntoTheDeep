@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.Auto;
 
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.InstantAction;
 import com.acmerobotics.roadrunner.ParallelAction;
@@ -36,10 +38,10 @@ private ChainActions chain;
         lift = new Lift(hardwareMap);
         turret = new Turret(hardwareMap);
         chain = new ChainActions(hardwareMap);
-        externTele.initialize(hardwareMap, telemetry);
+        externTele.initialize(hardwareMap);
         externTele.lext.setPosition(0.05);
         externTele.rext.setPosition(0.05);
-        externTele.claw.setPosition(0.75);
+        externTele.claw.setPosition(0.62);
         turret.setTargetPosition(0);
         lift.setTargetPosition(30);
 
@@ -50,15 +52,17 @@ private ChainActions chain;
 
         TrajectoryActionBuilder trajectory = drive.actionBuilder(startPose)
                 .waitSeconds(1)
-                .strafeTo(new Vector2d(8.75, -38.5))
-                .waitSeconds(3)
-                .afterTime(0.4, new SequentialAction(
+                .afterTime(0.35, new SequentialAction(
                         chain.scorePosition(),
-                        new SleepAction(0.3),
+                        new SleepAction(2),
                         chain.scoreSpecimen(),
-                        new SleepAction(0.2)
+                        new SleepAction(0.5)
 
                 ))
+                .strafeTo(new Vector2d(8.75, -37))
+
+                .waitSeconds(3)
+
 
 
                 .setReversed(true)
@@ -66,13 +70,13 @@ private ChainActions chain;
 
 
 //increased all of these by +3
-                .splineToConstantHeading(new Vector2d(28, -44), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(30, -44), Math.toRadians(0))
 
 
-                .splineToConstantHeading(new Vector2d(36, -34), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(40, -22), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(47, -7), Math.toRadians(270))
-                .splineToConstantHeading(new Vector2d(47, -54), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(38, -34), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(42, -22), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(49, -7), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(49, -54), Math.toRadians(270))
 //
 //                .splineToConstantHeading(new Vector2d(44, -20), Math.toRadians(90))
 //                .splineToConstantHeading(new Vector2d(55, -7), Math.toRadians(270))

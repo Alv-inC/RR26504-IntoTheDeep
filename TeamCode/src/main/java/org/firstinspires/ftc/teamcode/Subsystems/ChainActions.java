@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.InstantAction;
 import com.acmerobotics.roadrunner.SequentialAction;
@@ -21,7 +23,7 @@ public class ChainActions {
         lift = new Lift(hardwareMap);
         turret = new Turret(hardwareMap);
         externTele = new InitializeTeleOp();
-        externTele.initialize(hardwareMap, telemetry);
+        externTele.initialize(hardwareMap);
     }
 
     public Action startPosition(double position){

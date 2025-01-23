@@ -257,7 +257,7 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
 
         drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
         externTele = new InitializeTeleOp();
-       externTele.initialize(hardwareMap, telemetry);
+       externTele.initialize(hardwareMap);
        externTele.lext.setPosition(0.05);
        externTele.rext.setPosition(0.05);
         externTele.claw.setPosition(0.75);
