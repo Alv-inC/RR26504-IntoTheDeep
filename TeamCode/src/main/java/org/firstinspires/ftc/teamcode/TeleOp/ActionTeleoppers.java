@@ -323,17 +323,17 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
 if(gamepad1.left_trigger == 1){
     runningActions.add(new SequentialAction(
             new InstantAction(() ->     turret.setTargetPosition(turret.getCurrentPosition()+processor.getTurretAdjustment())),
-            new SleepAction(1),
+            new SleepAction(0.25),
             new InstantAction(() -> turret.setTargetPosition(turret.getCurrentPosition()+processor.getTurretAdjustment())),
-            new SleepAction(1),
+            new SleepAction(0.5),
             new InstantAction(() ->     externTele.lext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
             new InstantAction(() ->     externTele.rext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
-            new SleepAction(1),
+            new SleepAction(0.5),
             new InstantAction(() -> externTele.rotation.setPosition(externTele.rotation.getPosition()+processor.getServoAdjustment())),
-            new SleepAction(1),
+            new SleepAction(0.5),
             new InstantAction(() -> externTele.lsecondary.setPosition(0.15)),
             new InstantAction(() -> externTele.rsecondary.setPosition(0.15)),
-            new SleepAction(1),
+            new SleepAction(0.5),
             new InstantAction(() ->     externTele.claw.setPosition(0.66))
     ));
 }
