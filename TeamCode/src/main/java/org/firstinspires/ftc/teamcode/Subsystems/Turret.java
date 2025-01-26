@@ -66,7 +66,7 @@ public class Turret {
         this.targetPosition = targetPosition;
     }
     public int getCurrentPosition(){
-        return this.getCurrentPosition();
+        return turretMotor.getCurrentPosition();
     }
 
     public boolean isClose(){

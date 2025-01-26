@@ -31,7 +31,7 @@ public class ChainActions {
                 //add the chain of commands here
         new InstantAction(() -> externTele.lext.setPosition(0.05)),
                 new InstantAction(() -> externTele.rext.setPosition(0.05)),
-                new InstantAction(() -> externTele.claw.setPosition(0.75)),
+                new InstantAction(() -> externTele.claw.setPosition(0.45)),
                 new InstantAction(() -> turret.setTargetPosition(0)),
                 new InstantAction(() -> lift.setTargetPosition(30))
         );
@@ -58,7 +58,7 @@ public class ChainActions {
                 new InstantAction(() -> externTele.rotation.setPosition(0.47)),
                 new InstantAction(() -> lift.setTargetPosition(744)),
                 new SleepAction(1),
-                new InstantAction(() -> externTele.claw.setPosition(0.75))
+                new InstantAction(() -> externTele.claw.setPosition(0.45))
         );
     }
     //prepareGrab

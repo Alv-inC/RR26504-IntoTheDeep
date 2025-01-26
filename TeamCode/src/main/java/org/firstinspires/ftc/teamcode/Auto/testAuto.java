@@ -52,7 +52,7 @@ VelConstraint slower = new MinVelConstraint(Arrays.asList(
         externTele.initialize(hardwareMap);
         externTele.lext.setPosition(0.05);
         externTele.rext.setPosition(0.05);
-        externTele.claw.setPosition(0.42);
+        externTele.claw.setPosition(0.55);
         turret.setTargetPosition(0);
         lift.setTargetPosition(30);
 
