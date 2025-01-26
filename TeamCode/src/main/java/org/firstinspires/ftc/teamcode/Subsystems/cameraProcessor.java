@@ -30,7 +30,7 @@ public class cameraProcessor implements VisionProcessor, CameraStreamSource {
 //    }
     public static double width, height = 0;
     public static boolean MASK_TOGGLE = true;
-    public static Scalar RANGE_LOW = new Scalar(150, 0, 0,0);
+    public static Scalar RANGE_LOW = new Scalar(100, 0, 0,0);
     public static Scalar RANGE_HIGH = new Scalar(255, 5, 230,255);
     public static double rotpos = 0.5;
     Mat peopleMask = new Mat();
@@ -152,9 +152,9 @@ public class cameraProcessor implements VisionProcessor, CameraStreamSource {
         double offsetTicks = offsetMM*0.33/303;
         offsetTicks *= -1;
         offsetTicks /= 2;
-        //offsetTicks += 0.03;
-        if(offsetTicks< 0) offsetTicks -= 0.01;
-        else offsetTicks += 0.015;
+        //offsetTicks += 0.01;
+        if(offsetTicks< 0) offsetTicks -= 0.0225;
+//        else offsetTicks += 0.02;
         return offsetTicks;
     }
 

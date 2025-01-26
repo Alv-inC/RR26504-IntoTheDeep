@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -29,7 +30,7 @@ public class valueTesting extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        pext = 0.15; ppri = 0.67; psec = 0.25; pclaw = 0.75; prot = 0.47;
+        pext = 0.15; ppri = 0.67; psec = 0.25; pclaw = 0.45; prot = 0.47;
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         final cameraProcessor processor = new cameraProcessor();
         new VisionPortal.Builder()
@@ -49,11 +50,16 @@ public class valueTesting extends LinearOpMode {
         Servo rotation = hardwareMap.get(Servo.class, "rotation");
         Servo primary = hardwareMap.get(Servo.class, "primary");
         Servo claw = hardwareMap.get(Servo.class, "claw");
+        claw.setDirection(Servo.Direction.REVERSE);
         Servo ltransfer = hardwareMap.get(Servo.class, "ltransfer");
         Servo rtransfer = hardwareMap.get(Servo.class, "rtransfer");
         ltransfer.setDirection(Servo.Direction.REVERSE);
+        DcMotor lslide = hardwareMap.get(DcMotor.class, "lslide");
+        DcMotor rslide = hardwareMap.get(DcMotor.class, "rslide");
+        lslide.setDirection(DcMotorSimple.Direction.REVERSE);
 //        Servo outtake = hardwareMap.get(Servo.class, "outtake");
         //Servo servo = hardwareMap.get(Servo.class, "primary");
+        //moveSlidesToPosition(50, lslide, rslide);
 
         waitForStart();
 
@@ -94,18 +100,24 @@ public class valueTesting extends LinearOpMode {
             if(ADJUST){
                 ADJUST = false;
                 moveMotorToPosition(turret, (int) (processor.getTurretAdjustment()), 0.5);
-                waitWithoutStoppingRobot(1000);
+                waitWithoutStoppingRobot(500);
                 moveMotorToPosition(turret, (int) (processor.getTurretAdjustment()), 0.5);
-                waitWithoutStoppingRobot(1000);
+                waitWithoutStoppingRobot(700);
                 lext.setPosition(lext.getPosition()+processor.getExtensionAdjustment());
                 rext.setPosition(lext.getPosition()+processor.getExtensionAdjustment());
-                waitWithoutStoppingRobot(1000);
+                waitWithoutStoppingRobot(1500);
+                lext.setPosition(lext.getPosition()+processor.getExtensionAdjustment());
+                rext.setPosition(lext.getPosition()+processor.getExtensionAdjustment());
+                waitWithoutStoppingRobot(700);
                 rotation.setPosition(rotation.getPosition()+processor.getServoAdjustment());
+                waitWithoutStoppingRobot(700);
+                //lext.setPosition(lext.getPosition()-0.07);
+                //rext.setPosition(lext.getPosition()-0.07);
+                //waitWithoutStoppingRobot(500);
+                lsecondary.setPosition(0.14);
+                rsecondary.setPosition(0.14);
                 waitWithoutStoppingRobot(1000);
-                lsecondary.setPosition(0.15);
-                rsecondary.setPosition(0.15);
-                waitWithoutStoppingRobot(1000);
-                claw.setPosition(0.67);
+                claw.setPosition(0.55);
             }
             telemetry.addData("turret adjustment", processor.getTurretAdjustment());
             telemetry.addData("turret position", turret.getCurrentPosition());
@@ -143,4 +155,30 @@ public class valueTesting extends LinearOpMode {
         motor.setPower(0); // Stop the motor
         motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER); // Switch back to normal mode
     }
+    private void moveSlidesToPosition(int position, DcMotor leftSlide, DcMotor rightSlide) {
+        // Set the target position for both slides
+        leftSlide.setTargetPosition(position);
+        rightSlide.setTargetPosition(position);
+
+        // Set the mode to run to the target position
+        leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        // Set motor power to move to the target position
+        leftSlide.setPower(0.5);  // Adjust power as needed
+        rightSlide.setPower(0.5);  // Adjust power as needed
+
+        // Wait until both slides reach the target position
+        while (leftSlide.isBusy() && rightSlide.isBusy()) {
+            telemetry.addData("Moving to Position", position);
+            telemetry.update();
+        }
+
+        // Apply holding power to maintain position
+        leftSlide.setPower(0.4); // Small power to hold position
+        rightSlide.setPower(0.4);
+    }
+
+
 }
+
