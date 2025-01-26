@@ -4,13 +4,17 @@ package org.firstinspires.ftc.teamcode.Auto;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.AngularVelConstraint;
 import com.acmerobotics.roadrunner.InstantAction;
+import com.acmerobotics.roadrunner.MinVelConstraint;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
+import com.acmerobotics.roadrunner.VelConstraint;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -22,6 +26,8 @@ import org.firstinspires.ftc.teamcode.Subsystems.InitializeTeleOp;
 import org.firstinspires.ftc.teamcode.Subsystems.Lift;
 import org.firstinspires.ftc.teamcode.Subsystems.Turret;
 
+import java.util.Arrays;
+
 @Autonomous(name = "Testing Auto")
 public class testAuto extends LinearOpMode {
 private Lift lift;
@@ -29,6 +35,11 @@ private Turret turret;
 // private ChainActions chain = new ChainActions(hardwareMap);
 private InitializeTeleOp externTele;
 private ChainActions chain;
+
+VelConstraint slower = new MinVelConstraint(Arrays.asList(
+        new TranslationalVelConstraint(30),
+        new AngularVelConstraint(Math.PI / 2)
+));
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -41,7 +52,7 @@ private ChainActions chain;
         externTele.initialize(hardwareMap);
         externTele.lext.setPosition(0.05);
         externTele.rext.setPosition(0.05);
-        externTele.claw.setPosition(0.62);
+        externTele.claw.setPosition(0.42);
         turret.setTargetPosition(0);
         lift.setTargetPosition(30);
 
@@ -52,13 +63,15 @@ private ChainActions chain;
 
         TrajectoryActionBuilder trajectory = drive.actionBuilder(startPose)
                 .waitSeconds(1)
-                .afterTime(0.35, new SequentialAction(
-                        chain.scorePosition(),
-                        new SleepAction(2),
-                        chain.scoreSpecimen(),
-                        new SleepAction(0.5)
 
-                ))
+                //uncomment later; it works but inconsistent
+//                .afterTime(0.35, new SequentialAction(
+//                        chain.scorePosition(),
+//                        new SleepAction(2),
+//                        chain.scoreSpecimen(),
+//                        new SleepAction(0.5)
+//
+//                ))
                 .strafeTo(new Vector2d(8.75, -37))
 
                 .waitSeconds(3)
@@ -70,24 +83,29 @@ private ChainActions chain;
 
 
 //increased all of these by +3
-                .splineToConstantHeading(new Vector2d(30, -44), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(31.5, -44), Math.toRadians(0))
 
+                //first specimen
+                .splineToConstantHeading(new Vector2d(39.5, -33), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(43.5, -21), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(49.5, -5), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(49.5, -61), Math.toRadians(270))
+                .waitSeconds(0.3)
 
-                .splineToConstantHeading(new Vector2d(38, -34), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(42, -22), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(49, -7), Math.toRadians(270))
-                .splineToConstantHeading(new Vector2d(49, -54), Math.toRadians(270))
+                //second specimen
+                .splineToConstantHeading(new Vector2d(50, -20), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(60.5, -5), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(60.5, -61), Math.toRadians(270))
+                .waitSeconds(0.3)
+
 //
-//                .splineToConstantHeading(new Vector2d(44, -20), Math.toRadians(90))
-//                .splineToConstantHeading(new Vector2d(55, -7), Math.toRadians(270))
-//                .splineToConstantHeading(new Vector2d(55, -54), Math.toRadians(270))
-//
-//                .splineToConstantHeading(new Vector2d(55, -34), Math.toRadians(90))
-//                .splineToConstantHeading(new Vector2d(56, -22), Math.toRadians(90))
-//                .splineToConstantHeading(new Vector2d(63, -7), Math.toRadians(270))
-//                .splineToConstantHeading(new Vector2d(63, -54), Math.toRadians(270))
-//
-//
+//                //third specimen
+//                .splineToConstantHeading(new Vector2d(52.5, -33), Math.toRadians(90))
+//                .splineToConstantHeading(new Vector2d(52.5, -21), Math.toRadians(90))
+//                .splineToConstantHeading(new Vector2d(55, -5), Math.toRadians(270))
+//                .splineToConstantHeading(new Vector2d(58.5, -61), Math.toRadians(270))
+//                .waitSeconds(0.3)
+
 //                .splineToConstantHeading(new Vector2d(30, -62), Math.toRadians(270))
 //                //grab
 //                //turn 180

@@ -183,9 +183,7 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
                     new InstantAction(() -> turret.setTargetPosition(0)),
                     new InstantAction(() -> lift.setTargetPosition(30))
 
-                    //       externTele.claw.setPosition(0.75);
-                    //        turret.setTargetPosition(0);
-                    //       lift.setTargetPosition(30);
+
             ));
         }
 
@@ -319,7 +317,6 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
             externTele.claw.setPosition(0.75);  // Open the claw
         }
 
-
 if(gamepad1.left_trigger == 1){
     runningActions.add(new SequentialAction(
             new InstantAction(() ->     turret.setTargetPosition(turret.getCurrentPosition()+processor.getTurretAdjustment())),
@@ -334,13 +331,13 @@ if(gamepad1.left_trigger == 1){
             new InstantAction(() -> externTele.lsecondary.setPosition(0.15)),
             new InstantAction(() -> externTele.rsecondary.setPosition(0.15)),
             new SleepAction(0.5),
-            new InstantAction(() ->     externTele.claw.setPosition(0.66))
+            new InstantAction(() ->     externTele.claw.setPosition(0.42))
     ));
 }
 
 
         if(gamepad1.right_bumper){
-            externTele.claw.setPosition(0.65);  // Close the claw
+            externTele.claw.setPosition(0.42);  // Close the claw
             if(externTele.lsecondary.getPosition() > 0.15 && externTele.rsecondary.getPosition() > 0.15){
                 runningActions.add(new SequentialAction(
                 new InstantAction(() -> lift.setTargetPosition(1150)),
@@ -354,27 +351,8 @@ if(gamepad1.left_trigger == 1){
                         ));
             }
         }
-//        if (gamepad1.left_bumper && !clawtoggle) {  // Check if the button is pressed and toggle is false
-//            clawtoggle = true;  // Prevents spamming, now the toggle is true
-//            // Change the lift position state based on the current state
-//            if (clawPositionState == 0) {
-//                clawPositionState = 1;
-//                externTele.claw.setPosition(0.18);  // Close the claw
-//            } else if (clawPositionState == 1) {
-//                clawPositionState = 0;
-//                externTele.claw.setPosition(0.6);  // Open the claw
-//            }
-//        } else if (!gamepad1.left_bumper && clawtoggle) {  // Button is released and toggle is true
-//            clawtoggle = false;  // Reset toggle to allow future button presses
-//        }
 
 
-
-        //make trigger change the rotation as you hold, left trigger rotate left, right trigger rotate right
-
-
-
-        //
         if(gamepad1.a){
             runningActions.add(new SequentialAction(
                     new InstantAction(() -> externTele.lsecondary.setPosition(0.22)),

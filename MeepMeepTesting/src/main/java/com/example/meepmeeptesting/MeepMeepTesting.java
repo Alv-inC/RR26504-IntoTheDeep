@@ -1,6 +1,8 @@
 package com.example.meepmeeptesting;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
@@ -17,84 +19,79 @@ public class MeepMeepTesting {
 
         myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(8.75, -62.75, Math.toRadians(90)))
                 .waitSeconds(3)
-                //.setTangent(135)
-                .strafeTo(new Vector2d(8.75, -38.5))
-//                .afterTime(0.5, new SequentialAction(
-//                        new InstantAction(() -> externTele.claw.setPosition(0.6)),
-//                        new InstantAction(() -> externTele.lsecondary.setPosition(0.16)),
-//                        new InstantAction(() -> externTele.rsecondary.setPosition(0.16)),
-//                //wait
-//                        new InstantAction(() -> externTele.primary.setPosition(0.25)),
-//                        new InstantAction(() -> externTele.rotation.setPosition(0.47)),
+                .strafeTo(new Vector2d(8.75, -37))
+
+                .waitSeconds(3)
+
+
+
+                .setReversed(true)
+
+
+
+//increased all of these by +3
+                .splineToConstantHeading(new Vector2d(31.5, -44), Math.toRadians(0))
+
+                //first specimen
+                .splineToConstantHeading(new Vector2d(39.5, -33), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(43.5, -21), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(49.5, -5), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(49.5, -61), Math.toRadians(270))
+                .waitSeconds(0.3)
+
+                //second specimen
+                .splineToConstantHeading(new Vector2d(50, -20), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(59, -5), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(59, -61), Math.toRadians(270))
+                .waitSeconds(0.3)
+
+//
+//                //third specimen
+//                .splineToConstantHeading(new Vector2d(52.5, -33), Math.toRadians(90))
+//                .splineToConstantHeading(new Vector2d(52.5, -21), Math.toRadians(90))
+//                .splineToConstantHeading(new Vector2d(55, -5), Math.toRadians(270))
+//                .splineToConstantHeading(new Vector2d(58.5, -61), Math.toRadians(270))
+//                .waitSeconds(0.3)
+
+
+
 //
 //
+//                .splineToConstantHeading(new Vector2d(30, -62), Math.toRadians(270))
+//                //grab
+//                //turn 180
+//                .waitSeconds(0.2)
+//                .splineToConstantHeading(new Vector2d(8.75, -35.5), Math.toRadians(90))
+//                //turn 180;
+//                //score
+//                .waitSeconds(0.2)
+//                //end of first iteration
 //
-//                        new InstantAction(() -> lift.setTargetPosition(820)),
-//                        new InstantAction(() -> externTele.lext.setPosition(0.3)),
-//                        new InstantAction(() -> externTele.rext.setPosition(0.3)),
-//                        new SleepAction(1),
-//                        new InstantAction(() -> externTele.lext.setPosition(0)),
-//                        new InstantAction(() -> externTele.rext.setPosition(0))
+//                .setReversed(true)
+//                .splineToConstantHeading(new Vector2d(30, -62), Math.toRadians(270))
+//                .waitSeconds(0.2)
+//                .setReversed(false)
+//                .splineToConstantHeading(new Vector2d(8.75, -35.5), Math.toRadians(90))
+//                .waitSeconds(0.2)
 //
-//                        ))
-                .setReversed(true)
-
-
-
-
-                .splineToConstantHeading(new Vector2d(28, -44), Math.toRadians(0))
-
-
-                .splineToConstantHeading(new Vector2d(36, -34), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(40, -22), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(47, -7), Math.toRadians(270))
-                .splineToConstantHeading(new Vector2d(47, -54), Math.toRadians(270))
-
-                .splineToConstantHeading(new Vector2d(47, -20), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(58, -7), Math.toRadians(270))
-                .splineToConstantHeading(new Vector2d(58, -54), Math.toRadians(270))
-
-                .splineToConstantHeading(new Vector2d(58, -34), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(59, -22), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(66, -7), Math.toRadians(270))
-                .splineToConstantHeading(new Vector2d(66, -54), Math.toRadians(270))
-
-
-                .splineToConstantHeading(new Vector2d(30, -62), Math.toRadians(270))
-                //grab
-                //turn 180
-                .waitSeconds(0.2)
-                .splineToConstantHeading(new Vector2d(8.75, -35.5), Math.toRadians(90))
-                //turn 180;
-                //score
-                .waitSeconds(0.2)
-                //end of first iteration
-
-                .setReversed(true)
-                .splineToConstantHeading(new Vector2d(30, -62), Math.toRadians(270))
-                .waitSeconds(0.2)
-                .setReversed(false)
-                .splineToConstantHeading(new Vector2d(8.75, -35.5), Math.toRadians(90))
-                .waitSeconds(0.2)
-
-                .setReversed(true)
-                .splineToConstantHeading(new Vector2d(30, -62), Math.toRadians(270))
-                .waitSeconds(0.2)
-                .setReversed(false)
-                .splineToConstantHeading(new Vector2d(8.75, -35.5), Math.toRadians(90))
-                .waitSeconds(0.2)
-
-                .setReversed(true)
-                .splineToConstantHeading(new Vector2d(30, -62), Math.toRadians(270))
-                .waitSeconds(0.2)
-                .setReversed(false)
-                .splineToConstantHeading(new Vector2d(8.75, -35.5), Math.toRadians(90))
-                .waitSeconds(0.2)
-
-                .setReversed(true)
-                .splineToConstantHeading(new Vector2d(30, -62), Math.toRadians(270))
-                .waitSeconds(0.2)
-                .setReversed(false)
+//                .setReversed(true)
+//                .splineToConstantHeading(new Vector2d(30, -62), Math.toRadians(270))
+//                .waitSeconds(0.2)
+//                .setReversed(false)
+//                .splineToConstantHeading(new Vector2d(8.75, -35.5), Math.toRadians(90))
+//                .waitSeconds(0.2)
+//
+//                .setReversed(true)
+//                .splineToConstantHeading(new Vector2d(30, -62), Math.toRadians(270))
+//                .waitSeconds(0.2)
+//                .setReversed(false)
+//                .splineToConstantHeading(new Vector2d(8.75, -35.5), Math.toRadians(90))
+//                .waitSeconds(0.2)
+//
+//                .setReversed(true)
+//                .splineToConstantHeading(new Vector2d(30, -62), Math.toRadians(270))
+//                .waitSeconds(0.2)
+//                .setReversed(false)
 
                 .endTrajectory().build());
 
