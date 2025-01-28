@@ -50,9 +50,9 @@ VelConstraint slower = new MinVelConstraint(Arrays.asList(
         turret = new Turret(hardwareMap);
         chain = new ChainActions(hardwareMap);
         externTele.initialize(hardwareMap);
-        externTele.lext.setPosition(0.05);
-        externTele.rext.setPosition(0.05);
-        externTele.claw.setPosition(0.55);
+        externTele.lext.setPosition(0);
+        externTele.rext.setPosition(0);
+        externTele.claw.setPosition(0.42);
         turret.setTargetPosition(0);
         lift.setTargetPosition(30);
 
@@ -64,14 +64,14 @@ VelConstraint slower = new MinVelConstraint(Arrays.asList(
         TrajectoryActionBuilder trajectory = drive.actionBuilder(startPose)
                 .waitSeconds(1)
 
-                //uncomment later; it works but inconsistent
-//                .afterTime(0.35, new SequentialAction(
-//                        chain.scorePosition(),
-//                        new SleepAction(2),
-//                        chain.scoreSpecimen(),
-//                        new SleepAction(0.5)
-//
-//                ))
+
+                .afterTime(0, new SequentialAction(
+                        chain.scorePosition(),
+                        new SleepAction(1.4),
+                        chain.scoreSpecimen(),
+                        new SleepAction(1.2)
+                ))
+
                 .strafeTo(new Vector2d(8.75, -37))
 
                 .waitSeconds(3)
@@ -83,6 +83,9 @@ VelConstraint slower = new MinVelConstraint(Arrays.asList(
 
 
 //increased all of these by +3
+                .afterTime(0.5, new SequentialAction(
+                        chain.startPosition()
+                ))
                 .splineToConstantHeading(new Vector2d(31.5, -44), Math.toRadians(0))
 
                 //first specimen

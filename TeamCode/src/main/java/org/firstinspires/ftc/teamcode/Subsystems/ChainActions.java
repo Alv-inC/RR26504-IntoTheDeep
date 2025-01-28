@@ -26,12 +26,12 @@ public class ChainActions {
         externTele.initialize(hardwareMap);
     }
 
-    public Action startPosition(double position){
+    public Action startPosition(){
         return new SequentialAction(
                 //add the chain of commands here
         new InstantAction(() -> externTele.lext.setPosition(0.05)),
                 new InstantAction(() -> externTele.rext.setPosition(0.05)),
-                new InstantAction(() -> externTele.claw.setPosition(0.45)),
+                new InstantAction(() -> externTele.claw.setPosition(0.6)),
                 new InstantAction(() -> turret.setTargetPosition(0)),
                 new InstantAction(() -> lift.setTargetPosition(30))
         );
@@ -57,8 +57,8 @@ public class ChainActions {
                 new InstantAction(() -> externTele.primary.setPosition(0.3)),
                 new InstantAction(() -> externTele.rotation.setPosition(0.47)),
                 new InstantAction(() -> lift.setTargetPosition(744)),
-                new SleepAction(1),
-                new InstantAction(() -> externTele.claw.setPosition(0.45))
+                new SleepAction(0.8),
+                new InstantAction(() -> externTele.claw.setPosition(0.6))
         );
     }
     //prepareGrab
