@@ -27,6 +27,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
+import org.firstinspires.ftc.teamcode.Subsystems.ChainActions;
 import org.firstinspires.ftc.teamcode.Subsystems.InitializeTeleOp;
 import org.firstinspires.ftc.teamcode.Subsystems.Lift;
 import org.firstinspires.ftc.teamcode.Subsystems.Turret;
@@ -70,6 +71,7 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
 
     private Lift lift;
     private Turret turret;
+    private ChainActions chain;
     private FtcDashboard dash = FtcDashboard.getInstance();
     private List<Action> runningActions = new ArrayList<>();
     private DcMotor fl;
@@ -115,6 +117,7 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         lift = new Lift(hardwareMap);
         turret = new Turret(hardwareMap);
+        chain = new ChainActions(hardwareMap);
         //initialize motors
         //init cameras
         processor = new cameraProcessor();
@@ -191,14 +194,7 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
         //retract to base position
         if(gamepad1.y){
             runningActions.add(new SequentialAction(
-
-                    new InstantAction(() -> externTele.lsecondary.setPosition(0.16)),
-                    new InstantAction(() -> externTele.rsecondary.setPosition(0.16)),
-                    new InstantAction(() -> externTele.primary.setPosition(0.3)),
-                      new InstantAction(() -> externTele.rotation.setPosition(0.47)),
-                    new InstantAction(() -> lift.setTargetPosition(744)),
-                    new SleepAction(0.6),
-                    new InstantAction(() -> externTele.claw.setPosition(0.6))
+            chain.scoreSpecimen()
 
 
             ));
@@ -340,14 +336,7 @@ if(gamepad1.left_trigger == 1){
             externTele.claw.setPosition(0.42);  // Close the claw
             if(externTele.lsecondary.getPosition() > 0.15 && externTele.rsecondary.getPosition() > 0.15){
                 runningActions.add(new SequentialAction(
-                new InstantAction(() -> lift.setTargetPosition(1150)),
-                new InstantAction(() -> externTele.lsecondary.setPosition(0.17)),
-                        new InstantAction(() -> externTele.rsecondary.setPosition(0.17)),
-                        //wait
-                        new InstantAction(() -> externTele.primary.setPosition(0.2)),
-                        new InstantAction(() -> externTele.rotation.setPosition(0.47)),
-                        new InstantAction(() -> externTele.lext.setPosition(0.12)),
-                        new InstantAction(() -> externTele.rext.setPosition(0.12))
+                chain.scorePosition()
                         ));
             }
         }
