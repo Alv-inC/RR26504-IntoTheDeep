@@ -33,16 +33,16 @@ public class MeepMeepTesting {
                 .splineToConstantHeading(new Vector2d(31.5, -44), Math.toRadians(0))
 
                 //first specimen
-                .splineToConstantHeading(new Vector2d(39.5, -33), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(43.5, -21), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(49.5, -5), Math.toRadians(270))
-                .splineToConstantHeading(new Vector2d(49.5, -61), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(41.5, -33), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(45.5, -21), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(51.5, -13), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(51.5, -61), Math.toRadians(270))
                 .waitSeconds(0.3)
 
                 //second specimen
                 .splineToConstantHeading(new Vector2d(50, -20), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(59, -5), Math.toRadians(270))
-                .splineToConstantHeading(new Vector2d(59, -61), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(54, -13), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(54, -61), Math.toRadians(270))
                 .waitSeconds(0.3)
 
 //

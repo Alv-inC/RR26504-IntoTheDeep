@@ -32,6 +32,9 @@ public class ChainActions {
         new InstantAction(() -> externTele.lext.setPosition(0.05)),
                 new InstantAction(() -> externTele.rext.setPosition(0.05)),
                 new InstantAction(() -> externTele.claw.setPosition(0.6)),
+                new InstantAction(() -> externTele.lsecondary.setPosition(0.34)),
+                new InstantAction(() -> externTele.rsecondary.setPosition(0.34)),
+                new InstantAction(() -> externTele.primary.setPosition(0.33)),
                 new InstantAction(() -> turret.setTargetPosition(0)),
                 new InstantAction(() -> lift.setTargetPosition(30))
         );
@@ -40,9 +43,9 @@ public class ChainActions {
     //
     public Action scorePosition(){
         return new SequentialAction(
-                new InstantAction(() -> lift.setTargetPosition(1150)),
-                new InstantAction(() -> externTele.lsecondary.setPosition(0.17)),
-                new InstantAction(() -> externTele.rsecondary.setPosition(0.17)),
+                new InstantAction(() -> lift.setTargetPosition(800)),
+                new InstantAction(() -> externTele.lsecondary.setPosition(0.29)),
+                new InstantAction(() -> externTele.rsecondary.setPosition(0.29)),
                 new InstantAction(() -> externTele.primary.setPosition(0.2)),
                 new InstantAction(() -> externTele.rotation.setPosition(0.47)),
                 new InstantAction(() -> externTele.lext.setPosition(0.12)),
@@ -52,11 +55,11 @@ public class ChainActions {
 
     public Action scoreSpecimen(){
         return new SequentialAction(
-                new InstantAction(() -> externTele.lsecondary.setPosition(0.16)),
-                new InstantAction(() -> externTele.rsecondary.setPosition(0.16)),
+                new InstantAction(() -> externTele.lsecondary.setPosition(0.19)),
+                new InstantAction(() -> externTele.rsecondary.setPosition(0.19)),
                 new InstantAction(() -> externTele.primary.setPosition(0.3)),
                 new InstantAction(() -> externTele.rotation.setPosition(0.47)),
-                new InstantAction(() -> lift.setTargetPosition(744)),
+                new InstantAction(() -> lift.setTargetPosition(710)),
                 new SleepAction(0.8),
                 new InstantAction(() -> externTele.claw.setPosition(0.6))
         );
