@@ -99,16 +99,16 @@ VelConstraint slower = new MinVelConstraint(Arrays.asList(
                 //second specimen
                 .splineToConstantHeading(new Vector2d(46.5, -20), Math.toRadians(90))
                 .splineToConstantHeading(new Vector2d(56, -13), Math.toRadians(270))
-                .splineToConstantHeading(new Vector2d(56, -55), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(57, -55), Math.toRadians(270))
                 .waitSeconds(0.3)
 
 
 
                 //third specimen
-                .splineToConstantHeading(new Vector2d(53, -33), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(53, -21), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(58, -5), Math.toRadians(270))
-                .splineToConstantHeading(new Vector2d(59, -61), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(55, -33), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(55, -21), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(59, -5), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(61, -55), Math.toRadians(270))
                 .waitSeconds(0.3)
 
 //                .splineToConstantHeading(new Vector2d(30, -62), Math.toRadians(270))

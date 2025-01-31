@@ -234,18 +234,22 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
 
         if(gamepad1.b){
             runningActions.add(new SequentialAction(
-                    //turret.setTargetPosition(turret.getCurrentPosition()+ processor.calculateTurretAdjustment);
-                    //new InstantAction(() -> externTele.rotation.setPosition(externTele.rotation.getPosition()+processor.getServoAdjustment())),
-                    new InstantAction(() -> externTele.lsecondary.setPosition(0.125)),
-                    new InstantAction(() -> externTele.rsecondary.setPosition(0.125))
-
-
-//                    new InstantAction(() -> externTele.rsecondary.setPosition(0.7)),
-//                    //wait
-//                    new InstantAction(() -> externTele.primary.setPosition(0.72)),
-//                    new InstantAction(() -> externTele.rotation.setPosition(0.67))
-                    //slide raise
-                    //driver move bot forward to attach
+                    new InstantAction(() ->     turret.setTargetPosition(turret.getCurrentPosition()+processor.getTurretAdjustment())),
+                    new SleepAction(0.5),
+                    new InstantAction(() -> turret.setTargetPosition(turret.getCurrentPosition()+processor.getTurretAdjustment())),
+                    new SleepAction(0.5),
+                    new InstantAction(() ->     externTele.lext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
+                    new InstantAction(() ->     externTele.rext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
+                    new SleepAction(1.5),
+                    new InstantAction(() ->     externTele.lext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
+                    new InstantAction(() ->     externTele.rext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
+                    new SleepAction(0.5),
+                    new InstantAction(() -> externTele.rotation.setPosition(externTele.rotation.getPosition()+processor.getServoAdjustment())),
+                    new SleepAction(0.5),
+                    new InstantAction(() -> externTele.lsecondary.setPosition(0.14)),
+                    new InstantAction(() -> externTele.rsecondary.setPosition(0.14)),
+                    new SleepAction(0.5),
+                    new InstantAction(() ->     externTele.claw.setPosition(0.42))
             ));
         }
 
@@ -318,26 +322,7 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
             externTele.claw.setPosition(0.6);  // Open the claw
         }
 
-if(gamepad1.left_trigger == 1){
-    runningActions.add(new SequentialAction(
-            new InstantAction(() ->     turret.setTargetPosition(turret.getCurrentPosition()+processor.getTurretAdjustment())),
-            new SleepAction(0.5),
-            new InstantAction(() -> turret.setTargetPosition(turret.getCurrentPosition()+processor.getTurretAdjustment())),
-            new SleepAction(0.5),
-            new InstantAction(() ->     externTele.lext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
-            new InstantAction(() ->     externTele.rext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
-            new SleepAction(1.5),
-            new InstantAction(() ->     externTele.lext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
-            new InstantAction(() ->     externTele.rext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
-            new SleepAction(0.5),
-            new InstantAction(() -> externTele.rotation.setPosition(externTele.rotation.getPosition()+processor.getServoAdjustment())),
-            new SleepAction(0.5),
-            new InstantAction(() -> externTele.lsecondary.setPosition(0.14)),
-            new InstantAction(() -> externTele.rsecondary.setPosition(0.14)),
-            new SleepAction(0.5),
-            new InstantAction(() ->     externTele.claw.setPosition(0.42))
-    ));
-}
+
 
 
         if(gamepad1.right_bumper){
@@ -387,7 +372,7 @@ if(gamepad1.left_trigger == 1){
 
         turret.update();
         lift.update();
-        telemetry.addData("UPDATED5", 0);
+        telemetry.addData("UPDATED", 0);
         telemetry.addData("rotation adjustment", processor.getServoAdjustment());
         telemetry.addData("turret adjustment", processor.getTurretAdjustment());
         telemetry.addData("extension adjustment", processor.getExtensionAdjustment());
