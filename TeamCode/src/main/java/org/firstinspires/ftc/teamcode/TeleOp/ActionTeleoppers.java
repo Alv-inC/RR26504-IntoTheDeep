@@ -92,6 +92,7 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
 
     // Declare the states of each mechanism (lift, arm, claw)
     boolean clawOpen = false;  // State of the claw, true for open, false for closed
+    boolean previousBButtonState = false;
     int liftPositionState = 0; // Lift states: 0 = lowest, 1 = mid, 2 = highest
     int armPositionState = 0;  // Arm states: 0 = retracted, 1 = extended
     // Declare the toggle state and previous state for dpad_right
@@ -163,6 +164,7 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
 
     @Override
     public void loop() {
+
         if(MASK_TOGGLE){
             FtcDashboard.getInstance().sendImage(processor.getMaskedFrameBitmap());
         } else {
@@ -182,16 +184,7 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
         // Trigger actions when gamepad1.x is pressed
         if (gamepad1.x) {
             runningActions.add(new SequentialAction(
-
-            new InstantAction(() -> externTele.rotation.setPosition(0.47)),
-                    //turret.setTargetPosition(turretPosition);
-                    new InstantAction(() -> externTele.lsecondary.setPosition(0.16)),
-                    new InstantAction(() -> externTele.rsecondary.setPosition(0.16)),
-                    new InstantAction(() -> externTele.primary.setPosition(0.3)),
-                    new InstantAction(() -> turret.setTargetPosition(0)),
-                    new InstantAction(() -> lift.setTargetPosition(30))
-
-
+           chain.grabPosition()
             ));
         }
 
@@ -232,26 +225,24 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
             toggle = false;  // Reset toggle to allow future button presses
         }
 
-        if(gamepad1.b){
+        boolean currentBButtonState = gamepad1.b;
+        if(currentBButtonState && !previousBButtonState){
             runningActions.add(new SequentialAction(
+                    //add code to make it non-spammable
                     new InstantAction(() ->     turret.setTargetPosition(turret.getCurrentPosition()+processor.getTurretAdjustment()*-1)),
-                    new SleepAction(0.5),
-                    new InstantAction(() -> turret.setTargetPosition(turret.getCurrentPosition()+processor.getTurretAdjustment()*-1)),
-                    new SleepAction(0.5),
+                    new SleepAction(0.3),
                     new InstantAction(() ->     externTele.lext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
                     new InstantAction(() ->     externTele.rext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
-                    new SleepAction(1.5),
-                    new InstantAction(() ->     externTele.lext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
-                    new InstantAction(() ->     externTele.rext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
-                    new SleepAction(0.5),
+                    new SleepAction(1.1),
                     new InstantAction(() -> externTele.rotation.setPosition(externTele.rotation.getPosition()+processor.getServoAdjustment())),
-                    new SleepAction(0.5),
+                    new SleepAction(0.3),
                     new InstantAction(() -> externTele.lsecondary.setPosition(0.15)),
                     new InstantAction(() -> externTele.rsecondary.setPosition(0.15)),
-                    new SleepAction(0.5),
+                    new SleepAction(0.3),
                     new InstantAction(() ->     externTele.claw.setPosition(0.42))
             ));
         }
+        previousBButtonState = currentBButtonState;
         if(gamepad1.left_stick_button){
             externTele.rotation.setPosition(externTele.rotation.getPosition()+processor.getServoAdjustment());
         }
