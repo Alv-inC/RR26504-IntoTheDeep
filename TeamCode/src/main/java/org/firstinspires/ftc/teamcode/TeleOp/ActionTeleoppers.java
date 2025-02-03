@@ -349,7 +349,7 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
         }
 
         boolean buttonState2a = false;
-        if(gamepad2.a && !buttonState2a) drive.strafe(processor.getSpecimenAdjustment());
+        if(gamepad2.a && !buttonState2a) strafe(drive.leftFront, drive.rightFront, drive.leftBack, drive.rightBack, processor.getSpecimenAdjustment());
         buttonState2a = gamepad2.a;
 
 
@@ -372,5 +372,48 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
         telemetry.addData("rotation position", externTele.rotation.getPosition());
         telemetry.addData("turret adjustment", processor.getTurretAdjustment());
         telemetry.addData("extension adjustment", processor.getExtensionAdjustment());
+    }
+
+    private void strafe(DcMotorEx frontLeft, DcMotorEx frontRight, DcMotorEx backLeft, DcMotorEx backRight, double targetTicks){
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        if(targetTicks<0) {
+            // Wait until movement finishes
+            while (Math.abs(backLeft.getCurrentPosition()) < Math.abs(targetTicks)) {
+                // Keep looping
+                frontLeft.setPower(0.6);
+                frontRight.setPower(-0.6);
+                backLeft.setPower(-0.6);
+                backRight.setPower(0.6);
+                telemetry.addLine("Strafing...");
+                telemetry.addData("Current Position", backLeft.getCurrentPosition());
+                telemetry.addData("Target Position", targetTicks);
+                telemetry.update();
+            }
+        } else{
+            while (Math.abs(backLeft.getCurrentPosition()) < Math.abs(targetTicks)) {
+                // Keep looping
+                frontLeft.setPower(-0.6);
+                frontRight.setPower(0.6);
+                backLeft.setPower(0.6);
+                backRight.setPower(-0.6);
+                telemetry.addLine("Strafing...");
+                telemetry.addData("Current Position", backLeft.getCurrentPosition());
+                telemetry.addData("Target Position", targetTicks);
+                telemetry.update();
+            }
+        }
+
+        // Stop motors
+        frontLeft.setPower(0);
+        frontRight.setPower(0);
+        backLeft.setPower(0);
+        backRight.setPower(0);
+
     }
 }
