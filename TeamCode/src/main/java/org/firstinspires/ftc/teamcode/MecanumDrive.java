@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.canvas.Canvas;
@@ -487,4 +489,39 @@ public final class MecanumDrive {
                 defaultVelConstraint, defaultAccelConstraint
         );
     }
+    public void strafe(double targetTicks){
+        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        if(targetTicks<0) {
+            // Wait until movement finishes
+            while (Math.abs(leftBack.getCurrentPosition()) < Math.abs(targetTicks)) {
+                // Keep looping
+                leftFront.setPower(0.6);
+                rightFront.setPower(-0.6);
+                leftBack.setPower(-0.6);
+                rightBack.setPower(0.6);
+            }
+        } else{
+            while (Math.abs(leftBack.getCurrentPosition()) < Math.abs(targetTicks)) {
+                // Keep looping
+                leftFront.setPower(-0.6);
+                rightFront.setPower(0.6);
+                leftBack.setPower(0.6);
+                rightBack.setPower(-0.6);
+            }
+        }
+
+        // Stop motors
+        leftFront.setPower(0);
+        rightFront.setPower(0);
+        leftBack.setPower(0);
+        rightBack.setPower(0);
+
+    }
+
 }

@@ -37,6 +37,7 @@ public class cameraProcessor implements VisionProcessor, CameraStreamSource {
     private final AtomicReference<Double> servoAdjustment = new AtomicReference<>(0.0);
     private final AtomicReference<Double> extensionAdjustment = new AtomicReference<>(0.0);
     private final AtomicReference<Double> turretAdjustment = new AtomicReference<>(0.0);
+    private final AtomicReference<Double> specimenAdjustment = new AtomicReference<>(0.0);
     private final AtomicReference<Scalar> centerHSV = new AtomicReference<>(new Scalar(0, 0, 0, 0));
     private final AtomicReference<Bitmap> lastFrame = new AtomicReference<>(Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565));
     private final AtomicReference<Bitmap> peopleMaskedFrame = new AtomicReference<>(Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565));
@@ -53,6 +54,9 @@ public class cameraProcessor implements VisionProcessor, CameraStreamSource {
     }
     public double getTurretAdjustment() {
         return turretAdjustment.get();
+    }
+    public double getSpecimenAdjustment(){
+        return specimenAdjustment.get();
     }
     public Bitmap getMaskedFrameBitmap() {
         return peopleMaskedFrame.get();
@@ -108,9 +112,8 @@ public class cameraProcessor implements VisionProcessor, CameraStreamSource {
             servoAdjustment.set(calculateServoAdjustment(rotatedRect));
             extensionAdjustment.set(calculateExtensionAdjustment(rotatedRect));
             turretAdjustment.set(calculateTurretAdjustment(rotatedRect));
+            specimenAdjustment.set(calculateSpecimenAdjustment(rotatedRect));
         }
-
-
         return null;
     }
 
@@ -151,7 +154,7 @@ public class cameraProcessor implements VisionProcessor, CameraStreamSource {
         double offsetMM = offsetY*152/480;
         double offsetTicks = offsetMM*0.33/303;
         offsetTicks *= -1;
-        offsetTicks /= 2;
+        offsetTicks /= 2.5;
         //offsetTicks += 0.01;
         if(offsetTicks< 0) offsetTicks -= 0.0225;
 //        else offsetTicks += 0.02;
@@ -173,5 +176,21 @@ public class cameraProcessor implements VisionProcessor, CameraStreamSource {
 
         // Return the calculated turret adjustment in motor ticks
         return ticksOffset/3.2;
+    }
+
+    public double calculateSpecimenAdjustment(RotatedRect rotatedRect) {
+        // Get X offset in pixels
+        double objectX = rotatedRect.center.x;
+        double offsetX = objectX - (640 / 2);  // Camera center is at 320 px
+
+        // Convert pixel offset to millimeters
+        double offsetMM = (offsetX / 640) * 230; // 230mm is the actual frame width
+
+        // Convert millimeters to encoder ticks
+        double wheelCircumference = 110; // mm
+        double ticksPerRevolution = 8192; // Example for GoBILDA 312 RPM motors
+        double ticksPerMM = ticksPerRevolution / wheelCircumference;
+
+        return offsetMM * ticksPerMM; // Returns encoder ticks needed to center object
     }
 }

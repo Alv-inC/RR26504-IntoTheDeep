@@ -181,19 +181,6 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
         }
         runningActions = newActions;
 
-
-        ///PLAYER 1 CODE
-        //drivetrain code
-        drive.setDrivePowers(new PoseVelocity2d(
-                new Vector2d(
-                        -gamepad1.left_stick_y,
-                        -gamepad1.left_stick_x
-                ),
-                -gamepad1.right_stick_x
-        ));
-
-        drive.updatePoseEstimate();
-
         // Trigger actions when gamepad1.x is pressed
         if (gamepad1.x) {
             runningActions.add(new SequentialAction(
@@ -201,69 +188,47 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
             ));
         }
 
-        if(gamepad2.y){
+
+        //retract to base position
+        if(gamepad1.y){
             runningActions.add(new SequentialAction(
-                    chain.scoreSpecimen()
+            chain.scoreSpecimen()
+
+
             ));
         }
-
-
-        if(gamepad1.left_bumper){
-            externTele.claw.setPosition(0.6);  // Open the claw
-        }
-
-        if(gamepad1.right_bumper){
-            externTele.claw.setPosition(0.42);  // Close the claw
-            if(externTele.lsecondary.getPosition() > 0.15 && externTele.rsecondary.getPosition() > 0.15){
-                runningActions.add(new SequentialAction(
-                        new InstantAction(() -> turret.setTargetPosition(-1250)),
-                        new SleepAction(0.5),
-                        chain.scorePosition()
-                ));
-            }
-        }
+        //transfer
 
 
 
+        // Declare a variable to track the current lift position state
+         // Start at 0
 
-/// PLAYER 2 CODE
-        if (gamepad2.dpad_up && !toggle) {  // Check if the button is pressed and toggle is false
+// In your loop or function where the dpad_up action is checked
+        if (gamepad1.dpad_up && !toggle) {  // Check if the button is pressed and toggle is false
             toggle = true;  // Prevents spamming, now the toggle is true
             // Change the lift position state based on the current state
             if (liftPositionState == 0) {
                 liftPositionState = 1;  // Move to position 1
-                runningActions.add(new SequentialAction(
-                new InstantAction(()->turret.setTargetPosition(-1250)),
-                new SleepAction(1.5),
-                new InstantAction(()->lift.setTargetPosition(2500))
-                ));
+                lift.setTargetPosition(835);
+            } else if (liftPositionState == 2) {
+                liftPositionState = 0;  // Move to position 2
+                lift.setTargetPosition(1700);
             } else if (liftPositionState == 1) {
                 liftPositionState = 0;  // Move back to position 0
                 if(lift.getPosition() > 1000){
-                    runningActions.add(new SequentialAction(
-                    new InstantAction(()->lift.setTargetPosition(30)),
-                    new SleepAction(1.5),
-                    new InstantAction(()->turret.setTargetPosition(0))
-                    ));
+                    lift.setTargetPosition(30);
                 }
 
             }
-        } else if (!gamepad2.dpad_up && toggle) {  // Button is released and toggle is true
+        } else if (!gamepad1.dpad_up && toggle) {  // Button is released and toggle is true
             toggle = false;  // Reset toggle to allow future button presses
         }
 
-        boolean currentBButtonState = gamepad2.a;
+        boolean currentBButtonState = gamepad1.b;
         if(currentBButtonState && !previousBButtonState){
             runningActions.add(new SequentialAction(
                     //add code to make it non-spammable
-                    //code to make it extend and look down
-                    new InstantAction(() -> externTele.lext.setPosition(0.15)),
-                    new InstantAction(() -> externTele.rext.setPosition(0.15)),
-                    new InstantAction(() -> externTele.lsecondary.setPosition(0.25)),
-                    new InstantAction(() -> externTele.rsecondary.setPosition(0.25)),
-                    new InstantAction(() -> externTele.primary.setPosition(0.67)),
-                    new InstantAction(() -> externTele.rotation.setPosition(0.47)),
-                    //code to intake it
                     new InstantAction(() ->     turret.setTargetPosition(turret.getCurrentPosition()+processor.getTurretAdjustment()*-1)),
                     new SleepAction(0.3),
                     new InstantAction(() ->     externTele.lext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
@@ -278,48 +243,125 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
             ));
         }
         previousBButtonState = currentBButtonState;
-        if(gamepad2.left_stick_button){
+        if(gamepad1.left_stick_button){
             externTele.rotation.setPosition(externTele.rotation.getPosition()+processor.getServoAdjustment());
         }
 
+        ////score specimen
 
-        if(gamepad2.b){
-            //code to transfer
+            if (gamepad1.dpad_down && !clawRotationToggle) {  // Check if the button is pressed and toggle is false
+                clawRotationToggle = true;  // Prevent spamming, now the toggle is true
+                // Change the claw rotation state based on the current state
+                if (clawRotationState == 0) {
+                    clawRotationState = 1;
+                    externTele.rotation.setPosition(0.18); // Set rotation to 90 degrees (adjust value as needed)
+                } else if (clawRotationState == 1) {
+                    clawRotationState = 0;
+                    externTele.rotation.setPosition(0.47); // Set rotation to 0 degrees (adjust value as needed)
+                }
+            } else if (!gamepad1.dpad_down && clawRotationToggle) {  // Button is released and toggle is true
+                clawRotationToggle = false;  // Reset toggle to allow future button presses
+            }
+
+        if (gamepad1.dpad_right && !dPadtoggle) {  // Check if the button is pressed and toggle is false
+            dPadtoggle = true;  // Prevents spamming, now the toggle is true
+            // Change the lift position state based on the current state
+            if (exPositionState == 0){
+                exPositionState = 1;
+                externTele.lext.setPosition(0.05); // Move to position when toggle is on
+                externTele.rext.setPosition(0.05); // Move to position when toggle is on
+            } else if (exPositionState == 1) {
+                exPositionState = 0;
+                externTele.lext.setPosition(0.25); // Move to position when toggle is off
+                externTele.rext.setPosition(0.25); // Move to position when toggle is off
+                if(lift.getPosition() > 500 && !actionsRunning) {
+                    actionsRunning = true;
+
+                    runningActions.add(new SequentialAction(
+                            new SleepAction(1.5),
+                            new InstantAction(() -> externTele.claw.setPosition(0.6)),
+                            new InstantAction(() -> externTele.rotation.setPosition(0.47)),
+                            new SleepAction(1),
+                            //turret.setTargetPosition(turretPosition);
+                            new InstantAction(() -> externTele.lsecondary.setPosition(0.16)),
+                            new InstantAction(() -> externTele.rsecondary.setPosition(0.16)),
+                            new InstantAction(() -> externTele.primary.setPosition(0.3)),
+                            new InstantAction(() -> externTele.lext.setPosition(0.05)),
+                            new InstantAction(() -> externTele.rext.setPosition(0.05))
+                    ));
+                    exPositionState = 1;
+
+                }
+            }
+        } else if (!gamepad1.dpad_right && dPadtoggle) {  // Button is released and toggle is true
+            dPadtoggle = false;  // Reset toggle to allow future button presses
+        }
+        if (gamepad1.dpad_left && !IDKtoggle) {  // Check if the button is pressed and toggle is false
+            IDKtoggle = true;  // Prevents spamming, now the toggle is true
+            // Change the lift position state based on the current state
+            if (IDKPositionState == 0){
+                IDKPositionState = 1;
+               lift.setTargetPosition(1700);
+            } else if (IDKPositionState == 1) {
+                IDKPositionState = 0;
+                lift.setTargetPosition(30);
+
+            }
+        } else if (!gamepad1.dpad_left && IDKtoggle) {  // Button is released and toggle is true
+            IDKtoggle = false;  // Reset toggle to allow future button presses
         }
 
-        if(gamepad2.left_bumper){
+
+        if(gamepad1.left_bumper){
+            externTele.claw.setPosition(0.6);  // Open the claw
+        }
+
+
+
+
+        if(gamepad1.right_bumper){
+            externTele.claw.setPosition(0.42);  // Close the claw
+            if(externTele.lsecondary.getPosition() > 0.15 && externTele.rsecondary.getPosition() > 0.15){
+                runningActions.add(new SequentialAction(
+                chain.scorePosition()
+                        ));
+            }
+        }
+
+
+        if(gamepad1.a){
             runningActions.add(new SequentialAction(
-                    //dump position
-                    //wait 0.5 secomds
-                    //open the trapdoor
-                    //wait 0.2 seconds
-                    //close the trapdoor
-                    //back to original position
-            ));
+                    new InstantAction(() -> externTele.lext.setPosition(0.15)),
+                    new InstantAction(() -> externTele.rext.setPosition(0.15)),
+                    new InstantAction(() -> externTele.lsecondary.setPosition(0.25)),
+                    new InstantAction(() -> externTele.rsecondary.setPosition(0.25)),
+                    new InstantAction(() -> externTele.primary.setPosition(0.67)),
+                    new InstantAction(() -> externTele.rotation.setPosition(0.47))
+
+
+
+                        ));
+                    }
+        if(gamepad2.x){
+            RANGE_HIGH = new Scalar(100, 150, 255, 255);
+            RANGE_LOW = new Scalar(10, 30, 140, 0);
+        }
+        if(gamepad2.b){
+            RANGE_HIGH = new Scalar(255, 5, 230,255);
+            RANGE_LOW = new Scalar(150, 0, 0,0);
         }
 
 
+        //drivetrain code
+        drive.setDrivePowers(new PoseVelocity2d(
+                new Vector2d(
+                        -gamepad1.left_stick_y,
+                        -gamepad1.left_stick_x
+                ),
+                -gamepad1.right_stick_x
+        ));
 
-        if(gamepad2.dpad_left){
-            //code for hang release
-        }
-
-        if(gamepad2.dpad_right){
-            //code for hang pull
-        }
-
-//        //color change?
-//        if(gamepad2.x){
-//            RANGE_HIGH = new Scalar(100, 150, 255, 255);
-//            RANGE_LOW = new Scalar(10, 30, 140, 0);
-//        }
-//        if(gamepad2.b){
-//            RANGE_HIGH = new Scalar(255, 5, 230,255);
-//            RANGE_LOW = new Scalar(150, 0, 0,0);
-//        }
-
-
-
+        drive.updatePoseEstimate();
 
 
         turret.update();
