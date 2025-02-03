@@ -233,7 +233,7 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
                     new SleepAction(0.3),
                     new InstantAction(() ->     externTele.lext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
                     new InstantAction(() ->     externTele.rext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
-                    new SleepAction(1.1),
+                    new SleepAction(1),
                     new InstantAction(() -> externTele.rotation.setPosition(externTele.rotation.getPosition()+processor.getServoAdjustment())),
                     new SleepAction(0.3),
                     new InstantAction(() -> externTele.lsecondary.setPosition(0.15)),
