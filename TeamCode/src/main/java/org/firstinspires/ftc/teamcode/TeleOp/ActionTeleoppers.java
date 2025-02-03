@@ -225,15 +225,15 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
             toggle = false;  // Reset toggle to allow future button presses
         }
 
-        boolean currentBButtonState = gamepad1.b;
-        if(currentBButtonState && !previousBButtonState){
+        boolean buttonState1b = false;
+        if(gamepad1.b && !buttonState1b){
             runningActions.add(new SequentialAction(
                     //add code to make it non-spammable
                     new InstantAction(() ->     turret.setTargetPosition(turret.getCurrentPosition()+processor.getTurretAdjustment()*-1)),
-                    new SleepAction(0.3),
+                    new SleepAction(0.5),
                     new InstantAction(() ->     externTele.lext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
                     new InstantAction(() ->     externTele.rext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
-                    new SleepAction(1),
+                    new SleepAction(0.5),
                     new InstantAction(() -> externTele.rotation.setPosition(externTele.rotation.getPosition()+processor.getServoAdjustment())),
                     new SleepAction(0.3),
                     new InstantAction(() -> externTele.lsecondary.setPosition(0.15)),
@@ -242,10 +242,7 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
                     new InstantAction(() ->     externTele.claw.setPosition(0.42))
             ));
         }
-        previousBButtonState = currentBButtonState;
-        if(gamepad1.left_stick_button){
-            externTele.rotation.setPosition(externTele.rotation.getPosition()+processor.getServoAdjustment());
-        }
+        buttonState1b = gamepad1.b;
 
         ////score specimen
 
@@ -350,6 +347,10 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
             RANGE_HIGH = new Scalar(255, 5, 230,255);
             RANGE_LOW = new Scalar(150, 0, 0,0);
         }
+
+        boolean buttonState2a = false;
+        if(gamepad2.a && !buttonState2a) drive.strafe(processor.getSpecimenAdjustment());
+        buttonState2a = gamepad2.a;
 
 
         //drivetrain code
