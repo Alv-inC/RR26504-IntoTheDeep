@@ -56,16 +56,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.cameraProcessor;
 
 @TeleOp(name = "pray")
 public class ActionTeleoppers extends ActionOpMode {
-    public static boolean clawgo, rotationgo, extensiongo, secondarygo = false;
-    public static double width, height = 0;
     public static boolean MASK_TOGGLE = true;
-//    public static Scalar RANGE_LOW = new Scalar(170, 100, 0, 0);
-//    public static Scalar RANGE_HIGH = new Scalar(255, 255, 230, 255);
-public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
-    public static Scalar RANGE_HIGH = new Scalar(180, 255, 255, 255); // Maximum HSV values
-
-    public static double rotpos = 0.5;
-
 
     private InitializeTeleOp externTele;  // Use the class-level reference
 
@@ -121,7 +112,7 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
         chain = new ChainActions(hardwareMap);
         //initialize motors
         //init cameras
-        processor = new cameraProcessor();
+        processor = new cameraProcessor(new Scalar(100, 0, 0,0), new Scalar(255, 5, 230,255), false);
 
         new VisionPortal.Builder()
                 .addProcessor(processor)
@@ -340,16 +331,19 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
                         ));
                     }
         if(gamepad2.x){
-            RANGE_HIGH = new Scalar(100, 150, 255, 255);
-            RANGE_LOW = new Scalar(10, 30, 140, 0);
+            processor.RANGE_HIGH_1 = new Scalar(100, 150, 255, 255);
+            processor.RANGE_LOW_1 = new Scalar(10, 30, 140, 0);
         }
         if(gamepad2.b){
-            RANGE_HIGH = new Scalar(255, 5, 230,255);
-            RANGE_LOW = new Scalar(150, 0, 0,0);
+            processor.RANGE_HIGH_1 = new Scalar(255, 5, 230,255);
+            processor.RANGE_LOW_1 = new Scalar(150, 0, 0,0);
+        }
+        if(gamepad2.y){
+            processor.yellow = true;
         }
 
         boolean buttonState2a = false;
-        if(gamepad2.a && !buttonState2a) drive.strafe(processor.getSpecimenAdjustment());
+        if(gamepad2.a && !buttonState2a) strafe(drive.leftFront, drive.rightFront, drive.leftBack, drive.rightBack, processor.getSpecimenAdjustment());
         buttonState2a = gamepad2.a;
 
 
@@ -372,5 +366,47 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
         telemetry.addData("rotation position", externTele.rotation.getPosition());
         telemetry.addData("turret adjustment", processor.getTurretAdjustment());
         telemetry.addData("extension adjustment", processor.getExtensionAdjustment());
+    }
+    private void strafe(DcMotorEx frontLeft, DcMotorEx frontRight, DcMotorEx backLeft, DcMotorEx backRight, double targetTicks){
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        if(targetTicks<0) {
+            // Wait until movement finishes
+            while (Math.abs(backLeft.getCurrentPosition()) < Math.abs(targetTicks)) {
+                // Keep looping
+                frontLeft.setPower(0.6);
+                frontRight.setPower(-0.6);
+                backLeft.setPower(-0.6);
+                backRight.setPower(0.6);
+                telemetry.addLine("Strafing...");
+                telemetry.addData("Current Position", backLeft.getCurrentPosition());
+                telemetry.addData("Target Position", targetTicks);
+                telemetry.update();
+            }
+        } else{
+            while (Math.abs(backLeft.getCurrentPosition()) < Math.abs(targetTicks)) {
+                // Keep looping
+                frontLeft.setPower(-0.6);
+                frontRight.setPower(0.6);
+                backLeft.setPower(0.6);
+                backRight.setPower(-0.6);
+                telemetry.addLine("Strafing...");
+                telemetry.addData("Current Position", backLeft.getCurrentPosition());
+                telemetry.addData("Target Position", targetTicks);
+                telemetry.update();
+            }
+        }
+
+        // Stop motors
+        frontLeft.setPower(0);
+        frontRight.setPower(0);
+        backLeft.setPower(0);
+        backRight.setPower(0);
+
     }
 }

@@ -24,15 +24,10 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class cameraProcessor implements VisionProcessor, CameraStreamSource {
-    //    cameraProcessor(Scalar range_low, Scalar range_high){
-//        Scalar low = range_low;
-//        Scalar high = range_high;
-//    }
     public static double width, height = 0;
     public static boolean MASK_TOGGLE = true;
-    public static Scalar RANGE_LOW = new Scalar(100, 0, 0,0);
-    public static Scalar RANGE_HIGH = new Scalar(255, 5, 230,255);
-    public static double rotpos = 0.5;
+    public static Scalar RANGE_LOW_1, RANGE_HIGH_1, RANGE_LOW_2, RANGE_HIGH_2;
+    public boolean yellow;
     Mat peopleMask = new Mat();
     private final AtomicReference<Double> servoAdjustment = new AtomicReference<>(0.0);
     private final AtomicReference<Double> extensionAdjustment = new AtomicReference<>(0.0);
@@ -42,6 +37,11 @@ public class cameraProcessor implements VisionProcessor, CameraStreamSource {
     private final AtomicReference<Bitmap> lastFrame = new AtomicReference<>(Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565));
     private final AtomicReference<Bitmap> peopleMaskedFrame = new AtomicReference<>(Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565));
 
+    public cameraProcessor(Scalar low, Scalar high, boolean yellow){
+        this.yellow = yellow;
+        RANGE_LOW_1 = low;
+        RANGE_HIGH_1 = high;
+    }
     @Override
     public void getFrameBitmap(Continuation<? extends Consumer<Bitmap>> continuation) {
         continuation.dispatch(bitmapConsumer -> bitmapConsumer.accept(lastFrame.get()));
@@ -88,7 +88,22 @@ public class cameraProcessor implements VisionProcessor, CameraStreamSource {
         Bitmap b = Bitmap.createBitmap(frame.width(), frame.height(), Bitmap.Config.RGB_565);
         Utils.matToBitmap(frame, b);
         lastFrame.set(b);
-        Core.inRange(frame, RANGE_LOW, RANGE_HIGH, peopleMask);
+
+        if(!yellow){
+            RANGE_LOW_2 = new Scalar(0, 0, 0, 0);
+            RANGE_HIGH_2 = new Scalar(0, 0, 0, 0);
+        } else{
+            RANGE_LOW_2 = new Scalar(170, 100, 0,0);
+            RANGE_HIGH_2 = new Scalar(255, 255, 230,255);
+        }
+
+        Mat mask1 = new Mat();
+        Mat mask2 = new Mat();
+        Mat peopleMask = new Mat();
+        Core.inRange(frame, RANGE_LOW_1, RANGE_HIGH_1, mask1);
+        Core.inRange(frame, RANGE_LOW_2, RANGE_HIGH_2, mask2);
+        Core.bitwise_or(mask1, mask2, peopleMask);
+
         Bitmap b_peopleMask = Bitmap.createBitmap(frame.width(), frame.height(), Bitmap.Config.RGB_565);
         Utils.matToBitmap(peopleMask, b_peopleMask);
         peopleMaskedFrame.set(b_peopleMask);

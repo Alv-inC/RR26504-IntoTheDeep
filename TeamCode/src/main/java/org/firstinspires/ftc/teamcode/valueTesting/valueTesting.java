@@ -32,7 +32,7 @@ public class valueTesting extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         pext = 0.15; ppri = 0.67; psec = 0.25; pclaw = 0.45; prot = 0.47;
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        final cameraProcessor processor = new cameraProcessor();
+        final cameraProcessor processor = new cameraProcessor(new Scalar(100, 0, 0,0), new Scalar(255, 5, 230,255), false);
         new VisionPortal.Builder()
                 .addProcessor(processor)
                 .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
