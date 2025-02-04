@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "SECONDARYPRIMARY", group = "Testing")
 public class testPrimarySecondary extends OpMode {
     private Servo lsecondary;
     private Servo rsecondary;

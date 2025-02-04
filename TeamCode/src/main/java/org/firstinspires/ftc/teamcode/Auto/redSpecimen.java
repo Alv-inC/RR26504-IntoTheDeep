@@ -28,18 +28,18 @@ import org.firstinspires.ftc.teamcode.Subsystems.Turret;
 
 import java.util.Arrays;
 
-@Autonomous(name = "Testing Auto")
-public class testAuto extends LinearOpMode {
-private Lift lift;
-private Turret turret;
-// private ChainActions chain = new ChainActions(hardwareMap);
-private InitializeTeleOp externTele;
-private ChainActions chain;
+@Autonomous(name = "Red Specimen")
+public class redSpecimen extends LinearOpMode {
+    private Lift lift;
+    private Turret turret;
+    // private ChainActions chain = new ChainActions(hardwareMap);
+    private InitializeTeleOp externTele;
+    private ChainActions chain;
 
-VelConstraint slower = new MinVelConstraint(Arrays.asList(
-        new TranslationalVelConstraint(30),
-        new AngularVelConstraint(Math.PI / 2)
-));
+    VelConstraint slower = new MinVelConstraint(Arrays.asList(
+            new TranslationalVelConstraint(30),
+            new AngularVelConstraint(Math.PI / 2)
+    ));
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -112,22 +112,20 @@ VelConstraint slower = new MinVelConstraint(Arrays.asList(
 //                .waitSeconds(0.4)
 
                 .splineToConstantHeading(new Vector2d(45, -55), Math.toRadians(270))
+                .turn(Math.toRadians(180))
                 .afterTime(0.1, new SequentialAction(
-                        new InstantAction(() -> turret.setTargetPosition(-1250)),
-                    new SleepAction(1.5),
-                    chain.grabPosition()
+                        chain.grabPosition()
                 ))
                 .waitSeconds(2)
                 .afterTime(0,
                         new SequentialAction(
-                        new InstantAction(() -> externTele.claw.setPosition(0.42)),
-                        new InstantAction(() -> turret.setTargetPosition(-1250)),
-                        new SleepAction(0.3),
-                        chain.scorePosition()
-                ))
+                                new InstantAction(() -> externTele.claw.setPosition(0.42)),
+                                chain.scorePosition()
+                        ))
                 .splineToConstantHeading(new Vector2d(8.75, -36), Math.toRadians(90))
+                .turn(Math.toRadians(180))
+                .waitSeconds(1.5)
                 .afterTime(0, new SequentialAction(
-                        new SleepAction(1.5),
                         chain.scoreSpecimen()
                 ))
 //                //turn 180;
@@ -170,7 +168,7 @@ VelConstraint slower = new MinVelConstraint(Arrays.asList(
         Actions.runBlocking(new ParallelAction(
                 trajectoryAction,
                 lift.updateAction(),
-                turret .updateAction()
+                turret.updateAction()
         ));
 //        Actions.runBlocking(new IDK.RaceParallelCommand(
 //                trajectoryAction,
