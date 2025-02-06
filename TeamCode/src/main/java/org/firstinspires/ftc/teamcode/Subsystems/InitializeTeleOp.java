@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class InitializeTeleOp {
-    public Servo rotation, lext, rext, lsecondary, rsecondary, primary, claw;
+    public Servo rotation, lext, rext, lsecondary, rsecondary, primary, claw, trapdoor, ltransfer, rtransfer;
     public MultipleTelemetry telemetry;
 
     public void initialize(HardwareMap hardwareMap) {
@@ -34,8 +34,16 @@ public class InitializeTeleOp {
         primary.setPosition(0.33);
 
         claw = hardwareMap.get(Servo.class, "claw");
+
+        trapdoor = hardwareMap.get(Servo.class, "outtake");
+        trapdoor.setPosition(0.67);
+        ltransfer = hardwareMap.get(Servo.class, "ltransfer");
+        ltransfer.setDirection(Servo.Direction.REVERSE);
+        rtransfer = hardwareMap.get(Servo.class, "rtransfer");
+        ltransfer.setPosition(0.05);
+        rtransfer.setPosition(0.05);
     }
-    public void waitWithoutStoppingRobot(double milliseconds) {
+    public void waitWithoutStoppingRobotcc(double milliseconds) {
         ElapsedTime timer = new ElapsedTime(); // Create a timer instance
         timer.reset(); // Reset the timer to start at 0
 
