@@ -27,21 +27,23 @@ public class InitializeTeleOp {
         lsecondary = hardwareMap.get(Servo.class, "lsecondary");
         rsecondary = hardwareMap.get(Servo.class, "rsecondary");
         lsecondary.setDirection(Servo.Direction.REVERSE);
-        lsecondary.setPosition(0.34);
-        rsecondary.setPosition(0.34);
+        lsecondary.setPosition(0.36);
+        rsecondary.setPosition(0.36);
 
         primary = hardwareMap.get(Servo.class, "primary");
         primary.setPosition(0.33);
 
         claw = hardwareMap.get(Servo.class, "claw");
 
-        trapdoor = hardwareMap.get(Servo.class, "outtake");
-        trapdoor.setPosition(0.67);
-        ltransfer = hardwareMap.get(Servo.class, "ltransfer");
-        ltransfer.setDirection(Servo.Direction.REVERSE);
-        rtransfer = hardwareMap.get(Servo.class, "rtransfer");
-        ltransfer.setPosition(0.05);
-        rtransfer.setPosition(0.05);
+//        trapdoor = hardwareMap.get(Servo.class, "outtake");
+//        trapdoor.setPosition(0.67);
+//        ltransfer = hardwareMap.get(Servo.class, "ltransfer");
+//        ltransfer.setDirection(Servo.Direction.REVERSE);
+//        rtransfer = hardwareMap.get(Servo.class, "rtransfer");
+//        ltransfer.setPosition(0.05);
+//        rtransfer.setPosition(0.05);
+
+
     }
     public void waitWithoutStoppingRobotcc(double milliseconds) {
         ElapsedTime timer = new ElapsedTime(); // Create a timer instance

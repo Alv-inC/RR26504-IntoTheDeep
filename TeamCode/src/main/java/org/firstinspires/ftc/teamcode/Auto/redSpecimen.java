@@ -28,7 +28,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.Turret;
 
 import java.util.Arrays;
 
-@Autonomous(name = "Red Specimen")
+@Autonomous(name = "RED AUTO")
 public class redSpecimen extends LinearOpMode {
     private Lift lift;
     private Turret turret;
@@ -66,13 +66,19 @@ public class redSpecimen extends LinearOpMode {
 
 
                 .afterTime(0, new SequentialAction(
-                        chain.scorePosition(),
+                        new InstantAction(() -> lift.setTargetPosition(800)),
+                        new InstantAction(() -> externTele.lsecondary.setPosition(0.295)),
+                        new InstantAction(() -> externTele.rsecondary.setPosition(0.295)),
+                        new InstantAction(() -> externTele.primary.setPosition(0.2)),
+                        new InstantAction(() -> externTele.rotation.setPosition(0.47)),
+                        new InstantAction(() -> externTele.lext.setPosition(0.12)),
+                        new InstantAction(() -> externTele.rext.setPosition(0.12)),
                         new SleepAction(1.4),
                         chain.scoreSpecimen(),
                         new SleepAction(1.2)
                 ))
 
-                .strafeTo(new Vector2d(8.75, -36))
+                .strafeTo(new Vector2d(8.75, -38))
 
                 .waitSeconds(1.7)
 
@@ -112,20 +118,21 @@ public class redSpecimen extends LinearOpMode {
 //                .waitSeconds(0.4)
 
                 .splineToConstantHeading(new Vector2d(45, -55), Math.toRadians(270))
-                .turn(Math.toRadians(180))
                 .afterTime(0.1, new SequentialAction(
+                        new InstantAction(() -> turret.setTargetPosition(-1250)),
+                        new SleepAction(1.5),
                         chain.grabPosition()
                 ))
                 .waitSeconds(2)
                 .afterTime(0,
                         new SequentialAction(
                                 new InstantAction(() -> externTele.claw.setPosition(0.42)),
+                                new SleepAction(0.3),
                                 chain.scorePosition()
                         ))
                 .splineToConstantHeading(new Vector2d(8.75, -36), Math.toRadians(90))
-                .turn(Math.toRadians(180))
-                .waitSeconds(1.5)
                 .afterTime(0, new SequentialAction(
+                        new SleepAction(1.5),
                         chain.scoreSpecimen()
                 ))
 //                //turn 180;
@@ -168,7 +175,7 @@ public class redSpecimen extends LinearOpMode {
         Actions.runBlocking(new ParallelAction(
                 trajectoryAction,
                 lift.updateAction(),
-                turret.updateAction()
+                turret .updateAction()
         ));
 //        Actions.runBlocking(new IDK.RaceParallelCommand(
 //                trajectoryAction,

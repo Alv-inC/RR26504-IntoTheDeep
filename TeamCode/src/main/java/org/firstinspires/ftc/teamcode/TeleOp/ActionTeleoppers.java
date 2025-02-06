@@ -107,8 +107,6 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
     private boolean clawRotationToggle;
     private int clawRotationState;
     private MecanumDrive drive;
-    private Scalar red;
-    private Scalar blue;
 
     cameraProcessor processor;
 
@@ -123,8 +121,7 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
         chain = new ChainActions(hardwareMap);
         //initialize motors
         //init cameras
-        Scalar red = new Scalar(0, 0, 0);
-        Scalar blue = new Scalar(0, 0, 0);
+
         processor = new cameraProcessor(new Scalar(100, 0, 0,0), new Scalar(255, 5, 230,255), false);
 
         new VisionPortal.Builder()
@@ -200,9 +197,20 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
 
         // Trigger actions when gamepad1.x is pressed
         if (gamepad1.x) {
-            runningActions.add(new SequentialAction(
-           chain.grabPosition()
-            ));
+            if(turret.getCurrentPosition() > -100 && turret.getCurrentPosition() < 100){
+                runningActions.add(new SequentialAction(
+                        new InstantAction(() -> externTele.rotation.setPosition(0.47)),
+                        new InstantAction(() -> externTele.lsecondary.setPosition(0.17)),
+                        new InstantAction(() -> externTele.rsecondary.setPosition(0.17)),
+                        new InstantAction(() -> externTele.primary.setPosition(0.3)),
+                        new InstantAction(() -> lift.setTargetPosition(30))
+                ));
+            }else{
+                runningActions.add(new SequentialAction(
+                        chain.grabPosition()
+                ));
+            }
+
         }
 
         if(gamepad1.y){
@@ -218,10 +226,8 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
 
         if(gamepad1.right_bumper){
             externTele.claw.setPosition(0.42);  // Close the claw
-            if(externTele.lsecondary.getPosition() > 0.15 && externTele.rsecondary.getPosition() > 0.15){
+            if(externTele.lsecondary.getPosition() > 0.16 && externTele.rsecondary.getPosition() > 0.16){
                 runningActions.add(new SequentialAction(
-                        new InstantAction(() -> turret.setTargetPosition(-1250)),
-                        new SleepAction(0.5),
                         chain.scorePosition()
                 ));
             }
@@ -261,10 +267,11 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
             runningActions.add(new SequentialAction(
                     //add code to make it non-spammable
                     //code to make it extend and look down
+                    new InstantAction(() ->     externTele.claw.setPosition(0.6)),
                     new InstantAction(() -> externTele.lext.setPosition(0.15)),
                     new InstantAction(() -> externTele.rext.setPosition(0.15)),
-                    new InstantAction(() -> externTele.lsecondary.setPosition(0.25)),
-                    new InstantAction(() -> externTele.rsecondary.setPosition(0.25)),
+                    new InstantAction(() -> externTele.lsecondary.setPosition(0.26)),
+                    new InstantAction(() -> externTele.rsecondary.setPosition(0.26)),
                     new InstantAction(() -> externTele.primary.setPosition(0.67)),
                     new InstantAction(() -> externTele.rotation.setPosition(0.47)),
                     new SleepAction(0.5),
@@ -276,8 +283,8 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
                     new SleepAction(1),
                     new InstantAction(() -> externTele.rotation.setPosition(externTele.rotation.getPosition()+processor.getServoAdjustment())),
                     new SleepAction(0.3),
-                    new InstantAction(() -> externTele.lsecondary.setPosition(0.15)),
-                    new InstantAction(() -> externTele.rsecondary.setPosition(0.15)),
+                    new InstantAction(() -> externTele.lsecondary.setPosition(0.16)),
+                    new InstantAction(() -> externTele.rsecondary.setPosition(0.16)),
                     new SleepAction(0.3),
                     new InstantAction(() ->     externTele.claw.setPosition(0.42))
             ));

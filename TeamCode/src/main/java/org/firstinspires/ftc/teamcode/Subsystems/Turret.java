@@ -27,7 +27,7 @@ public class Turret {
 
 
 
-    public static double p = 0.0008, i = 0, d = 0.0001;
+    public static double p = 0.0013, i = 0, d = 0.0001;
     public static double targetPosition = 0;
     //0 is the start position
     //-1250 is the 180 position
@@ -49,7 +49,7 @@ public class Turret {
         turretPID.setPID(p, i, d);
         int pos = turretMotor.getCurrentPosition();
 
-        double power = (turretPID.calculate(pos, targetPosition) / 2);
+        double power = (turretPID.calculate(pos, targetPosition));
 
         //to tune the PID, test P-0.00#, D-0.0001
         // Send telemetry data
