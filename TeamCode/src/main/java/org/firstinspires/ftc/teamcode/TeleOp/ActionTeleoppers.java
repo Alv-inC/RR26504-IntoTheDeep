@@ -262,19 +262,32 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
             toggle = false;  // Reset toggle to allow future button presses
         }
 
-        boolean currentBButtonState = gamepad2.a;
-        if(currentBButtonState && !previousBButtonState){
+        if(gamepad2.dpad_down){
             runningActions.add(new SequentialAction(
-                    //add code to make it non-spammable
-                    //code to make it extend and look down
                     new InstantAction(() ->     externTele.claw.setPosition(0.6)),
                     new InstantAction(() -> externTele.lext.setPosition(0.15)),
                     new InstantAction(() -> externTele.rext.setPosition(0.15)),
                     new InstantAction(() -> externTele.lsecondary.setPosition(0.26)),
                     new InstantAction(() -> externTele.rsecondary.setPosition(0.26)),
                     new InstantAction(() -> externTele.primary.setPosition(0.67)),
-                    new InstantAction(() -> externTele.rotation.setPosition(0.47)),
-                    new SleepAction(0.5),
+                    new InstantAction(() -> externTele.rotation.setPosition(0.47))
+            ));
+        }
+
+        boolean currentBButtonState = gamepad2.a;
+        if(currentBButtonState && !previousBButtonState){
+            runningActions.add(new SequentialAction(
+                    //add code to make it non-spammable
+                    //code to make it extend and look down
+//                    new InstantAction(() ->     externTele.claw.setPosition(0.6)),
+//                    new InstantAction(() -> externTele.lext.setPosition(0.15)),
+//                    new InstantAction(() -> externTele.rext.setPosition(0.15)),
+//                    new InstantAction(() -> externTele.lsecondary.setPosition(0.26)),
+//                    new InstantAction(() -> externTele.rsecondary.setPosition(0.26)),
+//                    new InstantAction(() -> externTele.primary.setPosition(0.67)),
+//                    new InstantAction(() -> externTele.rotation.setPosition(0.47)),
+
+                    new SleepAction(2),
                     //code to intake it
                     new InstantAction(() ->     turret.setTargetPosition(turret.getCurrentPosition()+processor.getTurretAdjustment()*-1)),
                     new SleepAction(0.3),
