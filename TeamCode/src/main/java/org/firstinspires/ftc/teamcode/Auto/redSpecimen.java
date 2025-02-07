@@ -28,7 +28,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.Turret;
 
 import java.util.Arrays;
 
-@Autonomous(name = "RED AUTO")
+@Autonomous(name = "BLUE AUTO")
 public class redSpecimen extends LinearOpMode {
     private Lift lift;
     private Turret turret;

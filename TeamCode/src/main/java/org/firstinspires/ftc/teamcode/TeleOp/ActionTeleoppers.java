@@ -200,11 +200,11 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
         if (gamepad1.x) {
             if(turret.getCurrentPosition() > -100 && turret.getCurrentPosition() < 100){
                 runningActions.add(new SequentialAction(
+                        new InstantAction(() -> lift.setTargetPosition(30)),
                         new InstantAction(() -> externTele.rotation.setPosition(0.47)),
                         new InstantAction(() -> externTele.lsecondary.setPosition(0.17)),
                         new InstantAction(() -> externTele.rsecondary.setPosition(0.17)),
-                        new InstantAction(() -> externTele.primary.setPosition(0.3)),
-                        new InstantAction(() -> lift.setTargetPosition(30))
+                        new InstantAction(() -> externTele.primary.setPosition(0.3))
                 ));
             }else{
                 runningActions.add(new SequentialAction(
@@ -277,18 +277,18 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
 
         boolean previousButtonState1a = false; // Stores the previous state of the button
 
-        if (gamepad1.a && !previousButtonState1a) {
+        if (gamepad2.a && !previousButtonState1a) {
             double adj = processor.getTurretAdjustment();
             turret.setTargetPosition(turret.getCurrentPosition()+processor.getTurretAdjustment()*-1);
             waitWithoutStoppingRobot(300);
             adj = processor.getTurretAdjustment();
             if(Math.abs(adj)>30){
                 turret.setTargetPosition(turret.getCurrentPosition()+adj*-1);
-                waitWithoutStoppingRobot(300);
+                waitWithoutStoppingRobot(500);
             }
             externTele.lext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment());
             externTele.rext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment());
-            waitWithoutStoppingRobot(500);
+            waitWithoutStoppingRobot(800);
             adj = processor.getExtensionAdjustment();
             if(Math.abs(processor.getExtensionAdjustment())>0.005) {
                 externTele.lext.setPosition(externTele.lext.getPosition()+adj);
@@ -302,7 +302,7 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
             waitWithoutStoppingRobot(300);
             externTele.claw.setPosition(0.42);
         }
-        previousButtonState1a = gamepad1.a;
+        previousButtonState1a = gamepad2.a;
 
         if(gamepad2.left_stick_button){
             externTele.rotation.setPosition(externTele.rotation.getPosition()+processor.getServoAdjustment());
@@ -311,6 +311,7 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
 
         if(gamepad2.b){
             //code to transfer
+            externTele.hang.setPower(1);
         }
 
         if(gamepad2.left_bumper){
@@ -323,15 +324,27 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
                     //back to original position
             ));
         }
+        if(gamepad2.right_bumper){
+            runningActions.add(new SequentialAction(
+                    new InstantAction(() -> turret.setTargetPosition(0)),
+                    new InstantAction(() -> externTele.lext.setPosition(0.05)),
+                    new InstantAction(() -> externTele.rext.setPosition(0.05)),
+                    new InstantAction(() -> externTele.rotation.setPosition(0.47)),
+                    new InstantAction(() -> externTele.lsecondary.setPosition(0.34)),
+                    new InstantAction(() -> externTele.rsecondary.setPosition(0.34)),
+                    new InstantAction(() -> externTele.primary.setPosition(0.33)),
+                    new InstantAction(() -> lift.setTargetPosition(30))
+            ));
+        }
 
 
 
         if(gamepad2.dpad_left){
-            //code for hang release
+            externTele.hang.setPower(1);
         }
 
         if(gamepad2.dpad_right){
-            //code for hang pull
+            externTele.hang.setPower(-1);
         }
 
         if(gamepad2.x){
@@ -347,8 +360,8 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
         }
 
         boolean buttonState2a = false;
-        if(gamepad2.a && !buttonState2a) strafe(drive.leftFront, drive.rightFront, drive.leftBack, drive.rightBack, processor.getSpecimenAdjustment());
-        buttonState2a = gamepad2.a;
+        if(gamepad2.left_stick_button && !buttonState2a) strafe(drive.leftFront, drive.rightFront, drive.leftBack, drive.rightBack, processor.getSpecimenAdjustment());
+        buttonState2a = gamepad2.left_stick_button;
 
 
 

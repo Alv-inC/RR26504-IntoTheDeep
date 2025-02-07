@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -10,10 +11,15 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class InitializeTeleOp {
     public Servo rotation, lext, rext, lsecondary, rsecondary, primary, claw, trapdoor, ltransfer, rtransfer;
+    public DcMotorEx hang;
     public MultipleTelemetry telemetry;
 
     public void initialize(HardwareMap hardwareMap) {
 
+
+
+        //initialize motor
+        hang = hardwareMap.get(DcMotorEx.class, "hang");
         // Initialize servos
         rotation = hardwareMap.get(Servo.class, "rotation");
         rotation.setPosition(0.47);
