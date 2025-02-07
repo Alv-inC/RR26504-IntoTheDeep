@@ -20,6 +20,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.function.Consumer;
 import org.firstinspires.ftc.robotcore.external.function.Continuation;
@@ -267,42 +268,42 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
                     new InstantAction(() ->     externTele.claw.setPosition(0.6)),
                     new InstantAction(() -> externTele.lext.setPosition(0.15)),
                     new InstantAction(() -> externTele.rext.setPosition(0.15)),
-                    new InstantAction(() -> externTele.lsecondary.setPosition(0.26)),
-                    new InstantAction(() -> externTele.rsecondary.setPosition(0.26)),
+                    new InstantAction(() -> externTele.lsecondary.setPosition(0.28)),
+                    new InstantAction(() -> externTele.rsecondary.setPosition(0.28)),
                     new InstantAction(() -> externTele.primary.setPosition(0.67)),
                     new InstantAction(() -> externTele.rotation.setPosition(0.47))
             ));
         }
 
-        boolean currentBButtonState = gamepad2.a;
-        if(currentBButtonState && !previousBButtonState){
-            runningActions.add(new SequentialAction(
-                    //add code to make it non-spammable
-                    //code to make it extend and look down
-//                    new InstantAction(() ->     externTele.claw.setPosition(0.6)),
-//                    new InstantAction(() -> externTele.lext.setPosition(0.15)),
-//                    new InstantAction(() -> externTele.rext.setPosition(0.15)),
-//                    new InstantAction(() -> externTele.lsecondary.setPosition(0.26)),
-//                    new InstantAction(() -> externTele.rsecondary.setPosition(0.26)),
-//                    new InstantAction(() -> externTele.primary.setPosition(0.67)),
-//                    new InstantAction(() -> externTele.rotation.setPosition(0.47)),
+        boolean previousButtonState1a = false; // Stores the previous state of the button
 
-                    new SleepAction(2),
-                    //code to intake it
-                    new InstantAction(() ->     turret.setTargetPosition(turret.getCurrentPosition()+processor.getTurretAdjustment()*-1)),
-                    new SleepAction(0.3),
-                    new InstantAction(() ->     externTele.lext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
-                    new InstantAction(() ->     externTele.rext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
-                    new SleepAction(1),
-                    new InstantAction(() -> externTele.rotation.setPosition(externTele.rotation.getPosition()+processor.getServoAdjustment())),
-                    new SleepAction(0.3),
-                    new InstantAction(() -> externTele.lsecondary.setPosition(0.16)),
-                    new InstantAction(() -> externTele.rsecondary.setPosition(0.16)),
-                    new SleepAction(0.3),
-                    new InstantAction(() ->     externTele.claw.setPosition(0.42))
-            ));
+        if (gamepad1.a && !previousButtonState1a) {
+            double adj = processor.getTurretAdjustment();
+            turret.setTargetPosition(turret.getCurrentPosition()+processor.getTurretAdjustment()*-1);
+            waitWithoutStoppingRobot(300);
+            adj = processor.getTurretAdjustment();
+            if(Math.abs(adj)>30){
+                turret.setTargetPosition(turret.getCurrentPosition()+adj*-1);
+                waitWithoutStoppingRobot(300);
+            }
+            externTele.lext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment());
+            externTele.rext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment());
+            waitWithoutStoppingRobot(500);
+            adj = processor.getExtensionAdjustment();
+            if(Math.abs(processor.getExtensionAdjustment())>0.005) {
+                externTele.lext.setPosition(externTele.lext.getPosition()+adj);
+                externTele.rext.setPosition(externTele.lext.getPosition()+adj);
+                waitWithoutStoppingRobot(500);
+            }
+            externTele.rotation.setPosition(externTele.rotation.getPosition()+processor.getServoAdjustment());
+            waitWithoutStoppingRobot(300);
+            externTele.lsecondary.setPosition(0.16);
+            externTele.rsecondary.setPosition(0.16);
+            waitWithoutStoppingRobot(300);
+            externTele.claw.setPosition(0.42);
         }
-        previousBButtonState = currentBButtonState;
+        previousButtonState1a = gamepad1.a;
+
         if(gamepad2.left_stick_button){
             externTele.rotation.setPosition(externTele.rotation.getPosition()+processor.getServoAdjustment());
         }
@@ -360,6 +361,16 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
         telemetry.addData("rotation position", externTele.rotation.getPosition());
         telemetry.addData("turret adjustment", processor.getTurretAdjustment());
         telemetry.addData("extension adjustment", processor.getExtensionAdjustment());
+    }
+    public void waitWithoutStoppingRobot(double milliseconds) {
+        ElapsedTime timer = new ElapsedTime(); // Create a timer instance
+        timer.reset(); // Reset the timer to start at 0
+
+        while (timer.milliseconds() < milliseconds) {
+            // Perform other tasks or keep the robot running smoothly
+            telemetry.addData("Waiting", "%.2f seconds remaining", milliseconds - timer.seconds());
+            telemetry.update();
+        }
     }
     private void strafe(DcMotorEx frontLeft, DcMotorEx frontRight, DcMotorEx backLeft, DcMotorEx backRight, double targetTicks){
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

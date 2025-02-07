@@ -169,11 +169,11 @@ public class cameraProcessor implements VisionProcessor, CameraStreamSource {
         double offsetMM = offsetY*152/480;
         double offsetTicks = offsetMM*0.33/303;
         offsetTicks *= -1;
-        offsetTicks /= 2.5;
+        //offsetTicks /= 2.5;
         //offsetTicks += 0.01;
-        if(offsetTicks< 0) offsetTicks -= 0.0225;
+        //if(offsetTicks< 0) offsetTicks -= 0.0225;
 //        else offsetTicks += 0.02;
-        return offsetTicks;
+        return offsetTicks /2.5;
     }
 
     public double calculateTurretAdjustment(RotatedRect rotatedRect) {
@@ -199,13 +199,13 @@ public class cameraProcessor implements VisionProcessor, CameraStreamSource {
         double offsetX = objectX - (640 / 2);  // Camera center is at 320 px
 
         // Convert pixel offset to millimeters
-        double offsetMM = (offsetX / 640) * 230; // 230mm is the actual frame width
+        double offsetMM = (offsetX / 640) * 220; // 230mm is the actual frame width
 
         // Convert millimeters to encoder ticks
         double wheelCircumference = 110; // mm
         double ticksPerRevolution = 8192; // Example for GoBILDA 312 RPM motors
         double ticksPerMM = ticksPerRevolution / wheelCircumference;
 
-        return offsetMM * ticksPerMM; // Returns encoder ticks needed to center object
+        return (offsetMM * ticksPerMM)/2.8; // Returns encoder ticks needed to center object
     }
 }
