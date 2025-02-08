@@ -133,8 +133,8 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
         drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
         externTele = new InitializeTeleOp();
        externTele.initialize(hardwareMap);
-       externTele.lext.setPosition(0.05);
-       externTele.rext.setPosition(0.05);
+       externTele.lext.setPosition(0);
+       externTele.rext.setPosition(0);
         externTele.claw.setPosition(0.6);
         turret.setTargetPosition(0);
        lift.setTargetPosition(30);
@@ -208,6 +208,7 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
                 ));
             }else{
                 runningActions.add(new SequentialAction(
+                        //taking account of the barrier
                         chain.grabPosition()
                 ));
             }

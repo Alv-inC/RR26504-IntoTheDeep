@@ -47,8 +47,8 @@ public class ChainActions {
                 new InstantAction(() -> externTele.rotation.setPosition(0.47)),
                 new InstantAction(() -> externTele.lext.setPosition(0)),
                 new InstantAction(() -> externTele.rext.setPosition(0)),
-                new InstantAction(() -> externTele.lsecondary.setPosition(0.29)),
-                new InstantAction(() -> externTele.rsecondary.setPosition(0.29)),
+                new InstantAction(() -> externTele.lsecondary.setPosition(0.37)),
+                new InstantAction(() -> externTele.rsecondary.setPosition(0.37)),
                 new InstantAction(() -> turret.setTargetPosition(-1250)),
                 new SleepAction(1.6),
                 new InstantAction(() -> externTele.primary.setPosition(0.2)),
@@ -66,7 +66,7 @@ public class ChainActions {
                 new InstantAction(() -> externTele.rotation.setPosition(0.47)),
                 new InstantAction(() -> lift.setTargetPosition(700)),
                 new SleepAction(0.8),
-                new InstantAction(() -> externTele.claw.setPosition(0.6))
+                new InstantAction(() -> externTele.claw.setPosition(0.73))
         );
     }
 
@@ -74,8 +74,8 @@ public class ChainActions {
         return new SequentialAction(
                 new InstantAction(() -> externTele.primary.setPosition(0.1)),
                 new InstantAction(() -> externTele.rotation.setPosition(0.47)),
-                new InstantAction(() -> externTele.lsecondary.setPosition(0.29)),
-                new InstantAction(() -> externTele.rsecondary.setPosition(0.29)),
+                new InstantAction(() -> externTele.lsecondary.setPosition(0.37)),
+                new InstantAction(() -> externTele.rsecondary.setPosition(0.37)),
                 new InstantAction(() -> lift.setTargetPosition(30)),
                 new InstantAction(() -> turret.setTargetPosition(0)),
                 new SleepAction(1.7),
@@ -84,6 +84,41 @@ public class ChainActions {
                 new InstantAction(() -> externTele.rsecondary.setPosition(0.16)),
                 new InstantAction(() -> externTele.primary.setPosition(0.3))
 
+        );
+    }
+
+    public Action grabPositionAuto(){
+        return new SequentialAction(
+                new InstantAction(() -> externTele.primary.setPosition(0.1)),
+                new InstantAction(() -> externTele.rotation.setPosition(0.47)),
+                new InstantAction(() -> externTele.lsecondary.setPosition(0.37)),
+                new InstantAction(() -> externTele.rsecondary.setPosition(0.37)),
+                new InstantAction(() -> lift.setTargetPosition(30)),
+                new InstantAction(() -> turret.setTargetPosition(-1250)),
+                new SleepAction(1.7),
+                new InstantAction(() -> externTele.rotation.setPosition(0.47)),
+                new InstantAction(() -> externTele.lsecondary.setPosition(0.16)),
+                new InstantAction(() -> externTele.rsecondary.setPosition(0.16)),
+                new InstantAction(() -> externTele.primary.setPosition(0.3))
+
+        );
+    }
+
+    public Action scorePositionAuto(){
+        return new SequentialAction(
+                new InstantAction(() -> externTele.primary.setPosition(0.1)),
+                new InstantAction(() -> externTele.rotation.setPosition(0.47)),
+                new InstantAction(() -> externTele.lext.setPosition(0)),
+                new InstantAction(() -> externTele.rext.setPosition(0)),
+                new InstantAction(() -> externTele.lsecondary.setPosition(0.37)),
+                new InstantAction(() -> externTele.rsecondary.setPosition(0.37)),
+                new SleepAction(2.3),
+                new InstantAction(() -> turret.setTargetPosition(0)),
+                new SleepAction(1.6),
+                new InstantAction(() -> externTele.primary.setPosition(0.2)),
+                new InstantAction(() -> lift.setTargetPosition(800)),
+                new InstantAction(() -> externTele.lext.setPosition(0.12)),
+                new InstantAction(() -> externTele.rext.setPosition(0.12))
         );
     }
     //prepareGrab
