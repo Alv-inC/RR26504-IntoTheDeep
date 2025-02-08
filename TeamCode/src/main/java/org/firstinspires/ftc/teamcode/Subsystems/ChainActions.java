@@ -64,7 +64,7 @@ public class ChainActions {
                 new InstantAction(() -> externTele.rsecondary.setPosition(0.19)),
                 new InstantAction(() -> externTele.primary.setPosition(0.3)),
                 new InstantAction(() -> externTele.rotation.setPosition(0.47)),
-                new InstantAction(() -> lift.setTargetPosition(700)),
+                new InstantAction(() -> lift.setTargetPosition(685)),
                 new SleepAction(0.8),
                 new InstantAction(() -> externTele.claw.setPosition(0.73))
         );

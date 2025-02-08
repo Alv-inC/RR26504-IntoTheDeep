@@ -133,8 +133,8 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
         drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
         externTele = new InitializeTeleOp();
        externTele.initialize(hardwareMap);
-       externTele.lext.setPosition(0);
-       externTele.rext.setPosition(0);
+       externTele.lext.setPosition(0.05);
+       externTele.rext.setPosition(0.05);
         externTele.claw.setPosition(0.6);
         turret.setTargetPosition(0);
        lift.setTargetPosition(30);
@@ -267,8 +267,8 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
         if(gamepad2.dpad_down){
             runningActions.add(new SequentialAction(
                     new InstantAction(() ->     externTele.claw.setPosition(0.6)),
-                    new InstantAction(() -> externTele.lext.setPosition(0.15)),
-                    new InstantAction(() -> externTele.rext.setPosition(0.15)),
+                    new InstantAction(() -> externTele.lext.setPosition(0.22)),
+                    new InstantAction(() -> externTele.rext.setPosition(0.22)),
                     new InstantAction(() -> externTele.lsecondary.setPosition(0.28)),
                     new InstantAction(() -> externTele.rsecondary.setPosition(0.28)),
                     new InstantAction(() -> externTele.primary.setPosition(0.67)),
@@ -279,17 +279,12 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
         boolean previousButtonState1a = false; // Stores the previous state of the button
 
         if (gamepad2.a && !previousButtonState1a) {
-            double adj = processor.getTurretAdjustment();
+            double adj;
             turret.setTargetPosition(turret.getCurrentPosition()+processor.getTurretAdjustment()*-1);
             waitWithoutStoppingRobot(300);
-            adj = processor.getTurretAdjustment();
-            if(Math.abs(adj)>30){
-                turret.setTargetPosition(turret.getCurrentPosition()+adj*-1);
-                waitWithoutStoppingRobot(500);
-            }
             externTele.lext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment());
             externTele.rext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment());
-            waitWithoutStoppingRobot(800);
+            waitWithoutStoppingRobot(500);
             adj = processor.getExtensionAdjustment();
             if(Math.abs(processor.getExtensionAdjustment())>0.005) {
                 externTele.lext.setPosition(externTele.lext.getPosition()+adj);
@@ -311,19 +306,23 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
 
 
         if(gamepad2.b){
-            //code to transfer
-            externTele.hang.setPower(1);
+//            //code to transfer
+//            externTele.hang.setPower(0);
+            externTele.rotation.setPosition(0.25);
         }
 
         if(gamepad2.left_bumper){
-            runningActions.add(new SequentialAction(
                     //dump position
                     //wait 0.5 secomds
                     //open the trapdoor
                     //wait 0.2 seconds
                     //close the trapdoor
                     //back to original position
-            ));
+            externTele.lsecondary.setPosition(0.16);
+            externTele.rsecondary.setPosition(0.16);
+            waitWithoutStoppingRobot(300);
+            externTele.claw.setPosition(0.42);
+
         }
         if(gamepad2.right_bumper){
             runningActions.add(new SequentialAction(
@@ -339,14 +338,14 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
         }
 
 
-
-        if(gamepad2.dpad_left){
-            externTele.hang.setPower(1);
-        }
-
-        if(gamepad2.dpad_right){
-            externTele.hang.setPower(-1);
-        }
+//
+//        if(gamepad2.dpad_left){
+//            externTele.hang.setPower(1);
+//        }
+//
+//        if(gamepad2.dpad_right){
+//            externTele.hang.setPower(-1);
+//        }
 
         if(gamepad2.x){
             processor.RANGE_HIGH_1 = new Scalar(100, 150, 255, 255);
