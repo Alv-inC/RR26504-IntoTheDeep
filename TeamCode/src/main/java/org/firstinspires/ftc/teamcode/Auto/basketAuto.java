@@ -75,7 +75,9 @@ public class basketAuto extends LinearOpMode {
                 .afterTime(0, new SequentialAction(
                         chain.readyGrab(),
                         new SleepAction(0.3),
-                        chain.grabSample(processor)
+                        chain.grabSample(processor),
+                        new SleepAction(0.3),
+                        chain.readyGrab()
                         //SCORE AFTER, RAISE LIFT AND DROP SECONDARY
                 ))
 
@@ -85,7 +87,6 @@ public class basketAuto extends LinearOpMode {
 
                 //grab
                 .waitSeconds(3)
-                .afterTime(2.5, chain.readyGrab())
 
                 //new score position
                 .splineToLinearHeading(new Pose2d(-58, -50, Math.toRadians(90)), Math.toRadians(140))

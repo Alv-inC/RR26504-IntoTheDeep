@@ -130,7 +130,7 @@ public class ChainActions {
                 new SleepAction(0.3),
                 new InstantAction(() ->externTele.lsecondary.setPosition(0.16)),
                 new InstantAction(() ->externTele.rsecondary.setPosition(0.16)),
-                new SleepAction(0.25),
+                new SleepAction(0.4),
                 new InstantAction(() ->externTele.claw.setPosition(0.42))
         );
     }
@@ -138,8 +138,8 @@ public class ChainActions {
     public Action readyGrab(){
         return new SequentialAction(
                 new InstantAction(() -> externTele.claw.setPosition(0.6)),
-                new InstantAction(() -> externTele.lext.setPosition(0.22)),
-                new InstantAction(() -> externTele.rext.setPosition(0.22)),
+                new InstantAction(() -> externTele.lext.setPosition(0.33)),
+                new InstantAction(() -> externTele.rext.setPosition(0.33)),
                 new InstantAction(() -> externTele.lsecondary.setPosition(0.28)),
                 new InstantAction(() -> externTele.rsecondary.setPosition(0.28)),
                 new InstantAction(() -> externTele.primary.setPosition(0.67)),
