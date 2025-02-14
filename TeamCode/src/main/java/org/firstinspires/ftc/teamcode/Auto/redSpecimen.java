@@ -50,11 +50,16 @@ public class redSpecimen extends LinearOpMode {
         turret = new Turret(hardwareMap);
         chain = new ChainActions(hardwareMap);
         externTele.initialize(hardwareMap);
+        externTele.rotation.setPosition(1);
         externTele.lext.setPosition(0);
         externTele.rext.setPosition(0);
         externTele.claw.setPosition(0.42);
         turret.setTargetPosition(0);
         lift.setTargetPosition(30);
+
+        externTele. lsecondary.setPosition(0.29);
+        externTele.rsecondary.setPosition(0.29);
+        externTele.primary.setPosition(0.695);
 
 
 
@@ -69,15 +74,17 @@ public class redSpecimen extends LinearOpMode {
                         new InstantAction(() -> externTele.lsecondary.setPosition(0.295)),
                         new InstantAction(() -> externTele.rsecondary.setPosition(0.295)),
                         new InstantAction(() -> externTele.primary.setPosition(0.2)),
-                        new InstantAction(() -> externTele.rotation.setPosition(0.47)),
                         new InstantAction(() -> externTele.lext.setPosition(0.12)),
                         new InstantAction(() -> externTele.rext.setPosition(0.12)),
+                        new SleepAction(0.3),
+                        new InstantAction(() -> externTele.rotation.setPosition(0.47)),
+
                         new SleepAction(1.4),
                         chain.scoreSpecimen(),
                         new SleepAction(1.2)
                 ))
 
-                .strafeTo(new Vector2d(8.75, -37.5))
+                .strafeTo(new Vector2d(8.75, -35))
 
                 .waitSeconds(1.5)
 
@@ -121,7 +128,7 @@ public class redSpecimen extends LinearOpMode {
                         chain.grabPositionAuto()
                 ))
                 .waitSeconds(3.2)
-                .splineToConstantHeading(new Vector2d(43, -56.2), Math.toRadians(270), slower)
+                .splineToConstantHeading(new Vector2d(43, -57), Math.toRadians(270), slower)
                 .afterTime(1.5,
                         new SequentialAction(
                                 new InstantAction(() -> externTele.claw.setPosition(0.42)),
@@ -130,7 +137,7 @@ public class redSpecimen extends LinearOpMode {
                         ))
                 .waitSeconds(4)
                 .splineToConstantHeading(new Vector2d(15, -54), Math.toRadians(90), slower)
-                .splineToConstantHeading(new Vector2d(6, -38), Math.toRadians(90), slower)
+                .splineToConstantHeading(new Vector2d(6, -35.5), Math.toRadians(90), slower)
                 .waitSeconds(1.5)
                 .afterTime(0, new SequentialAction(
                         chain.scoreSpecimen()
@@ -139,8 +146,8 @@ public class redSpecimen extends LinearOpMode {
 
 
                 //third score
-                .splineToConstantHeading(new Vector2d(5, -60), Math.toRadians(270))
-                .splineToConstantHeading(new Vector2d(64, -60), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(6, -63), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(60, -63), Math.toRadians(270))
 
 
 

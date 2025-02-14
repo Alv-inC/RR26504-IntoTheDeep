@@ -53,7 +53,7 @@ public class ChainActions {
                 new InstantAction(() -> turret.setTargetPosition(-1250)),
                 new SleepAction(1.6),
                 new InstantAction(() -> externTele.primary.setPosition(0.2)),
-                new InstantAction(() -> lift.setTargetPosition(800)),
+                new InstantAction(() -> lift.setTargetPosition(770)),
                 new InstantAction(() -> externTele.lext.setPosition(0.12)),
                 new InstantAction(() -> externTele.rext.setPosition(0.12))
         );
@@ -65,7 +65,7 @@ public class ChainActions {
                 new InstantAction(() -> externTele.rsecondary.setPosition(0.19)),
                 new InstantAction(() -> externTele.primary.setPosition(0.3)),
                 new InstantAction(() -> externTele.rotation.setPosition(0.47)),
-                new InstantAction(() -> lift.setTargetPosition(685)),
+                new InstantAction(() -> lift.setTargetPosition(660)),
                 new SleepAction(0.8),
                 new InstantAction(() -> externTele.claw.setPosition(0.73))
         );
@@ -73,6 +73,8 @@ public class ChainActions {
 
     public Action grabPosition(){
         return new SequentialAction(
+                new InstantAction(() -> externTele.lext.setPosition(0.05)),
+                new InstantAction(() -> externTele.rext.setPosition(0.05)),
                 new InstantAction(() -> externTele.primary.setPosition(0.1)),
                 new InstantAction(() -> externTele.rotation.setPosition(0.47)),
                 new InstantAction(() -> externTele.lsecondary.setPosition(0.37)),

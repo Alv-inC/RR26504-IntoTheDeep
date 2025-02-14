@@ -28,7 +28,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.Turret;
 
 import java.util.Arrays;
 
-@Autonomous(name = "basket auto")
+@Autonomous(name = "BASKETTTTT")
 public class basketAuto extends LinearOpMode {
     private Lift lift;
     private Turret turret;
@@ -43,8 +43,8 @@ public class basketAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(8.75, -62.75, Math.toRadians(90)));
-        Pose2d startPose = new Pose2d(8.75, -62.75, Math.toRadians(90));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(-38, -62.75, Math.toRadians(90)));
+        Pose2d startPose = new Pose2d(-38, -62.75, Math.toRadians(90));
         externTele = new InitializeTeleOp();
         lift = new Lift(hardwareMap);
         turret = new Turret(hardwareMap);
@@ -61,47 +61,42 @@ public class basketAuto extends LinearOpMode {
         if (isStopRequested()) return;
 
         TrajectoryActionBuilder trajectory = drive.actionBuilder(startPose)
-                .waitSeconds(1)
+                .waitSeconds(3)
 
-                .afterTime(0, new SequentialAction(
-                        new InstantAction(() -> lift.setTargetPosition(800)),
-                        new InstantAction(() -> externTele.lsecondary.setPosition(0.295)),
-                        new InstantAction(() -> externTele.rsecondary.setPosition(0.295)),
-                        new InstantAction(() -> externTele.primary.setPosition(0.2)),
-                        new InstantAction(() -> externTele.rotation.setPosition(0.47)),
-                        new InstantAction(() -> externTele.lext.setPosition(0.12)),
-                        new InstantAction(() -> externTele.rext.setPosition(0.12)),
-                        new SleepAction(1.4),
-                        chain.scoreSpecimen(),
-                        new SleepAction(1.2)
-                ))
 
-                .strafeTo(new Vector2d(8.75, -38))
+//get ready to score & after time, score
+// robot rotates to get new sample after 'scoring', may need to rotate turret to correct for incorrect angle
 
-                .waitSeconds(1.7)
+                .splineToLinearHeading(new Pose2d(-60, -50, Math.toRadians(65)), Math.toRadians(140))
 
+                //SCORE
+                //grab and score
+
+
+                //grab
+                .waitSeconds(3)
+                //new score position
+                .splineToLinearHeading(new Pose2d(-58, -50, Math.toRadians(90)), Math.toRadians(140))
+                //SCORE
+
+                //grab
+                .waitSeconds(3)
+                //new score position
+                .splineToLinearHeading(new Pose2d(-56, -50, Math.toRadians(110)), Math.toRadians(140))
+                .waitSeconds(3)
+                //SCORE
+
+                //grab
+
+                //grab from summersible
+                .splineToLinearHeading(new Pose2d(-25, -10, Math.toRadians(0)), Math.toRadians(0))
+                .waitSeconds(3)
                 .setReversed(true)
+                .splineToLinearHeading(new Pose2d(-58, -50, Math.toRadians(65)), Math.toRadians(180))
 
-                .afterTime(0.5, new SequentialAction(
-                        chain.startPosition()
-                ))
-//baskets starts
-                .strafeTo(new Vector2d(8.75, -52))
-                .waitSeconds(1.7)
 
-                .strafeTo(new Vector2d(56, -52))
-                .waitSeconds(1.7)
-                .afterTime(1,
-                        new SequentialAction(
-                                chain.grabSample()
-                        ))
 
-                .strafeTo(new Vector2d(-52, -52))
-                .waitSeconds(1.7)
-                .afterTime(1,
-                        new SequentialAction(
-                                chain.scoreLowBasket()
-                        ))
+
 
                 .endTrajectory();
         Action trajectoryAction = trajectory.build();

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.roadrunner.InstantAction;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -37,9 +38,15 @@ public class InitializeTeleOp {
         rsecondary.setPosition(0.36);
 
         primary = hardwareMap.get(Servo.class, "primary");
-        primary.setPosition(0.33);
+        primary.setPosition(0.28);
 
         claw = hardwareMap.get(Servo.class, "claw");
+
+
+        lsecondary.setPosition(0.3);
+         rsecondary.setPosition(0.3);
+         primary.setPosition(0.695);
+        rotation.setPosition(1);
 
 //        trapdoor = hardwareMap.get(Servo.class, "outtake");
 //        trapdoor.setPosition(0.67);
