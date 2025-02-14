@@ -25,6 +25,8 @@ import org.firstinspires.ftc.teamcode.Subsystems.IDK;
 import org.firstinspires.ftc.teamcode.Subsystems.InitializeTeleOp;
 import org.firstinspires.ftc.teamcode.Subsystems.Lift;
 import org.firstinspires.ftc.teamcode.Subsystems.Turret;
+import org.firstinspires.ftc.teamcode.Subsystems.cameraProcessor;
+import org.opencv.core.Scalar;
 
 import java.util.Arrays;
 
@@ -35,6 +37,7 @@ public class basketAuto extends LinearOpMode {
     // private ChainActions chain = new ChainActions(hardwareMap);
     private InitializeTeleOp externTele;
     private ChainActions chain;
+    private cameraProcessor processor;
 
     VelConstraint slower = new MinVelConstraint(Arrays.asList(
             new TranslationalVelConstraint(30),
@@ -43,6 +46,7 @@ public class basketAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        processor = new cameraProcessor(new Scalar(100, 0, 0,0), new Scalar(255, 5, 230,255), true);
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(-38, -62.75, Math.toRadians(90)));
         Pose2d startPose = new Pose2d(-38, -62.75, Math.toRadians(90));
         externTele = new InitializeTeleOp();
@@ -68,6 +72,12 @@ public class basketAuto extends LinearOpMode {
 // robot rotates to get new sample after 'scoring', may need to rotate turret to correct for incorrect angle
 
                 .splineToLinearHeading(new Pose2d(-60, -50, Math.toRadians(65)), Math.toRadians(140))
+                .afterTime(0, new SequentialAction(
+                        chain.readyGrab(),
+                        new SleepAction(0.3),
+                        chain.grabSample(processor)
+                        //SCORE AFTER, RAISE LIFT AND DROP SECONDARY
+                ))
 
                 //SCORE
                 //grab and score
@@ -75,6 +85,8 @@ public class basketAuto extends LinearOpMode {
 
                 //grab
                 .waitSeconds(3)
+                .afterTime(2.5, chain.readyGrab())
+
                 //new score position
                 .splineToLinearHeading(new Pose2d(-58, -50, Math.toRadians(90)), Math.toRadians(140))
                 //SCORE
@@ -88,7 +100,7 @@ public class basketAuto extends LinearOpMode {
 
                 //grab
 
-                //grab from summersible
+                //grab from submersible
                 .splineToLinearHeading(new Pose2d(-25, -10, Math.toRadians(0)), Math.toRadians(0))
                 .waitSeconds(3)
                 .setReversed(true)

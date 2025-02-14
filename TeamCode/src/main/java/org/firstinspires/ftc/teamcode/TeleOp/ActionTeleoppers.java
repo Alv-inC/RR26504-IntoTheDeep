@@ -307,16 +307,7 @@ public class ActionTeleoppers extends ActionOpMode {
         }
 
         if(gamepad2.left_bumper){
-            //dump position
-            //wait 0.5 secomds
-            //open the trapdoor
-            //wait 0.2 seconds
-            //close the trapdoor
-            //back to original position
-            externTele.lsecondary.setPosition(0.16);
-            externTele.rsecondary.setPosition(0.16);
-            waitWithoutStoppingRobot(300);
-            externTele.claw.setPosition(0.42);
+            //score position for sample(lift up and rotate turret and move secondary back)
 
         }
         if(gamepad2.right_bumper){
