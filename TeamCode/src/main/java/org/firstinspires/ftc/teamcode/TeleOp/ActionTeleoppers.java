@@ -60,9 +60,9 @@ public class ActionTeleoppers extends ActionOpMode {
     public static boolean clawgo, rotationgo, extensiongo, secondarygo = false;
     public static double width, height = 0;
     public static boolean MASK_TOGGLE = true;
-//    public static Scalar RANGE_LOW = new Scalar(170, 100, 0, 0);
+    //    public static Scalar RANGE_LOW = new Scalar(170, 100, 0, 0);
 //    public static Scalar RANGE_HIGH = new Scalar(255, 255, 230, 255);
-public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
+    public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
     public static Scalar RANGE_HIGH = new Scalar(180, 255, 255, 255); // Maximum HSV values
 
     public static double rotpos = 0.5;
@@ -132,12 +132,12 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
 
         drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
         externTele = new InitializeTeleOp();
-       externTele.initialize(hardwareMap);
-       externTele.lext.setPosition(0.05);
-       externTele.rext.setPosition(0.05);
+        externTele.initialize(hardwareMap);
+        externTele.lext.setPosition(0.05);
+        externTele.rext.setPosition(0.05);
         externTele.claw.setPosition(0.6);
         turret.setTargetPosition(0);
-       lift.setTargetPosition(30);
+        lift.setTargetPosition(30);
 
         // Re-initialize the variables to reset their values
         liftPositionState = 0; // Lift states: 0 = lowest, 1 = mid, 2 = highest
@@ -154,7 +154,7 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
         clawRotationState = 0;
 
         // Initialize externTele at the class level
-          // Initialize using hardwareMap and telemetry
+        // Initialize using hardwareMap and telemetry
 
         // Set up vision processor (if necessary)
         // final OpenCVTEST.CameraStreamProcessor processor = new OpenCVTEST.CameraStreamProcessor();
@@ -245,17 +245,17 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
             if (liftPositionState == 0) {
                 liftPositionState = 1;  // Move to position 1
                 runningActions.add(new SequentialAction(
-                new InstantAction(()->turret.setTargetPosition(-1250)),
-                new SleepAction(1.5),
-                new InstantAction(()->lift.setTargetPosition(2500))
+                        new InstantAction(()->turret.setTargetPosition(-1250)),
+                        new SleepAction(1.5),
+                        new InstantAction(()->lift.setTargetPosition(2500))
                 ));
             } else if (liftPositionState == 1) {
                 liftPositionState = 0;  // Move back to position 0
                 if(lift.getPosition() > 1000){
                     runningActions.add(new SequentialAction(
-                    new InstantAction(()->lift.setTargetPosition(30)),
-                    new SleepAction(1.5),
-                    new InstantAction(()->turret.setTargetPosition(0))
+                            new InstantAction(()->lift.setTargetPosition(30)),
+                            new SleepAction(1.5),
+                            new InstantAction(()->turret.setTargetPosition(0))
                     ));
                 }
 
@@ -280,8 +280,8 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
 
         if (gamepad2.a && !previousButtonState1a) {
             double adj;
-            turret.setTargetPosition(turret.getCurrentPosition()+processor.getTurretAdjustment()*-1);
-            waitWithoutStoppingRobot(300);
+            turret.setTargetPosition(turret.getCurrentPosition()+ processor.getTurretAdjustment()*-1);
+            waitWithoutStoppingRobot(3000);
             externTele.lext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment());
             externTele.rext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment());
             waitWithoutStoppingRobot(500);
@@ -312,12 +312,12 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
         }
 
         if(gamepad2.left_bumper){
-                    //dump position
-                    //wait 0.5 secomds
-                    //open the trapdoor
-                    //wait 0.2 seconds
-                    //close the trapdoor
-                    //back to original position
+            //dump position
+            //wait 0.5 secomds
+            //open the trapdoor
+            //wait 0.2 seconds
+            //close the trapdoor
+            //back to original position
             externTele.lsecondary.setPosition(0.16);
             externTele.rsecondary.setPosition(0.16);
             waitWithoutStoppingRobot(300);
@@ -362,10 +362,6 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
         boolean buttonState2a = false;
         if(gamepad2.left_stick_button && !buttonState2a) strafe(drive.leftFront, drive.rightFront, drive.leftBack, drive.rightBack, processor.getSpecimenAdjustment());
         buttonState2a = gamepad2.left_stick_button;
-
-
-
-
 
         turret.update();
         lift.update();
@@ -425,6 +421,6 @@ public static Scalar RANGE_LOW = new Scalar(0, 0, 0, 0);   // Minimum HSV values
         frontRight.setPower(0);
         backLeft.setPower(0);
         backRight.setPower(0);
-
     }
+
 }
