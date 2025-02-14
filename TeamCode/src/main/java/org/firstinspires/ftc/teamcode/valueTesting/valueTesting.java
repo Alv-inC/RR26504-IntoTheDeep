@@ -249,6 +249,7 @@ public class valueTesting extends LinearOpMode {
             telemetry.addData("slides position", lext.getPosition());
             telemetry.addData("specimen adjustment", processor.getSpecimenAdjustment());
             telemetry.addData("odometry position", bl.getCurrentPosition());
+            telemetry.addData("odometry position", bl.getCurrentPosition());
 
 
             telemetry.update();

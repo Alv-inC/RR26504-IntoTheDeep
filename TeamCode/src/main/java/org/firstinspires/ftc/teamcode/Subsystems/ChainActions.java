@@ -137,22 +137,18 @@ public class ChainActions {
         return new SequentialAction(
                 new InstantAction(() ->turret.setTargetPosition(turret.getCurrentPosition()+ processor.getTurretAdjustment()*-1)),
             new SleepAction(3),
-                        new InstantAction(() ->externTele.lext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
+                new InstantAction(() ->externTele.lext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
                 new InstantAction(() ->externTele.rext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
-        new SleepAction(0.5)
-
-        double adj = processor.getExtensionAdjustment();
-        if(Math.abs(processor.getExtensionAdjustment())>0.005) {
-            externTele.lext.setPosition(externTele.lext.getPosition()+adj);
-            externTele.rext.setPosition(externTele.lext.getPosition()+adj);
-            waitWithoutStoppingRobot(500);
-        }
-        externTele.rotation.setPosition(externTele.rotation.getPosition()+processor.getServoAdjustment());
-        waitWithoutStoppingRobot(300);
-        externTele.lsecondary.setPosition(0.16);
-        externTele.rsecondary.setPosition(0.16);
-        waitWithoutStoppingRobot(300);
-        externTele.claw.setPosition(0.42);
+            new SleepAction(0.5),
+                new InstantAction(() ->externTele.lext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
+                new InstantAction(() ->externTele.rext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
+            new SleepAction(0.5),
+                new InstantAction(() ->externTele.rotation.setPosition(externTele.rotation.getPosition()+processor.getServoAdjustment())),
+            new SleepAction(0.3),
+                new InstantAction(() ->externTele.lsecondary.setPosition(0.16)),
+                new InstantAction(() ->externTele.rsecondary.setPosition(0.16)),
+            new SleepAction(0.3),
+                new InstantAction(() ->externTele.claw.setPosition(0.42))
         );
     }
     //prepareGrab

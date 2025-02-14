@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.Tests;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -14,8 +16,10 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 public class movementTest extends LinearOpMode{
     public static boolean strafe, rotate, go = false;
     public static double strafeTicks, rotateTicks, goTicks;
+
     MecanumDrive drive;
     public void runOpMode() throws InterruptedException {
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
         waitForStart();
 
@@ -35,6 +39,7 @@ public class movementTest extends LinearOpMode{
             telemetry.addData("leftFront encoder: ", drive.leftFront.getCurrentPosition());
             telemetry.addData("rightFront encoder: ", drive.rightFront.getCurrentPosition());
             telemetry.addData("leftBack encoder: ", drive.leftBack.getCurrentPosition());
+            telemetry.update();
         }
 
     }

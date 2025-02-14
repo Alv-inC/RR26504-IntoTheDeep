@@ -8,12 +8,12 @@ blue: 10, 30, 140, 0; 100, 150, 255, 255
 
 SERVOS:
 
-horizontal extension: min 0.05, max 0.33
+horizontal extension: min 0.05, max 0.27
 primary: up 0.02 specimen score, straight 0.3, down 0.67
-secondary: inttake 0.15(0.13 if slides up 50), mid 0.16, 0.22 specimen wall, 0.32 up
+secondary: inttake 0.17(0.15 if slides up 50), mid 0.18, 0.24 specimen wall, transfer 0.28, 0.34 up
 claw: max open 0, ideal intake 0.5, max close 0.55
-transfer: down 0.05, up 0.7
-outtake: closed 0.67, open 0.72
+transfer: down 0.05, transfer 0.1, up 0.7
+outtake: closed 0.67, open 0.8
 rotation: mid 0.47
 
 MOTORS:
@@ -26,3 +26,22 @@ Horizontal extension: 303 mm
 camera height (pri down, sec high): 152 mm, 480 px
 camera width (pri down, sec high): 203 mm, 640 px
 secondary 0.25->0.15, ext +0.07, claw center->camera center :2 in
+wheel circumference: 104 mm * pi = 327mm
+odometry circumference: 35 mm * pi = 110mm, 8192 counts per rotation
+perpendicular: port 2 bl
+
+claw:lsecondary
+primary:ltransfer
+rext:primary
+rotation:rotation
+rsec:outtake
+ltrans:claw
+lext:rext
+lsec:lext
+rtransfer: rsecondary
+outtake: rtransfer
+
+intake
+color masking
+specimen adjustment
+transfer&outtake
