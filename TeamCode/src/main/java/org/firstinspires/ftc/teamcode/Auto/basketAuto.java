@@ -71,12 +71,12 @@ public class basketAuto extends LinearOpMode {
 //get ready to score & after time, score
 // robot rotates to get new sample after 'scoring', may need to rotate turret to correct for incorrect angle
 
-                .splineToLinearHeading(new Pose2d(-60, -50, Math.toRadians(65)), Math.toRadians(140))
+                .splineToLinearHeading(new Pose2d(-58, -47, Math.toRadians(65)), Math.toRadians(140))
                 .afterTime(0, new SequentialAction(
                         chain.readyGrab(),
                         new SleepAction(0.3),
                         chain.grabSample(processor),
-                        new SleepAction(0.3),
+                        new SleepAction(1),
                         chain.readyGrab()
                         //SCORE AFTER, RAISE LIFT AND DROP SECONDARY
                 ))
@@ -89,23 +89,23 @@ public class basketAuto extends LinearOpMode {
                 .waitSeconds(3)
 
                 //new score position
-                .splineToLinearHeading(new Pose2d(-58, -50, Math.toRadians(90)), Math.toRadians(140))
+                .splineToLinearHeading(new Pose2d(-56, -47, Math.toRadians(92)), Math.toRadians(140))
                 //SCORE
 
                 //grab
                 .waitSeconds(3)
                 //new score position
-                .splineToLinearHeading(new Pose2d(-56, -50, Math.toRadians(110)), Math.toRadians(140))
+                .splineToLinearHeading(new Pose2d(-54, -47, Math.toRadians(110)), Math.toRadians(140))
                 .waitSeconds(3)
                 //SCORE
 
                 //grab
 
                 //grab from submersible
-                .splineToLinearHeading(new Pose2d(-25, -10, Math.toRadians(0)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(-24, -11, Math.toRadians(0)), Math.toRadians(0))
                 .waitSeconds(3)
                 .setReversed(true)
-                .splineToLinearHeading(new Pose2d(-58, -50, Math.toRadians(65)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(-56, -47, Math.toRadians(65)), Math.toRadians(180))
 
 
 
