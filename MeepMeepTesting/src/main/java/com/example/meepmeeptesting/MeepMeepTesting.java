@@ -40,7 +40,7 @@ public class MeepMeepTesting {
                 //grab
                 .waitSeconds(3)
                 //new score position
-                .splineToLinearHeading(new Pose2d(-54, -47, Math.toRadians(120)), Math.toRadians(140))
+                .splineToLinearHeading(new Pose2d(-56, -47, Math.toRadians(120)), Math.toRadians(140))
                 .waitSeconds(3)
                 //SCORE
 

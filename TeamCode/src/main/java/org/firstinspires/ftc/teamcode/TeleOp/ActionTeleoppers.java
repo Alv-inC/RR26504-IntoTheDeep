@@ -14,6 +14,7 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -196,6 +197,12 @@ public class ActionTeleoppers extends ActionOpMode {
 
         drive.updatePoseEstimate();
 
+
+        TrajectoryActionBuilder turnBot = drive.actionBuilder(new Pose2d(0, 0, 0))
+                .turnTo(Math.toRadians(90))
+                .endTrajectory();
+        Action trajectoryAction = turnBot.build();
+
         // Trigger actions when gamepad1.x is pressed
         if (gamepad1.x) {
             if(turret.getCurrentPosition() > -100 && turret.getCurrentPosition() < 100){
@@ -234,6 +241,8 @@ public class ActionTeleoppers extends ActionOpMode {
                 ));
             }
         }
+
+
 
 
 

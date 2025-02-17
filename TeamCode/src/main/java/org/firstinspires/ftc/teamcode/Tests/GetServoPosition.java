@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Config
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Dual Servo Tester", group = "Testing")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Servo Tester", group = "Testing")
 public class GetServoPosition extends OpMode {
 
     private Servo testServo1;
@@ -20,7 +20,7 @@ public class GetServoPosition extends OpMode {
     @Override
     public void init() {
         testServo1 = hardwareMap.get(Servo.class, "testServo1");
-        testServo2 = hardwareMap.get(Servo.class, "testServo2");
+//        testServo2 = hardwareMap.get(Servo.class, "testServo2");
 
 
         //bottom position: servo1: 0.97, servo2: 0.03
@@ -46,18 +46,18 @@ public class GetServoPosition extends OpMode {
         // Set the servo positions
         testServo1.setPosition(position);
         //
-        // Reverse the direction for testServo2
-        testServo2.setPosition(1.0 - position);
+//        // Reverse the direction for testServo2
+//        testServo2.setPosition(1.0 - position);
 
         // Send telemetry data
         telemetry.addData("Servo 1 Position", position);
-        telemetry.addData("Servo 2 Position", 1.0 - position);
+//        telemetry.addData("Servo 2 Position", 1.0 - position);
         telemetry.update();
 
         // Send data to FTC Dashboard
         TelemetryPacket packet = new TelemetryPacket();
         packet.put("Servo 1 Position", position);
-        packet.put("Servo 2 Position", 1.0 - position);
+//        packet.put("Servo 2 Position", 1.0 - position);
         dashboard.sendTelemetryPacket(packet);
     }
 }
