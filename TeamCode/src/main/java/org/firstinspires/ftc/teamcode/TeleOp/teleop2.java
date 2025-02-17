@@ -114,8 +114,8 @@ public class teleop2 extends ActionOpMode {
                 -gamepad1.right_stick_x
         ));
 
-        if(gamepad2.dpad_up)runningActions.add(chain.strafeVertical(drive, 55));
-        else if(gamepad2.dpad_down)runningActions.add(chain.strafeVertical(drive, -55));
+        if(gamepad2.dpad_up)runningActions.add(chain.strafeHorizontal(drive, 55));
+        else if(gamepad2.dpad_down)runningActions.add(chain.strafeHorizontal(drive, -55));
         else if(gamepad2.dpad_right)runningActions.add(chain.rotateBot(drive,-90));
         else if(gamepad2.dpad_left)runningActions.add(chain.rotateBot(drive,90));
 

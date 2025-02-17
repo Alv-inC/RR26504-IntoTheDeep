@@ -49,6 +49,13 @@ public class ChainActions {
                 .endTrajectory();
         return strafeV.build();
     }
+    public Action basketPosition(MecanumDrive drive){
+        strafeV = drive.actionBuilder(new Pose2d(drive.pose.position.x, drive.pose.position.y, drive.pose.heading.toDouble()))
+                .setReversed(true)
+                .splineToLinearHeading(new Pose2d(drive.pose.position.x - 35, drive.pose.position.y - 33, Math.toRadians(45)), Math.toRadians(180))
+                .endTrajectory();
+        return strafeV.build();
+    }
 
     public Action startPosition(){
         return new SequentialAction(
