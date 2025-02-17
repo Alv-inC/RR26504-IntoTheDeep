@@ -7,9 +7,14 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.InstantAction;
+import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.Subsystems.cameraProcessor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -19,12 +24,30 @@ public class ChainActions {
     private Lift lift;
     private Turret turret;
     private InitializeTeleOp externTele;
-
+    TrajectoryActionBuilder turnBot, strafeH, strafeV;
     public ChainActions(HardwareMap hardwareMap){
         lift = new Lift(hardwareMap);
         turret = new Turret(hardwareMap);
         externTele = new InitializeTeleOp();
         externTele.initialize(hardwareMap);
+    }
+    public Action rotateBot(MecanumDrive drive, int rotateTicks){
+        turnBot = drive.actionBuilder(new Pose2d(drive.pose.position.x, drive.pose.position.y, drive.pose.heading.toDouble()))
+                .turn(Math.toRadians(rotateTicks))
+                .endTrajectory();
+        return turnBot.build();
+    }
+    public Action strafeHorizontal(MecanumDrive drive, int h){
+        strafeH = drive.actionBuilder(new Pose2d(drive.pose.position.x, drive.pose.position.y, drive.pose.heading.toDouble()))
+                .strafeTo(new Vector2d(drive.pose.position.x+h, drive.pose.position.y))
+                .endTrajectory();
+        return strafeH.build();
+    }
+    public Action strafeVertical(MecanumDrive drive, int v){
+        strafeV = drive.actionBuilder(new Pose2d(drive.pose.position.x, drive.pose.position.y, drive.pose.heading.toDouble()))
+                .strafeTo(new Vector2d(drive.pose.position.x, drive.pose.position.y+v))
+                .endTrajectory();
+        return strafeV.build();
     }
 
     public Action startPosition(){
@@ -170,6 +193,13 @@ public class ChainActions {
                 new InstantAction(() ->externTele.claw.setPosition(0.42))
         );
     }
+
+
+
+
+
+
+
     //prepareGrab
     //Grab
     //neutralPosition

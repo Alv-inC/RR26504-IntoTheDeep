@@ -15,6 +15,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.Subsystems.Lift;
+import org.firstinspires.ftc.teamcode.Subsystems.Turret;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.teamcode.Subsystems.cameraProcessor;
 
@@ -29,7 +31,8 @@ import java.util.List;
 @Config
 @Autonomous
 public class valueTesting extends LinearOpMode {
-    public static boolean go, rotAdjust, extAdjust, turretAdjust, specimenAdjust, slidesGo, turretGo, ADJUST = false;
+    public static boolean go, rotAdjust, extAdjust, turretAdjust, specimenAdjust, slidesGo, turretGo, ADJUST, sway = false;
+    boolean again = true;
     public static double pext, ppri, psec, pclaw, prot, ptrans, pout, slidespos, turretpos;
     public static double width, height = 0;
     public static double kp = 0;
@@ -47,7 +50,7 @@ public class valueTesting extends LinearOpMode {
                 .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
                 .build();
 
-        DcMotor turret = hardwareMap.get(DcMotor.class, "turret");
+        Turret turret = new Turret(hardwareMap);
         Servo lext = hardwareMap.get(Servo.class, "lext");
         Servo rext = hardwareMap.get(Servo.class, "rext");
         lext.setDirection(Servo.Direction.REVERSE);
@@ -60,15 +63,7 @@ public class valueTesting extends LinearOpMode {
         Servo primary = hardwareMap.get(Servo.class, "primary");
         Servo claw = hardwareMap.get(Servo.class, "claw");
         claw.setDirection(Servo.Direction.REVERSE);
-        Servo ltransfer = hardwareMap.get(Servo.class, "ltransfer");
-        Servo rtransfer = hardwareMap.get(Servo.class, "rtransfer");
-        ltransfer.setDirection(Servo.Direction.REVERSE);
-        DcMotor lslide = hardwareMap.get(DcMotor.class, "lift1");
-        DcMotor rslide = hardwareMap.get(DcMotor.class, "lift2");
-        lslide.setDirection(DcMotorSimple.Direction.REVERSE);
-        Servo outtake = hardwareMap.get(Servo.class, "outtake");
-        //Servo servo = hardwareMap.get(Servo.class, "primary");
-        //moveSlidesToPosition(50, lslide, rslide);
+        Lift lift = new Lift(hardwareMap);
         DcMotor fr, fl, br, bl;
         fr = hardwareMap.get(DcMotor.class, "rightFront");
         fl = hardwareMap.get(DcMotor.class, "leftFront");
@@ -95,18 +90,14 @@ public class valueTesting extends LinearOpMode {
                 primary.setPosition(ppri);
                 claw.setPosition(pclaw);
                 rotation.setPosition(prot);
-                ltransfer.setPosition(ptrans);
-                rtransfer.setPosition(ptrans);
-                outtake.setPosition(pout);
-                //servo.setPosition(0.31);
             }
             if(turretGo){
                 turretGo = false;
-                moveMotorToPosition(turret, (int) turretpos, 0.5);
+                turret.setTargetPosition(turretpos);
             }
             if(slidesGo){
                 slidesGo = false;
-                moveSlidesToPosition((int)slidespos, lslide, rslide);
+                lift.setTargetPosition(slidespos);
             }
             if(rotAdjust){
                 rotAdjust = false;
@@ -119,7 +110,26 @@ public class valueTesting extends LinearOpMode {
             }
             if(turretAdjust){
                 turretAdjust = false;
-                moveMotorToPosition(turret, (int) (processor.getTurretAdjustment()), 0.5);
+                turret.setTargetPosition(turret.getCurrentPosition()+processor.getTurretAdjustment());
+            }
+            if(sway){
+                while(turret.getCurrentPosition()<300){
+                    turret.setPower(0.4);
+                    if(processor.getArea()>=500){
+                        again = false;
+                        turret.setTargetPosition(turret.getCurrentPosition());
+                        break;
+                    }
+                }
+                if(again){
+                    while(turret.getCurrentPosition()>-300){
+                        turret.setPower(-0.4);
+                        if(processor.getArea()>=500){
+                            turret.setTargetPosition(turret.getCurrentPosition());
+                            break;
+                        }
+                    }
+                }
             }
             if(specimenAdjust){
                 specimenAdjust = false;
@@ -127,7 +137,7 @@ public class valueTesting extends LinearOpMode {
             }
             if(ADJUST){
                 ADJUST = false;
-                moveMotorToPosition(turret, (int) (processor.getTurretAdjustment()), 0.5);
+                turret.setTargetPosition(turret.getCurrentPosition()+processor.getTurretAdjustment());
                 waitWithoutStoppingRobot(500);
                 lext.setPosition(lext.getPosition()+processor.getExtensionAdjustment());
                 rext.setPosition(lext.getPosition()+processor.getExtensionAdjustment());
@@ -143,12 +153,12 @@ public class valueTesting extends LinearOpMode {
 
             if (gamepad1.a && !previousButtonState) {
                 double adj = processor.getTurretAdjustment();
-                moveMotorToPosition(turret, (int) (processor.getTurretAdjustment()), 0.5);
+                turret.setTargetPosition(turret.getCurrentPosition()+processor.getTurretAdjustment());
                 turretCorrection += adj;
                 waitWithoutStoppingRobot(300);
                 adj = processor.getTurretAdjustment();
                 if(Math.abs(adj)>30){
-                    moveMotorToPosition(turret, (int) (adj), 0.5);
+                    turret.setTargetPosition(turret.getCurrentPosition()+processor.getTurretAdjustment());
                     turretCorrection += adj;
                 }
                 lext.setPosition(lext.getPosition()+processor.getExtensionAdjustment());
@@ -175,7 +185,7 @@ public class valueTesting extends LinearOpMode {
                 rsecondary.setPosition(0.28);
                 primary.setPosition(0.67);
                 rotation.setPosition(0.47);
-                moveMotorToPosition(turret, (int) (turretCorrection*-1), 0.5);
+                turret.setTargetPosition(turret.getCurrentPosition()+processor.getTurretAdjustment());
                 turretCorrection = 0;
             }
             if(gamepad1.y){
@@ -186,7 +196,7 @@ public class valueTesting extends LinearOpMode {
 
             if(gamepad1.dpad_left){
                 //move back
-                moveMotorToPosition(turret, -625, 0.5);
+                turret.setTargetPosition(turret.getCurrentPosition()+processor.getTurretAdjustment());
                 //move to zone
                 strafe(fl, fr, bl, br, processor.getSpecimenAdjustment());
                 waitWithoutStoppingRobot(500);
@@ -251,7 +261,8 @@ public class valueTesting extends LinearOpMode {
             telemetry.addData("odometry position", bl.getCurrentPosition());
             telemetry.addData("odometry position", bl.getCurrentPosition());
 
-
+            lift.update();
+            turret.update();
             telemetry.update();
         }
     }
@@ -264,45 +275,6 @@ public class valueTesting extends LinearOpMode {
             telemetry.addData("Waiting", "%.2f seconds remaining", milliseconds - timer.seconds());
             telemetry.update();
         }
-    }
-    public void moveMotorToPosition(DcMotor motor, int targetPosition, double power) {
-        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); // Reset encoder
-        motor.setTargetPosition(targetPosition);              // Set target position
-        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);       // Enable RUN_TO_POSITION mode
-        motor.setPower(power);                                // Set motor power
-
-        while (motor.isBusy() && opModeIsActive()) {
-            // Wait until the motor reaches the target position
-            telemetry.addData("Motor Position", "Current: %d, Target: %d", motor.getCurrentPosition(), targetPosition);
-            telemetry.update();
-        }
-
-        motor.setPower(0); // Stop the motor
-        motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-    }
-    private void moveSlidesToPosition(int position, DcMotor leftSlide, DcMotor rightSlide) {
-        // Set the target position for both slides
-        leftSlide.setTargetPosition(position);
-        rightSlide.setTargetPosition(position);
-
-        // Set the mode to run to the target position
-        leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        // Set motor power to move to the target position
-        leftSlide.setPower(0.5);  // Adjust power as needed
-        rightSlide.setPower(0.5);  // Adjust power as needed
-
-        // Wait until both slides reach the target position
-        while (leftSlide.isBusy() && rightSlide.isBusy()) {
-            telemetry.addData("Moving to Position", position);
-            telemetry.update();
-        }
-
-        // Apply holding power to maintain position
-        leftSlide.setPower(0.4); // Small power to hold position
-        rightSlide.setPower(0.4);
     }
     private void strafe(DcMotor frontLeft, DcMotor frontRight, DcMotor backLeft, DcMotor backRight, double targetTicks){
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

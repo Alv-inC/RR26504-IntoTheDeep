@@ -6,13 +6,14 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
 @Config
-@Autonomous
+@TeleOp
 public class movementTest extends LinearOpMode{
     public static boolean strafe, rotate, go = false;
     public static double strafeTicks, rotateTicks, goTicks;
@@ -45,21 +46,20 @@ public class movementTest extends LinearOpMode{
     }
     private void strafe(DcMotorEx frontLeft, DcMotorEx frontRight, DcMotorEx backLeft, DcMotorEx backRight, double targetTicks1){
         int targetTicks = (int)targetTicks1+backLeft.getCurrentPosition();
-        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         if(targetTicks<0) {
-            while (Math.abs(backLeft.getCurrentPosition()) < Math.abs(targetTicks)) {
+            while (backLeft.getCurrentPosition() > targetTicks) {
                 frontLeft.setPower(0.6);
                 frontRight.setPower(-0.6);
                 backLeft.setPower(-0.6);
                 backRight.setPower(0.6);
             }
         } else{
-            while (Math.abs(backLeft.getCurrentPosition()) < Math.abs(targetTicks)) {
+            while (backLeft.getCurrentPosition() < targetTicks) {
                 frontLeft.setPower(-0.6);
                 frontRight.setPower(0.6);
                 backLeft.setPower(0.6);
@@ -74,21 +74,19 @@ public class movementTest extends LinearOpMode{
     private void go(DcMotorEx frontLeft, DcMotorEx frontRight, DcMotorEx backLeft, DcMotorEx backRight, double targetTicks1){
         int targetTicks = (int)targetTicks1+frontLeft.getCurrentPosition();
 
-        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
         frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         if(targetTicks<0) {
-            while (Math.abs(frontLeft.getCurrentPosition()) < Math.abs(targetTicks)) {
+            while (frontLeft.getCurrentPosition() > targetTicks) {
                 frontLeft.setPower(-0.6);
                 frontRight.setPower(-0.6);
                 backLeft.setPower(-0.6);
                 backRight.setPower(-0.6);
             }
         } else{
-            while (Math.abs(frontLeft.getCurrentPosition()) < Math.abs(targetTicks)) {
+            while (frontLeft.getCurrentPosition() < targetTicks) {
                 frontLeft.setPower(0.6);
                 frontRight.setPower(0.6);
                 backLeft.setPower(0.6);
@@ -103,21 +101,19 @@ public class movementTest extends LinearOpMode{
     private void rotate(DcMotorEx frontLeft, DcMotorEx frontRight, DcMotorEx backLeft, DcMotorEx backRight, double targetTicks1){
         int targetTicks = (int)targetTicks1+backLeft.getCurrentPosition();
 
-        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
         frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         if(targetTicks<0) {
-            while (Math.abs(backLeft.getCurrentPosition()) < Math.abs(targetTicks)) {
+            while (backLeft.getCurrentPosition() > targetTicks) {
                 frontLeft.setPower(-0.6);
                 frontRight.setPower(0.6);
                 backLeft.setPower(-0.6);
                 backRight.setPower(0.6);
             }
         } else{
-            while (Math.abs(backLeft.getCurrentPosition()) < Math.abs(targetTicks)) {
+            while (backLeft.getCurrentPosition() < targetTicks) {
                 frontLeft.setPower(0.6);
                 frontRight.setPower(-0.6);
                 backLeft.setPower(0.6);

@@ -33,6 +33,8 @@ public class cameraProcessor implements VisionProcessor, CameraStreamSource {
     private final AtomicReference<Double> extensionAdjustment = new AtomicReference<>(0.0);
     private final AtomicReference<Double> turretAdjustment = new AtomicReference<>(0.0);
     private final AtomicReference<Double> specimenAdjustment = new AtomicReference<>(0.0);
+    private final AtomicReference<Boolean> inFrame = new AtomicReference<>(false);
+    private final AtomicReference<Double> area = new AtomicReference<>(0.0);
     private final AtomicReference<Scalar> centerHSV = new AtomicReference<>(new Scalar(0, 0, 0, 0));
     private final AtomicReference<Bitmap> lastFrame = new AtomicReference<>(Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565));
     private final AtomicReference<Bitmap> peopleMaskedFrame = new AtomicReference<>(Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565));
@@ -45,6 +47,12 @@ public class cameraProcessor implements VisionProcessor, CameraStreamSource {
     @Override
     public void getFrameBitmap(Continuation<? extends Consumer<Bitmap>> continuation) {
         continuation.dispatch(bitmapConsumer -> bitmapConsumer.accept(lastFrame.get()));
+    }
+    public double getArea(){
+        return area.get();
+    }
+    public boolean getInFrame(){
+        return inFrame.get();
     }
     public double getServoAdjustment() {
         return servoAdjustment.get();
@@ -77,6 +85,7 @@ public class cameraProcessor implements VisionProcessor, CameraStreamSource {
 
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
+        inFrame.set(false);
         Mat hsvFrame = new Mat();
         Imgproc.cvtColor(frame, hsvFrame, Imgproc.COLOR_RGBA2RGB);
         int centerX = frame.width() / 2;
@@ -122,7 +131,10 @@ public class cameraProcessor implements VisionProcessor, CameraStreamSource {
                 largestContour = contour;
             }
         }
+        area.set(maxArea);
+
         if(largestContour != null){
+            inFrame.set(true);
             RotatedRect rotatedRect = Imgproc.minAreaRect(new MatOfPoint2f(largestContour.toArray()));
             servoAdjustment.set(calculateServoAdjustment(rotatedRect));
             extensionAdjustment.set(calculateExtensionAdjustment(rotatedRect));

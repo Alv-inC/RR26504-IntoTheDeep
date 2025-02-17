@@ -72,7 +72,9 @@ public class Turret {
     public boolean isClose(){
         return Math.abs(turretMotor.getCurrentPosition() - targetPosition) < 45;
     }
-
+    public void setPower(double power){
+        this.setPower(power);
+    }
 
     public Action setTargetPositionAction(double targetPosition){
         return t -> {
