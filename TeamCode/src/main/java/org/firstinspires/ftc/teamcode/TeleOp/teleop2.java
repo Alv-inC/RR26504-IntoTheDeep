@@ -114,6 +114,8 @@ public class teleop2 extends ActionOpMode {
                 -gamepad1.right_stick_x
         ));
 
+        drive.updatePoseEstimate();
+
         if(gamepad2.dpad_up)runningActions.add(chain.strafeHorizontal(drive, 55));
         else if(gamepad2.dpad_down)runningActions.add(chain.strafeHorizontal(drive, -55));
         else if(gamepad2.dpad_right)runningActions.add(chain.rotateBot(drive,-90));
@@ -153,6 +155,7 @@ public class teleop2 extends ActionOpMode {
         telemetry.addData("leftFront encoder: ", drive.leftFront.getCurrentPosition());
         telemetry.addData("rightFront encoder: ", drive.rightFront.getCurrentPosition());
         telemetry.addData("leftBack encoder: ", drive.leftBack.getCurrentPosition());
+        telemetry.addData("pose", drive.pose.position);
         telemetry.update();
     }
 }
