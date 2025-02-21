@@ -24,7 +24,7 @@ public class ChainActions {
     private Lift lift;
     private Turret turret;
     private InitializeTeleOp externTele;
-    TrajectoryActionBuilder turnBot, strafeH, strafeV;
+    TrajectoryActionBuilder turnBot, strafeH, strafeV, basket, intake;
     public ChainActions(HardwareMap hardwareMap){
         lift = new Lift(hardwareMap);
         turret = new Turret(hardwareMap);
@@ -50,11 +50,19 @@ public class ChainActions {
         return strafeV.build();
     }
     public Action basketPosition(MecanumDrive drive){
-        strafeV = drive.actionBuilder(new Pose2d(drive.pose.position.x, drive.pose.position.y, drive.pose.heading.toDouble()))
+        basket = drive.actionBuilder(new Pose2d(drive.pose.position.x, drive.pose.position.y, drive.pose.heading.toDouble()))
                 .setReversed(true)
-                .splineToLinearHeading(new Pose2d(drive.pose.position.x - 35, drive.pose.position.y - 33, Math.toRadians(45)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(drive.pose.position.x - 34, drive.pose.position.y - 37, Math.toRadians(45)), Math.toRadians(180))
                 .endTrajectory();
-        return strafeV.build();
+        return basket.build();
+    }
+
+    public Action intakePosition(MecanumDrive drive){
+        intake = drive.actionBuilder(new Pose2d(drive.pose.position.x, drive.pose.position.y, drive.pose.heading.toDouble()))
+                .setReversed(false)
+                .splineToLinearHeading(new Pose2d(drive.pose.position.x +34, drive.pose.position.y +37, Math.toRadians(0)), Math.toRadians(180))
+                .endTrajectory();
+        return intake.build();
     }
 
     public Action startPosition(){
