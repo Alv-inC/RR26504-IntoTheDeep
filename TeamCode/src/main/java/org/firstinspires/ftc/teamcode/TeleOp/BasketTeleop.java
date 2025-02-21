@@ -10,13 +10,8 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
-import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
@@ -35,10 +30,10 @@ import page.j5155.expressway.ftc.actions.ActionOpMode;
 
 @Config
 @TeleOp
-public class teleop2 extends ActionOpMode {
+public class BasketTeleop extends ActionOpMode {
     private InitializeTeleOp externTele;  // Use the class-level reference
 
-    public static boolean strafeV, rotate, strafeH = false;
+    public static boolean strafeV, rotate, strafeH, joystick = false;
     public static int h, v, rotateTicks = 0;
 
     MecanumDrive drive;
@@ -105,10 +100,8 @@ public class teleop2 extends ActionOpMode {
 
         }
 
-
-
-        if(gamepad2.dpad_up){runningActions.add(chain.strafeHorizontal(drive, 55));}else{
-            //drivetrain code
+        //drivetrain code
+        if(joystick) {
             drive.setDrivePowers(new PoseVelocity2d(
                     new Vector2d(
                             -gamepad1.left_stick_y,
@@ -116,47 +109,18 @@ public class teleop2 extends ActionOpMode {
                     ),
                     -gamepad1.right_stick_x
             ));
-
-            drive.updatePoseEstimate();
         }
-        if(gamepad2.dpad_down){runningActions.add(chain.strafeHorizontal(drive, -55));}
-        else{
-            //drivetrain code
-            drive.setDrivePowers(new PoseVelocity2d(
-                    new Vector2d(
-                            -gamepad1.left_stick_y,
-                            -gamepad1.left_stick_x
-                    ),
-                    -gamepad1.right_stick_x
-            ));
-
-            drive.updatePoseEstimate();
+        else {
+            if (gamepad2.dpad_up) runningActions.add(chain.strafeHorizontal(drive, 55));
+            else if (gamepad2.dpad_down) runningActions.add(chain.strafeHorizontal(drive, -55));
+            else if (gamepad2.dpad_right) runningActions.add(chain.rotateBot(drive, -90));
+            else if (gamepad2.dpad_left) runningActions.add(chain.rotateBot(drive, 90));
         }
-        if(gamepad2.dpad_right){runningActions.add(chain.rotateBot(drive,-90));}
-        else{
-            //drivetrain code
-            drive.setDrivePowers(new PoseVelocity2d(
-                    new Vector2d(
-                            -gamepad1.left_stick_y,
-                            -gamepad1.left_stick_x
-                    ),
-                    -gamepad1.right_stick_x
-            ));
 
-            drive.updatePoseEstimate();
-        }
-        if(gamepad2.dpad_left){runningActions.add(chain.rotateBot(drive,90));}else{
-            //drivetrain code
-            drive.setDrivePowers(new PoseVelocity2d(
-                    new Vector2d(
-                            -gamepad1.left_stick_y,
-                            -gamepad1.left_stick_x
-                    ),
-                    -gamepad1.right_stick_x
-            ));
+        drive.updatePoseEstimate();
 
-            drive.updatePoseEstimate();
-        }
+        if (gamepad1.dpad_left) joystick = true;
+        if(gamepad2.dpad_right) joystick = false;
 
         if(gamepad2.dpad_down){
             runningActions.add(new SequentialAction(
@@ -188,6 +152,7 @@ public class teleop2 extends ActionOpMode {
             ));
         }
         previousButtonState1a = gamepad2.a;
+
 
         telemetry.addData("leftFront encoder: ", drive.leftFront.getCurrentPosition());
         telemetry.addData("rightFront encoder: ", drive.rightFront.getCurrentPosition());
