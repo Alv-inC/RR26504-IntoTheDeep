@@ -105,21 +105,58 @@ public class teleop2 extends ActionOpMode {
 
         }
 
-        //drivetrain code
-        drive.setDrivePowers(new PoseVelocity2d(
-                new Vector2d(
-                        -gamepad1.left_stick_y,
-                        -gamepad1.left_stick_x
-                ),
-                -gamepad1.right_stick_x
-        ));
 
-        drive.updatePoseEstimate();
 
-        if(gamepad2.dpad_up)runningActions.add(chain.strafeHorizontal(drive, 55));
-        else if(gamepad2.dpad_down)runningActions.add(chain.strafeHorizontal(drive, -55));
-        else if(gamepad2.dpad_right)runningActions.add(chain.rotateBot(drive,-90));
-        else if(gamepad2.dpad_left)runningActions.add(chain.rotateBot(drive,90));
+        if(gamepad2.dpad_up){runningActions.add(chain.strafeHorizontal(drive, 55));}else{
+            //drivetrain code
+            drive.setDrivePowers(new PoseVelocity2d(
+                    new Vector2d(
+                            -gamepad1.left_stick_y,
+                            -gamepad1.left_stick_x
+                    ),
+                    -gamepad1.right_stick_x
+            ));
+
+            drive.updatePoseEstimate();
+        }
+        if(gamepad2.dpad_down){runningActions.add(chain.strafeHorizontal(drive, -55));}
+        else{
+            //drivetrain code
+            drive.setDrivePowers(new PoseVelocity2d(
+                    new Vector2d(
+                            -gamepad1.left_stick_y,
+                            -gamepad1.left_stick_x
+                    ),
+                    -gamepad1.right_stick_x
+            ));
+
+            drive.updatePoseEstimate();
+        }
+        if(gamepad2.dpad_right){runningActions.add(chain.rotateBot(drive,-90));}
+        else{
+            //drivetrain code
+            drive.setDrivePowers(new PoseVelocity2d(
+                    new Vector2d(
+                            -gamepad1.left_stick_y,
+                            -gamepad1.left_stick_x
+                    ),
+                    -gamepad1.right_stick_x
+            ));
+
+            drive.updatePoseEstimate();
+        }
+        if(gamepad2.dpad_left){runningActions.add(chain.rotateBot(drive,90));}else{
+            //drivetrain code
+            drive.setDrivePowers(new PoseVelocity2d(
+                    new Vector2d(
+                            -gamepad1.left_stick_y,
+                            -gamepad1.left_stick_x
+                    ),
+                    -gamepad1.right_stick_x
+            ));
+
+            drive.updatePoseEstimate();
+        }
 
         if(gamepad2.dpad_down){
             runningActions.add(new SequentialAction(
