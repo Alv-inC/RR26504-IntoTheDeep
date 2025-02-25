@@ -11,7 +11,7 @@ SERVOS:
 horizontal extension: min 0.05, max 0.27
 primary: up 0.02 specimen score, straight 0.3, down 0.67
 secondary: inttake 0.17(0.15 if slides up 50), mid 0.18, 0.24 specimen wall, transfer 0.28, 0.34 up
-claw: max open 0, ideal intake 0.5, max close 0.55
+claw: max open 0.74, ideal intake 0.42, open 0.5, max close 0.35
 transfer: down 0.05, transfer 0.1, up 0.7
 outtake: closed 0.67, open 0.8
 rotation: mid 0.47
