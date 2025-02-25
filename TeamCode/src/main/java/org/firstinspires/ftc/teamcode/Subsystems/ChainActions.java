@@ -99,6 +99,15 @@ public class ChainActions {
         );
     }
 
+    public Action scorePositionSample(){
+        return new SequentialAction(
+                //servo positions to score
+                new InstantAction(() -> turret.setTargetPosition(-1250)),
+                new SleepAction(2),
+                new InstantAction(() -> lift.setTargetPosition(2330))
+        );
+    }
+
     public Action scoreSpecimen(){
         return new SequentialAction(
                 new InstantAction(() -> externTele.lsecondary.setPosition(0.19)),
