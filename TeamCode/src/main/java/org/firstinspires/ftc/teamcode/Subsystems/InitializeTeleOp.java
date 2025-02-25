@@ -28,8 +28,8 @@ public class InitializeTeleOp {
         lext = hardwareMap.get(Servo.class, "lext");
         rext = hardwareMap.get(Servo.class, "rext");
         lext.setDirection(Servo.Direction.REVERSE);
-        lext.setPosition(0.15);
-        rext.setPosition(0.15);
+        lext.setPosition(0.05);
+        rext.setPosition(0.05);
 
         lsecondary = hardwareMap.get(Servo.class, "lsecondary");
         rsecondary = hardwareMap.get(Servo.class, "rsecondary");

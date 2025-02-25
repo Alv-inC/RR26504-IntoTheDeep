@@ -56,8 +56,8 @@ import page.j5155.expressway.ftc.actions.ActionOpMode;
 import org.firstinspires.ftc.teamcode.Subsystems.cameraProcessor;
 
 
-@TeleOp(name = "Specimen Pray")
-public class ActionTeleoppers extends ActionOpMode {
+@TeleOp(name = "Sample Pray")
+public class BasketTeleOp extends ActionOpMode {
     public static boolean clawgo, rotationgo, extensiongo, secondarygo = false;
     public static double width, height = 0;
     public static boolean MASK_TOGGLE = true;
@@ -200,31 +200,6 @@ public class ActionTeleoppers extends ActionOpMode {
                 .endTrajectory();
         Action trajectoryAction = turnBot.build();
 
-        // Trigger actions when gamepad1.x is pressed
-        if (gamepad1.x) {
-            if(turret.getCurrentPosition() > -100 && turret.getCurrentPosition() < 100){
-                runningActions.add(new SequentialAction(
-                        new InstantAction(() -> lift.setTargetPosition(30)),
-                        new InstantAction(() -> externTele.rotation.setPosition(0.47)),
-                        new InstantAction(() -> externTele.lsecondary.setPosition(0.17)),
-                        new InstantAction(() -> externTele.rsecondary.setPosition(0.17)),
-                        new InstantAction(() -> externTele.primary.setPosition(0.3))
-                ));
-            }else{
-                runningActions.add(new SequentialAction(
-                        //taking account of the barrier
-                        chain.grabPosition()
-                ));
-            }
-
-        }
-
-        if(gamepad1.y){
-            runningActions.add(new SequentialAction(
-                    chain.scoreSpecimen()
-            ));
-        }
-
 
         if(gamepad1.left_bumper){
             externTele.claw.setPosition(0.6);  // Open the claw
@@ -255,9 +230,43 @@ public class ActionTeleoppers extends ActionOpMode {
 
 
 /// PLAYER 2 CODE
+//        if (gamepad2.dpad_up && !toggle) {  // Check if the button is pressed and toggle is false
+//            toggle = true;  // Prevents spamming, now the toggle is true
+//            // Change the lift position state based on the current state
+//            if (liftPositionState == 0) {
+//                liftPositionState = 1;  // Move to position 1
+//                runningActions.add(new SequentialAction(
+//                        new InstantAction(()->turret.setTargetPosition(-1250)),
+//                        new SleepAction(1.5),
+//                        new InstantAction(()->lift.setTargetPosition(2500))
+//                ));
+//            } else if (liftPositionState == 1) {
+//                liftPositionState = 0;  // Move back to position 0
+//                if(lift.getPosition() > 1000){
+//                    runningActions.add(new SequentialAction(
+//                            new InstantAction(()->lift.setTargetPosition(30)),
+//                            new SleepAction(1.5),
+//                            new InstantAction(()->turret.setTargetPosition(0))
+//                    ));
+//                }
+//
+//            }
+//        } else if (!gamepad2.dpad_up && toggle) {  // Button is released and toggle is true
+//            toggle = false;  // Reset toggle to allow future button presses
+//        }
+
+
+        if(gamepad2.left_bumper){
+            runningActions.add(new SequentialAction(
+                        new InstantAction(()->turret.setTargetPosition(-1250)),
+                        new SleepAction(1.5),
+                        new InstantAction(()->lift.setTargetPosition(2500))
+                    //move servos to score position
+                ));
+        }
         if(gamepad2.dpad_down){
             runningActions.add(new SequentialAction(
-                   chain.grabPosition()
+                    chain.grabPosition()
             ));
         }
 
@@ -282,11 +291,13 @@ public class ActionTeleoppers extends ActionOpMode {
 
 
 
-        if(gamepad2.right_stick_button){
-            runningActions.add(new SequentialAction(
-            chain.startPosition()
-            ));
+
+
+        if(gamepad2.right_bumper){
+                    externTele.claw.setPosition(0.6);  // Open the claw
         }
+
+
 
         if(gamepad2.x){
             processor.RANGE_HIGH_1 = new Scalar(100, 150, 255, 255);

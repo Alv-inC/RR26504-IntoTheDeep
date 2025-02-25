@@ -26,7 +26,7 @@ public class Lift {
         CachingDcMotorEx lift2;
 
 
-        public static double p = 0.0097, i = 0, d = 0;
+        public static double p = 0.006, i = 0, d = 0;
         public static double targetPosition;
         private Telemetry telemetry;
 
@@ -34,7 +34,7 @@ public class Lift {
         public static double liftMass = 0.3;
         public static double gravity = 9.81;
         public static double armLength = 0.4;
-        public static double feedforwardScale = 0.003;
+        public static double feedforwardScale = 0.001;
         //may need to increase
 
 
