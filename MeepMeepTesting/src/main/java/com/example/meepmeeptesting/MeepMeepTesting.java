@@ -26,31 +26,40 @@ public class MeepMeepTesting {
 // robot rotates to get new sample after 'scoring', may need to rotate turret to correct for incorrect angle
 
                 .splineToLinearHeading(new Pose2d(-58, -47, Math.toRadians(65)), Math.toRadians(140))
+                .waitSeconds(1.5) //score after
 
                 //SCORE
-                //grab and score
+                .splineToLinearHeading(new Pose2d(-55, -40, Math.toRadians(65)), Math.toRadians(90))
+                //grab
+                .waitSeconds(1)
+                .splineToLinearHeading(new Pose2d(-58, -47, Math.toRadians(65)), Math.toRadians(270))
+                //score
 
 
                 //grab
                 .waitSeconds(3)
                 //new score position
-                .splineToLinearHeading(new Pose2d(-56, -47, Math.toRadians(95)), Math.toRadians(140))
+                .splineToLinearHeading(new Pose2d(-60, -40, Math.toRadians(90)), Math.toRadians(140))
+                .waitSeconds(1.5)
+                .splineToLinearHeading(new Pose2d(-58, -47, Math.toRadians(65)), Math.toRadians(140))
                 //SCORE
 
                 //grab
                 .waitSeconds(3)
                 //new score position
-                .splineToLinearHeading(new Pose2d(-56, -47, Math.toRadians(120)), Math.toRadians(140))
+                .splineToLinearHeading(new Pose2d(-60, -40, Math.toRadians(110)), Math.toRadians(140))
+                .waitSeconds(1.5)
+                .splineToLinearHeading(new Pose2d(-58, -47, Math.toRadians(65)), Math.toRadians(140))
                 .waitSeconds(3)
                 //SCORE
 
                 //grab
 
                 //grab from summersible
-                .splineToLinearHeading(new Pose2d(-23, -12, Math.toRadians(0)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(-25, -12, Math.toRadians(0)), Math.toRadians(0))
                 .waitSeconds(3)
                 .setReversed(true)
-                .splineToLinearHeading(new Pose2d(-56, -47, Math.toRadians(65)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(-58, -47, Math.toRadians(65)), Math.toRadians(180))
 
 
 

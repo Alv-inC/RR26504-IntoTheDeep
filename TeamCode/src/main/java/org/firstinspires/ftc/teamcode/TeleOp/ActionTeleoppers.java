@@ -208,7 +208,7 @@ public class ActionTeleoppers extends ActionOpMode {
                         new InstantAction(() -> externTele.rotation.setPosition(0.47)),
                         new InstantAction(() -> externTele.lsecondary.setPosition(0.17)),
                         new InstantAction(() -> externTele.rsecondary.setPosition(0.17)),
-                        new InstantAction(() -> externTele.primary.setPosition(0.3))
+                        new InstantAction(() -> externTele.primary.setPosition(0.6))
                 ));
             }else{
                 runningActions.add(new SequentialAction(

@@ -38,7 +38,7 @@ public class InitializeTeleOp {
         rsecondary.setPosition(0.36);
 
         primary = hardwareMap.get(Servo.class, "primary");
-        primary.setPosition(0.28);
+        primary.setPosition(0);
 
         claw = hardwareMap.get(Servo.class, "claw");
 
