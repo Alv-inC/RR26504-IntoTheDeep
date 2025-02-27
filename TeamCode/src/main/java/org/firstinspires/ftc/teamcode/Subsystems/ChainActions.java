@@ -71,7 +71,7 @@ public class ChainActions {
         return pause? new SequentialAction(
                 //add the chain of commands here
 
-        new InstantAction(() -> externTele.lext.setPosition(0.05)),
+                new InstantAction(() -> externTele.lext.setPosition(0.05)),
                 new InstantAction(() -> externTele.rext.setPosition(0.05)),
                 new InstantAction(() -> externTele.claw.setPosition(0.6)),
                 new InstantAction(() -> externTele.primary.setPosition(0.33)),

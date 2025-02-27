@@ -53,7 +53,7 @@ public class valueTesting extends LinearOpMode {
         Servo servo3 = hardwareMap.get(Servo.class, "servo3");
         servo2.setDirection(Servo.Direction.REVERSE);
 
-        Lift liftj = new Lift(hardwareMap);
+        //Lift lift = new Lift(hardwareMap);
 
         waitForStart();
 
@@ -79,10 +79,10 @@ public class valueTesting extends LinearOpMode {
                 servo1.setPosition(pos1);
                 servo2.setPosition(pos2);
             }
-            if(goLift){
-                goLift = false;
-                liftj.setTargetPosition(liftpos);
-            }
+//            if(goLift){
+//                goLift = false;
+//                liftj.setTargetPosition(liftpos);
+//            }
 
             telemetry.addData("servo1 pos", servo1.getPosition());
             telemetry.addData("servo2 pos", servo2.getPosition());
