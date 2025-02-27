@@ -9,7 +9,7 @@ blue: 10, 30, 140, 0; 100, 150, 255, 255
 SERVOS:
 
 horizontal extension: min 0.05, max 0.27
-primary: up 0.02 specimen score, straight 0.3, down 0.67
+primary: init 0, up 0.32 specimen score, straight 0.6, down 0.97
 secondary: inttake 0.17(0.15 if slides up 50), mid 0.18, 0.24 specimen wall, transfer 0.28, 0.34 up
 claw: max open 0.74, ideal intake 0.42, open 0.5, max close 0.35
 transfer: down 0.05, transfer 0.1, up 0.7

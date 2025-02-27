@@ -67,10 +67,23 @@ public class ChainActions {
         return intake.build();
     }
 
-    public Action startPosition(){
-        return new SequentialAction(
+    public Action startPosition(boolean pause){
+        return pause? new SequentialAction(
                 //add the chain of commands here
+
         new InstantAction(() -> externTele.lext.setPosition(0.05)),
+                new InstantAction(() -> externTele.rext.setPosition(0.05)),
+                new InstantAction(() -> externTele.claw.setPosition(0.6)),
+                new InstantAction(() -> externTele.primary.setPosition(0.33)),
+                new SleepAction(1) ,
+                new InstantAction(() -> externTele.lsecondary.setPosition(0.34)),
+                new InstantAction(() -> externTele.rsecondary.setPosition(0.34)),
+                new InstantAction(() -> turret.setTargetPosition(0)),
+                new InstantAction(() -> lift.setTargetPosition(30))
+        )
+                :
+                new SequentialAction(
+                new InstantAction(() -> externTele.lext.setPosition(0.05)),
                 new InstantAction(() -> externTele.rext.setPosition(0.05)),
                 new InstantAction(() -> externTele.claw.setPosition(0.6)),
                 new InstantAction(() -> externTele.lsecondary.setPosition(0.34)),
@@ -78,7 +91,7 @@ public class ChainActions {
                 new InstantAction(() -> externTele.primary.setPosition(0)),
                 new InstantAction(() -> turret.setTargetPosition(0)),
                 new InstantAction(() -> lift.setTargetPosition(30))
-        );
+                );
     }
 
     //

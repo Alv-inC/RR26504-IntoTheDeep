@@ -284,7 +284,7 @@ public class ActionTeleoppers extends ActionOpMode {
 
         if(gamepad2.right_stick_button){
             runningActions.add(new SequentialAction(
-            chain.startPosition()
+            chain.startPosition(true)
             ));
         }
 

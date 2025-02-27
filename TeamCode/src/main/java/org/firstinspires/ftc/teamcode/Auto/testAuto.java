@@ -84,7 +84,7 @@ VelConstraint slower = new MinVelConstraint(Arrays.asList(
 
 //increased all of these by +3
                 .afterTime(0.5, new SequentialAction(
-                        chain.startPosition()
+                        chain.startPosition(false)
                 ))
                 .splineToConstantHeading(new Vector2d(31.5, -43), Math.toRadians(0))
 
