@@ -32,6 +32,12 @@ public class ChainActions {
         externTele.initialize(hardwareMap);
     }
 
+public Action rotate2(MecanumDrive drive, int angle){
+    turnBot = drive.actionBuilder(new Pose2d(0, 0, 0))
+            .turn(Math.toRadians( angle))
+            .endTrajectory();
+    return turnBot.build();
+}
 
     public Action rotateBot(MecanumDrive drive, int rotateTicks){
         turnBot = drive.actionBuilder(new Pose2d(drive.pose.position.x, drive.pose.position.y, drive.pose.heading.toDouble()))
@@ -59,13 +65,7 @@ public class ChainActions {
         return basket.build();
     }
 
-    public Action intakePosition(MecanumDrive drive){
-        intake = drive.actionBuilder(new Pose2d(drive.pose.position.x, drive.pose.position.y, drive.pose.heading.toDouble()))
-                .setReversed(false)
-                .splineToLinearHeading(new Pose2d(drive.pose.position.x +34, drive.pose.position.y +37, Math.toRadians(0)), Math.toRadians(180))
-                .endTrajectory();
-        return intake.build();
-    }
+
 
     public Action startPosition(boolean pause){
         return pause? new SequentialAction(
@@ -73,7 +73,6 @@ public class ChainActions {
 
                 new InstantAction(() -> externTele.lext.setPosition(0.05)),
                 new InstantAction(() -> externTele.rext.setPosition(0.05)),
-                new InstantAction(() -> externTele.claw.setPosition(0.6)),
                 new InstantAction(() -> externTele.primary.setPosition(0.33)),
                 new SleepAction(1) ,
                 new InstantAction(() -> externTele.lsecondary.setPosition(0.34)),
@@ -85,7 +84,6 @@ public class ChainActions {
                 new SequentialAction(
                 new InstantAction(() -> externTele.lext.setPosition(0.05)),
                 new InstantAction(() -> externTele.rext.setPosition(0.05)),
-                new InstantAction(() -> externTele.claw.setPosition(0.6)),
                 new InstantAction(() -> externTele.lsecondary.setPosition(0.34)),
                 new InstantAction(() -> externTele.rsecondary.setPosition(0.34)),
                 new InstantAction(() -> externTele.primary.setPosition(0)),
@@ -155,6 +153,21 @@ public class ChainActions {
                 new InstantAction(() -> externTele.lsecondary.setPosition(0.16)),
                 new InstantAction(() -> externTele.rsecondary.setPosition(0.16)),
                 new InstantAction(() -> externTele.primary.setPosition(0.6))
+
+        );
+    }
+    public Action intakePosition(){
+        return new SequentialAction(
+                new InstantAction(() -> externTele.claw.setPosition(0.5)),
+                new InstantAction(() -> externTele.lext.setPosition(0.15)),
+                new InstantAction(() -> externTele.rext.setPosition(0.15)),
+                new SleepAction(0.5),
+                new InstantAction(() -> externTele.primary.setPosition(0.49)),
+                new SleepAction(0.5),
+                new InstantAction(() -> externTele.primary.setPosition(0.97)),
+                new InstantAction(() -> externTele.rotation.setPosition(0.47)),
+                new InstantAction(() -> externTele.lsecondary.setPosition(0.24)),
+                new InstantAction(() -> externTele.rsecondary.setPosition(0.24))
 
         );
     }
@@ -247,10 +260,10 @@ public class ChainActions {
             new SleepAction(0.5),
                 new InstantAction(() ->externTele.rotation.setPosition(externTele.rotation.getPosition()+processor.getServoAdjustment())),
             new SleepAction(0.3),
-                new InstantAction(() ->externTele.lsecondary.setPosition(0.16)),
-                new InstantAction(() ->externTele.rsecondary.setPosition(0.16)),
+                new InstantAction(() ->externTele.lsecondary.setPosition(0.17)),
+                new InstantAction(() ->externTele.rsecondary.setPosition(0.17)),
             new SleepAction(0.3),
-                new InstantAction(() ->externTele.claw.setPosition(0.42))
+                new InstantAction(() ->externTele.claw.setPosition(0.35))
         );
     }
 

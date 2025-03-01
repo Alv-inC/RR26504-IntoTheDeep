@@ -25,37 +25,23 @@ public class InitializeTeleOp {
         rotation = hardwareMap.get(Servo.class, "rotation");
         rotation.setPosition(0.47);
 
-        lext = hardwareMap.get(Servo.class, "lext");
-        rext = hardwareMap.get(Servo.class, "rext");
-        lext.setDirection(Servo.Direction.REVERSE);
-        lext.setPosition(0.05);
-        rext.setPosition(0.05);
-
         lsecondary = hardwareMap.get(Servo.class, "lsecondary");
         rsecondary = hardwareMap.get(Servo.class, "rsecondary");
         lsecondary.setDirection(Servo.Direction.REVERSE);
-        lsecondary.setPosition(0.36);
-        rsecondary.setPosition(0.36);
+        lsecondary.setPosition(0.3);
+        rsecondary.setPosition(0.3);
 
         primary = hardwareMap.get(Servo.class, "primary");
         primary.setPosition(0);
 
+        lext = hardwareMap.get(Servo.class, "lext");
+        rext = hardwareMap.get(Servo.class, "rext");
+        rext.setDirection(Servo.Direction.REVERSE);
+        lext.setPosition(0.05);
+        rext.setPosition(0.05);
+
         claw = hardwareMap.get(Servo.class, "claw");
-
-
-        lsecondary.setPosition(0.3);
-         rsecondary.setPosition(0.3);
-         primary.setPosition(0.695);
-        rotation.setPosition(1);
-
-//        trapdoor = hardwareMap.get(Servo.class, "outtake");
-//        trapdoor.setPosition(0.67);
-//        ltransfer = hardwareMap.get(Servo.class, "ltransfer");
-//        ltransfer.setDirection(Servo.Direction.REVERSE);
-//        rtransfer = hardwareMap.get(Servo.class, "rtransfer");
-//        ltransfer.setPosition(0.05);
-//        rtransfer.setPosition(0.05);
-
+        claw.setPosition(0.35);
 
     }
     public void waitWithoutStoppingRobotcc(double milliseconds) {

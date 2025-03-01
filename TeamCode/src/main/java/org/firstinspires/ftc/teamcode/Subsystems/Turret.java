@@ -27,7 +27,7 @@ public class Turret {
 
 
 
-    public static double p = 0.0013, i = 0, d = 0.0001;
+    public static double p = 0.001, i = 0, d = 0.0001;
     public static double targetPosition = 0;
     //0 is the start position
     //-1250 is the 180 position

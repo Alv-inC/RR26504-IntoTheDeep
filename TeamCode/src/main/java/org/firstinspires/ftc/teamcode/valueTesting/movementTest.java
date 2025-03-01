@@ -70,7 +70,7 @@ public class movementTest extends ActionOpMode {
         }
         if(intakePosition){
             intakePosition = false;
-            runningActions.add(chain.intakePosition(drive));
+            runningActions.add(chain.intakePosition());
         }
 
 

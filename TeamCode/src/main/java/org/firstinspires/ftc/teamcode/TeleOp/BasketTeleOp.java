@@ -193,23 +193,24 @@ public class BasketTeleOp extends ActionOpMode {
             ));
         }
         else {
-            if (gamepad1.dpad_up) runningActions.add(chain.strafeHorizontal(drive, 55));
-            else if (gamepad1.dpad_down) runningActions.add(chain.strafeHorizontal(drive, -55));
+            if (gamepad1.dpad_down) runningActions.add(chain.rotateBot(drive, 45));
+            else if (gamepad1.dpad_up) runningActions.add(chain.rotateBot(drive, -45));
             else if (gamepad1.dpad_right) runningActions.add(chain.rotateBot(drive, -90));
             else if (gamepad1.dpad_left) runningActions.add(chain.rotateBot(drive, 90));
+            else if(gamepad2.dpad_left) runningActions.add(chain.rotate2(drive, 45));
         }
 
         drive.updatePoseEstimate();
 
         if (gamepad1.left_stick_button) joystick = true;
-        if(gamepad2.right_stick_button) joystick = false;
+        if(gamepad1.right_stick_button) joystick = false;
 
         if(gamepad1.left_bumper){
-            externTele.claw.setPosition(0.6);  // Open the claw
+            externTele.claw.setPosition(0.5);  // Open the claw
         }
 
         if(gamepad1.right_bumper){
-            externTele.claw.setPosition(0.42);  // Close the claw
+            externTele.claw.setPosition(0.35);  // Close the claw
             if(externTele.lsecondary.getPosition() > 0.16 && externTele.rsecondary.getPosition() > 0.16){
                 runningActions.add(new SequentialAction(
                         chain.scorePosition()
@@ -228,52 +229,21 @@ public class BasketTeleOp extends ActionOpMode {
         }
 
 
-
-
-
-
-/// PLAYER 2 CODE
-//        if (gamepad2.dpad_up && !toggle) {  // Check if the button is pressed and toggle is false
-//            toggle = true;  // Prevents spamming, now the toggle is true
-//            // Change the lift position state based on the current state
-//            if (liftPositionState == 0) {
-//                liftPositionState = 1;  // Move to position 1
-//                runningActions.add(new SequentialAction(
-//                        new InstantAction(()->turret.setTargetPosition(-1250)),
-//                        new SleepAction(1.5),
-//                        new InstantAction(()->lift.setTargetPosition(2500))
-//                ));
-//            } else if (liftPositionState == 1) {
-//                liftPositionState = 0;  // Move back to position 0
-//                if(lift.getPosition() > 1000){
-//                    runningActions.add(new SequentialAction(
-//                            new InstantAction(()->lift.setTargetPosition(30)),
-//                            new SleepAction(1.5),
-//                            new InstantAction(()->turret.setTargetPosition(0))
-//                    ));
-//                }
-//
-//            }
-//        } else if (!gamepad2.dpad_up && toggle) {  // Button is released and toggle is true
-//            toggle = false;  // Reset toggle to allow future button presses
-//        }
-
-
         if(gamepad2.left_bumper){
             runningActions.add(new SequentialAction(
                         new InstantAction(()->turret.setTargetPosition(-1250)),
                         new SleepAction(1.5),
-                        new InstantAction(()->lift.setTargetPosition(2500)),
+                        new InstantAction(()->lift.setTargetPosition(2250)),
+                        new InstantAction(()->externTele.lsecondary.setPosition(0.37)),
+                        new InstantAction(()->externTele.rsecondary.setPosition(0.37)),
                         new SleepAction(1.5),
-                        new InstantAction(()->externTele.lsecondary.setPosition(0.28)),
-                        new InstantAction(()->externTele.rsecondary.setPosition(0.28)),
                         new InstantAction(()->externTele.primary.setPosition(0.45))
                 ));
         }
 
         if(gamepad2.dpad_down){
             runningActions.add(new SequentialAction(
-                    chain.grabPosition()
+                    chain.intakePosition()
             ));
         }
 
@@ -285,7 +255,7 @@ public class BasketTeleOp extends ActionOpMode {
         }
         previousButtonState1a = gamepad2.a;
 
-        if(gamepad2.right_bumper) externTele.claw.setPosition(0.6);  // Open the claw
+        if(gamepad2.right_bumper) externTele.claw.setPosition(0.5);  // Open the claw
 
         if(gamepad2.right_stick_button){
             runningActions.add(new SequentialAction(
