@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.servoTest;
+package org.firstinspires.ftc.teamcode.valueTesting;
 
 import static java.lang.Math.PI;
 
@@ -43,6 +43,7 @@ public class servoTest extends LinearOpMode {
     public static boolean servo2Reverse = false;
     public static double pos1, pos2, pos3, liftpos = 0.5;
     public Lift lift;
+    Turret turret;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -55,7 +56,7 @@ public class servoTest extends LinearOpMode {
         servo2.setDirection(Servo.Direction.REVERSE);
 
         lift = new Lift(hardwareMap);
-
+        turret = new Turret(hardwareMap);
         waitForStart();
 
         while(opModeIsActive()){
@@ -80,11 +81,18 @@ public class servoTest extends LinearOpMode {
                 servo1.setPosition(pos1);
                 servo2.setPosition(pos2);
             }
+            if(turretGo){
+                turretGo = false;
+                turret.setTargetPosition(turretpos);
+            }
 
             telemetry.addData("servo1 pos", servo1.getPosition());
             telemetry.addData("servo2 pos", servo2.getPosition());
+            telemetry.addData("lift pos", lift.getPosition());
+
             telemetry.update();
             lift.update();
+            turret.update();
         }
     }
 
