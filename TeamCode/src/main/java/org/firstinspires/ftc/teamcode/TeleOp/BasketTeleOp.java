@@ -173,7 +173,7 @@ public class BasketTeleOp extends ActionOpMode {
         runningActions = newActions;
 
         //drivetrain code
-        if(joystick) {
+        if(!(gamepad2.left_trigger > 0)) {
             if (gamepad1.left_trigger > 0) {
                 drive.setDrivePowers(new PoseVelocity2d(
                         new Vector2d(
@@ -193,15 +193,15 @@ public class BasketTeleOp extends ActionOpMode {
             }
         }
         else {
-            if (gamepad1.dpad_down) runningActions.add(chain.rotateBot(drive, -45));
-            else if (gamepad1.dpad_up) runningActions.add(chain.rotateBot(drive, 45));
-            else if (gamepad1.dpad_right) runningActions.add(chain.rotateBot(drive, -90));
-            else if (gamepad1.dpad_left) runningActions.add(chain.rotateBot(drive, 90));
+            if (gamepad2.dpad_down) runningActions.add(chain.rotateBot(drive, -45));
+            else if (gamepad2.dpad_up) runningActions.add(chain.rotateBot(drive, 45));
+            else if (gamepad2.dpad_right) runningActions.add(chain.rotateBot(drive, -90));
+            else if (gamepad2.dpad_left) runningActions.add(chain.rotateBot(drive, 90));
             //else if (gamepad2.dpad_left) runningActions.add(chain.rotate2(drive, 45));
-            else if(gamepad2.dpad_down) runningActions.add(chain.strafeHorizontal(drive, -60));
-            else if(gamepad2.dpad_up) runningActions.add(chain.strafeHorizontal(drive, 60));
-            else if(gamepad2.dpad_right) runningActions.add(chain.strafeVertical(drive, -25));
-            else if(gamepad2.dpad_left) runningActions.add(chain.strafeVertical(drive, 25));
+//            else if(gamepad2.dpad_down) runningActions.add(chain.strafeHorizontal(drive, -60));
+//            else if(gamepad2.dpad_up) runningActions.add(chain.strafeHorizontal(drive, 60));
+//            else if(gamepad2.dpad_right) runningActions.add(chain.strafeVertical(drive, -25));
+//            else if(gamepad2.dpad_left) runningActions.add(chain.strafeVertical(drive, 25));
 
         }
         drive.updatePoseEstimate();
@@ -238,10 +238,10 @@ public class BasketTeleOp extends ActionOpMode {
                         new InstantAction(()->turret.setTargetPosition(-1250)),
                         new SleepAction(1.5),
                         new InstantAction(()->lift.setTargetPosition(2100)),
-                        new InstantAction(()->externTele.lsecondary.setPosition(0.37)),
-                        new InstantAction(()->externTele.rsecondary.setPosition(0.37)),
+                        new InstantAction(()->externTele.lsecondary.setPosition(0.34)),
+                        new InstantAction(()->externTele.rsecondary.setPosition(0.34)),
                         new SleepAction(1.5),
-                        new InstantAction(()->externTele.primary.setPosition(0.45))
+                        new InstantAction(()->externTele.primary.setPosition(0.35))
                 ));
         }
 
