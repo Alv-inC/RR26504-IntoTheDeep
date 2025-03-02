@@ -190,7 +190,7 @@ public class ActionTeleoppers extends ActionOpMode {
                         -gamepad1.left_stick_x
                 ),
                 -gamepad1.right_stick_x
-        ));
+        ), 1);
 
         drive.updatePoseEstimate();
 
@@ -206,8 +206,8 @@ public class ActionTeleoppers extends ActionOpMode {
                 runningActions.add(new SequentialAction(
                         new InstantAction(() -> lift.setTargetPosition(30)),
                         new InstantAction(() -> externTele.rotation.setPosition(0.47)),
-                        new InstantAction(() -> externTele.lsecondary.setPosition(0.17)),
-                        new InstantAction(() -> externTele.rsecondary.setPosition(0.17)),
+                        new InstantAction(() -> externTele.lsecondary.setPosition(0.25)),
+                        new InstantAction(() -> externTele.rsecondary.setPosition(0.25)),
                         new InstantAction(() -> externTele.primary.setPosition(0.6))
                 ));
             }else{
@@ -227,11 +227,11 @@ public class ActionTeleoppers extends ActionOpMode {
 
 
         if(gamepad1.left_bumper){
-            externTele.claw.setPosition(0.6);  // Open the claw
+            externTele.claw.setPosition(0.5);  // Open the claw
         }
 
         if(gamepad1.right_bumper){
-            externTele.claw.setPosition(0.42);  // Close the claw
+            externTele.claw.setPosition(0.4);  // Close the claw
             if(externTele.lsecondary.getPosition() > 0.16 && externTele.rsecondary.getPosition() > 0.16){
                 runningActions.add(new SequentialAction(
                         chain.scorePosition()
