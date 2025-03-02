@@ -151,15 +151,6 @@ public class BasketTeleOp extends ActionOpMode {
         clawRotationToggle = false;
         clawRotationState = 0;
 
-        // Initialize externTele at the class level
-        // Initialize using hardwareMap and telemetry
-
-        // Set up vision processor (if necessary)
-        // final OpenCVTEST.CameraStreamProcessor processor = new OpenCVTEST.CameraStreamProcessor();
-        // VisionPortal visionPortal = new VisionPortal.Builder()
-        //        .addProcessor(processor)
-        //        .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
-        //        .build();
     }
 
     @Override
@@ -181,25 +172,38 @@ public class BasketTeleOp extends ActionOpMode {
         }
         runningActions = newActions;
 
-
         //drivetrain code
         if(joystick) {
-            drive.setDrivePowers(new PoseVelocity2d(
-                    new Vector2d(
-                            -gamepad1.left_stick_y,
-                            -gamepad1.left_stick_x
-                    ),
-                    -gamepad1.right_stick_x
-            ));
+            if (gamepad1.left_trigger > 0) {
+                drive.setDrivePowers(new PoseVelocity2d(
+                        new Vector2d(
+                                -gamepad1.left_stick_y,
+                                -gamepad1.left_stick_x
+                        ),
+                        -gamepad1.right_stick_x
+                ), 3);
+            } else {
+                drive.setDrivePowers(new PoseVelocity2d(
+                        new Vector2d(
+                                -gamepad1.left_stick_y,
+                                -gamepad1.left_stick_x
+                        ),
+                        -gamepad1.right_stick_x
+                ), 1.5);
+            }
         }
         else {
-            if (gamepad1.dpad_down) runningActions.add(chain.rotateBot(drive, 45));
-            else if (gamepad1.dpad_up) runningActions.add(chain.rotateBot(drive, -45));
+            if (gamepad1.dpad_down) runningActions.add(chain.rotateBot(drive, -45));
+            else if (gamepad1.dpad_up) runningActions.add(chain.rotateBot(drive, 45));
             else if (gamepad1.dpad_right) runningActions.add(chain.rotateBot(drive, -90));
             else if (gamepad1.dpad_left) runningActions.add(chain.rotateBot(drive, 90));
-            else if(gamepad2.dpad_left) runningActions.add(chain.rotate2(drive, 45));
-        }
+            //else if (gamepad2.dpad_left) runningActions.add(chain.rotate2(drive, 45));
+            else if(gamepad2.dpad_down) runningActions.add(chain.strafeHorizontal(drive, -60));
+            else if(gamepad2.dpad_up) runningActions.add(chain.strafeHorizontal(drive, 60));
+            else if(gamepad2.dpad_right) runningActions.add(chain.strafeVertical(drive, -25));
+            else if(gamepad2.dpad_left) runningActions.add(chain.strafeVertical(drive, 25));
 
+        }
         drive.updatePoseEstimate();
 
         if (gamepad1.left_stick_button) joystick = true;
@@ -210,30 +214,30 @@ public class BasketTeleOp extends ActionOpMode {
         }
 
         if(gamepad1.right_bumper){
-            externTele.claw.setPosition(0.35);  // Close the claw
-            if(externTele.lsecondary.getPosition() > 0.16 && externTele.rsecondary.getPosition() > 0.16){
-                runningActions.add(new SequentialAction(
-                        chain.scorePosition()
-                ));
-            }
+            externTele.claw.setPosition(0.4);  // Close the claw
+//            if(externTele.lsecondary.getPosition() > 0.16 && externTele.rsecondary.getPosition() > 0.16){
+//                runningActions.add(new SequentialAction(
+//                        chain.scorePosition()
+//                ));
+//            }
         }
 
-        //hang go forward
-        if(gamepad1.right_trigger > 0){
-            externTele.hang.setPower(gamepad1.right_trigger);
-        }
-
-        //hang go backward
-        if(gamepad1.left_trigger > 0){
-            externTele.hang.setPower(-gamepad1.left_trigger);
-        }
-
+//        //hang go forward
+//        if(gamepad1.right_trigger > 0){
+//            externTele.hang.setPower(gamepad1.right_trigger);
+//        }
+//
+//        //hang go backward
+//        if(gamepad1.left_trigger > 0){
+//            externTele.hang.setPower(-gamepad1.left_trigger);
+//        }
+        if(gamepad2.right_trigger>0)runningActions.add(chain.startPosition(false));
 
         if(gamepad2.left_bumper){
             runningActions.add(new SequentialAction(
                         new InstantAction(()->turret.setTargetPosition(-1250)),
                         new SleepAction(1.5),
-                        new InstantAction(()->lift.setTargetPosition(2250)),
+                        new InstantAction(()->lift.setTargetPosition(2100)),
                         new InstantAction(()->externTele.lsecondary.setPosition(0.37)),
                         new InstantAction(()->externTele.rsecondary.setPosition(0.37)),
                         new SleepAction(1.5),
@@ -241,27 +245,22 @@ public class BasketTeleOp extends ActionOpMode {
                 ));
         }
 
-        if(gamepad2.dpad_down){
+        if(gamepad2.right_stick_button){
             runningActions.add(new SequentialAction(
                     chain.intakePosition()
             ));
         }
 
-        boolean previousButtonState1a = false; // Stores the previous state of the button
-        if (gamepad2.a && !previousButtonState1a) {
+        boolean previousButtonState2a = false; // Stores the previous state of the button
+        if (gamepad2.a && !previousButtonState2a) {
             runningActions.add(new SequentialAction(
                 chain.intake(processor)
             ));
         }
-        previousButtonState1a = gamepad2.a;
+        previousButtonState2a = gamepad2.a;
 
         if(gamepad2.right_bumper) externTele.claw.setPosition(0.5);  // Open the claw
 
-        if(gamepad2.right_stick_button){
-            runningActions.add(new SequentialAction(
-                    chain.startPosition(false)
-            ));
-        }
         else if(gamepad2.left_stick_button){
             runningActions.add(new SequentialAction(
                     chain.startPosition(true)

@@ -18,7 +18,7 @@ rotation: mid 0.47
 
 MOTORS:
 turret: 1250 180 degrees
-lift: 30 bottom, 1150 specimen, 2330 max
+lift: 30 bottom, 800 specimen, 550 down, 2330 max
 
 
 MEASUREMENTS:

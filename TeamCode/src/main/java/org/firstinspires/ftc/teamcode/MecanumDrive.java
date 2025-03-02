@@ -245,7 +245,7 @@ public final class MecanumDrive{
         FlightRecorder.write("MECANUM_PARAMS", PARAMS);
     }
 
-    public void setDrivePowers(PoseVelocity2d powers) {
+    public void setDrivePowers(PoseVelocity2d powers, double divide) {
         MecanumKinematics.WheelVelocities<Time> wheelVels = new MecanumKinematics(1).inverse(
                 PoseVelocity2dDual.constant(powers, 1));
 
@@ -254,10 +254,10 @@ public final class MecanumDrive{
             maxPowerMag = Math.max(maxPowerMag, power.value());
         }
 
-        leftFront.setPower(wheelVels.leftFront.get(0) / maxPowerMag);
-        leftBack.setPower(wheelVels.leftBack.get(0) / maxPowerMag);
-        rightBack.setPower(wheelVels.rightBack.get(0) / maxPowerMag);
-        rightFront.setPower(wheelVels.rightFront.get(0) / maxPowerMag);
+        leftFront.setPower(wheelVels.leftFront.get(0) / maxPowerMag / divide);
+        leftBack.setPower(wheelVels.leftBack.get(0) / maxPowerMag / divide);
+        rightBack.setPower(wheelVels.rightBack.get(0) / maxPowerMag / divide);
+        rightFront.setPower(wheelVels.rightFront.get(0) / maxPowerMag / divide);
     }
 
     public final class FollowTrajectoryAction implements Action {
@@ -317,10 +317,10 @@ public final class MecanumDrive{
 
             final MotorFeedforward feedforward = new MotorFeedforward(PARAMS.kS,
                     PARAMS.kV / PARAMS.inPerTick, PARAMS.kA / PARAMS.inPerTick);
-            double leftFrontPower = feedforward.compute(wheelVels.leftFront) / voltage;
-            double leftBackPower = feedforward.compute(wheelVels.leftBack) / voltage;
-            double rightBackPower = feedforward.compute(wheelVels.rightBack) / voltage;
-            double rightFrontPower = feedforward.compute(wheelVels.rightFront) / voltage;
+            double leftFrontPower = feedforward.compute(wheelVels.leftFront) / voltage/1.5;
+            double leftBackPower = feedforward.compute(wheelVels.leftBack) / voltage/1.5;
+            double rightBackPower = feedforward.compute(wheelVels.rightBack) / voltage/1.5;
+            double rightFrontPower = feedforward.compute(wheelVels.rightFront) / voltage/1.5;
             mecanumCommandWriter.write(new MecanumCommandMessage(
                     voltage, leftFrontPower, leftBackPower, rightBackPower, rightFrontPower
             ));

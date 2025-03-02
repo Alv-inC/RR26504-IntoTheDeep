@@ -33,8 +33,8 @@ public class ChainActions {
     }
 
 public Action rotate2(MecanumDrive drive, int angle){
-    turnBot = drive.actionBuilder(new Pose2d(0, 0, 0))
-            .turn(Math.toRadians( angle))
+    turnBot = drive.actionBuilder(new Pose2d(0, 0, drive.pose.heading.toDouble()))
+            .turnTo(Math.toRadians(angle))
             .endTrajectory();
     return turnBot.build();
 }
@@ -73,12 +73,14 @@ public Action rotate2(MecanumDrive drive, int angle){
 
                 new InstantAction(() -> externTele.lext.setPosition(0.05)),
                 new InstantAction(() -> externTele.rext.setPosition(0.05)),
+                new InstantAction(() -> externTele.rotation.setPosition(0.47)),
                 new InstantAction(() -> externTele.primary.setPosition(0.33)),
-                new SleepAction(1) ,
+                new SleepAction(0.5) ,
                 new InstantAction(() -> externTele.lsecondary.setPosition(0.34)),
                 new InstantAction(() -> externTele.rsecondary.setPosition(0.34)),
-                new InstantAction(() -> turret.setTargetPosition(0)),
-                new InstantAction(() -> lift.setTargetPosition(30))
+                new InstantAction(() -> lift.setTargetPosition(0)),
+                new SleepAction(1.5),
+                new InstantAction(() -> turret.setTargetPosition(0))
         )
                 :
                 new SequentialAction(
@@ -86,9 +88,10 @@ public Action rotate2(MecanumDrive drive, int angle){
                 new InstantAction(() -> externTele.rext.setPosition(0.05)),
                 new InstantAction(() -> externTele.lsecondary.setPosition(0.34)),
                 new InstantAction(() -> externTele.rsecondary.setPosition(0.34)),
-                new InstantAction(() -> externTele.primary.setPosition(0)),
+                new InstantAction(() -> externTele.primary.setPosition(0.6)),
                 new InstantAction(() -> turret.setTargetPosition(0)),
                 new InstantAction(() -> lift.setTargetPosition(30))
+
                 );
     }
 
@@ -103,10 +106,10 @@ public Action rotate2(MecanumDrive drive, int angle){
                 new InstantAction(() -> externTele.rsecondary.setPosition(0.37)),
                 new InstantAction(() -> turret.setTargetPosition(-1250)),
                 new SleepAction(1.6),
-                new InstantAction(() -> externTele.primary.setPosition(0.5)),
-                new InstantAction(() -> lift.setTargetPosition(770)),
-                new InstantAction(() -> externTele.lext.setPosition(0.12)),
-                new InstantAction(() -> externTele.rext.setPosition(0.12))
+                new InstantAction(() -> externTele.primary.setPosition(0.53)),
+                new InstantAction(() -> externTele.lsecondary.setPosition(0.38)),
+                new InstantAction(() -> externTele.rsecondary.setPosition(0.38)),
+                new InstantAction(() -> lift.setTargetPosition(800))
         );
     }
 
@@ -121,13 +124,9 @@ public Action rotate2(MecanumDrive drive, int angle){
 
     public Action scoreSpecimen(){
         return new SequentialAction(
-                new InstantAction(() -> externTele.lsecondary.setPosition(0.19)),
-                new InstantAction(() -> externTele.rsecondary.setPosition(0.19)),
-                new InstantAction(() -> externTele.primary.setPosition(0.6)),
-                new InstantAction(() -> externTele.rotation.setPosition(0.47)),
-                new InstantAction(() -> lift.setTargetPosition(660)),
+                new InstantAction(() -> lift.setTargetPosition(550)),
                 new SleepAction(0.8),
-                new InstantAction(() -> externTele.claw.setPosition(0.73))
+                new InstantAction(() -> externTele.claw.setPosition(0.5))
         );
     }
 
@@ -142,16 +141,16 @@ public Action rotate2(MecanumDrive drive, int angle){
         return new SequentialAction(
                 new InstantAction(() -> externTele.lext.setPosition(0.05)),
                 new InstantAction(() -> externTele.rext.setPosition(0.05)),
-                new InstantAction(() -> externTele.primary.setPosition(0.4)),
+                new InstantAction(() -> externTele.primary.setPosition(0.34)),
                 new InstantAction(() -> externTele.rotation.setPosition(0.47)),
-                new InstantAction(() -> externTele.lsecondary.setPosition(0.37)),
-                new InstantAction(() -> externTele.rsecondary.setPosition(0.37)),
+                new InstantAction(() -> externTele.lsecondary.setPosition(0.41)),
+                new InstantAction(() -> externTele.rsecondary.setPosition(0.41)),
                 new InstantAction(() -> lift.setTargetPosition(30)),
                 new InstantAction(() -> turret.setTargetPosition(0)),
                 new SleepAction(1.7),
                 new InstantAction(() -> externTele.rotation.setPosition(0.47)),
-                new InstantAction(() -> externTele.lsecondary.setPosition(0.16)),
-                new InstantAction(() -> externTele.rsecondary.setPosition(0.16)),
+                new InstantAction(() -> externTele.lsecondary.setPosition(0.2)),
+                new InstantAction(() -> externTele.rsecondary.setPosition(0.2)),
                 new InstantAction(() -> externTele.primary.setPosition(0.6))
 
         );
@@ -159,15 +158,17 @@ public Action rotate2(MecanumDrive drive, int angle){
     public Action intakePosition(){
         return new SequentialAction(
                 new InstantAction(() -> externTele.claw.setPosition(0.5)),
-                new InstantAction(() -> externTele.lext.setPosition(0.15)),
-                new InstantAction(() -> externTele.rext.setPosition(0.15)),
+                new InstantAction(() -> externTele.lext.setPosition(0.2)),
+                new InstantAction(() -> externTele.rext.setPosition(0.2)),
                 new SleepAction(0.5),
                 new InstantAction(() -> externTele.primary.setPosition(0.49)),
                 new SleepAction(0.5),
                 new InstantAction(() -> externTele.primary.setPosition(0.97)),
                 new InstantAction(() -> externTele.rotation.setPosition(0.47)),
-                new InstantAction(() -> externTele.lsecondary.setPosition(0.24)),
-                new InstantAction(() -> externTele.rsecondary.setPosition(0.24))
+                new InstantAction(() -> externTele.lsecondary.setPosition(0.28)),
+                new InstantAction(() -> externTele.rsecondary.setPosition(0.28)),
+                new InstantAction(() -> turret.setTargetPosition(0))
+
 
         );
     }
@@ -251,19 +252,16 @@ public Action rotate2(MecanumDrive drive, int angle){
     public Action intake(cameraProcessor processor){
         return new SequentialAction(
                 new InstantAction(() ->turret.setTargetPosition(turret.getCurrentPosition()+ processor.getTurretAdjustment()*-1)),
-            new SleepAction(3),
-                new InstantAction(() ->externTele.lext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
-                new InstantAction(() ->externTele.rext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
             new SleepAction(0.5),
                 new InstantAction(() ->externTele.lext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
                 new InstantAction(() ->externTele.rext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
             new SleepAction(0.5),
-                new InstantAction(() ->externTele.rotation.setPosition(externTele.rotation.getPosition()+processor.getServoAdjustment())),
+                new InstantAction(() ->externTele.rotation.setPosition(0.47+processor.getServoAdjustment())),
             new SleepAction(0.3),
-                new InstantAction(() ->externTele.lsecondary.setPosition(0.17)),
-                new InstantAction(() ->externTele.rsecondary.setPosition(0.17)),
+                new InstantAction(() ->externTele.lsecondary.setPosition(0.19)),
+                new InstantAction(() ->externTele.rsecondary.setPosition(0.19)),
             new SleepAction(0.3),
-                new InstantAction(() ->externTele.claw.setPosition(0.35))
+                new InstantAction(() ->externTele.claw.setPosition(0.4))
         );
     }
 
