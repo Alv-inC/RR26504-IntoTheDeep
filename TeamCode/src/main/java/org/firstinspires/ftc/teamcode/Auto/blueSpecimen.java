@@ -52,7 +52,7 @@ public class blueSpecimen extends LinearOpMode {
         externTele.initialize(hardwareMap);
         externTele.lext.setPosition(0);
         externTele.rext.setPosition(0);
-        externTele.claw.setPosition(0.42);
+        externTele.claw.setPosition(0.58);
         turret.setTargetPosition(0);
         lift.setTargetPosition(30);
 
@@ -62,21 +62,25 @@ public class blueSpecimen extends LinearOpMode {
         if(isStopRequested()) return;
 
         TrajectoryActionBuilder trajectory = drive.actionBuilder(startPose)
-                .waitSeconds(1)
 
 
                 .afterTime(0, new SequentialAction(
-                        new InstantAction(() -> externTele.primary.setPosition(0.6)),
+                        new InstantAction(() -> externTele.lext.setPosition(0.32)),
+                        new InstantAction(() -> externTele.rext.setPosition(0.32)),
+                        new SleepAction(0.6),
+                        new InstantAction(() -> externTele.primary.setPosition(0.65)),
                         new InstantAction(() -> externTele.lsecondary.setPosition(0.38)),
                         new InstantAction(() -> externTele.rsecondary.setPosition(0.38)),
-                        new InstantAction(() -> lift.setTargetPosition(875)),
+                        new InstantAction(() -> externTele.lext.setPosition(0)),
+                        new InstantAction(() -> externTele.rext.setPosition(0)),
+                        new InstantAction(() -> lift.setTargetPosition(945)),
                         new SleepAction(1.4),
                         chain.scoreSpecimen()
                 ))
 
                 .strafeTo(new Vector2d(8.75, -35))
 
-                .waitSeconds(1.7)
+                .waitSeconds(1.3)
 
 
 
@@ -93,18 +97,26 @@ public class blueSpecimen extends LinearOpMode {
 
                 //first specimen
                 //first specimen
-                .splineToConstantHeading(new Vector2d(39, -33), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(39.5, -21), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(49.5, -11), Math.toRadians(270))
-                .splineToConstantHeading(new Vector2d(49.5, -55), Math.toRadians(270))
-                .waitSeconds(0.2)
+                .splineToConstantHeading(new Vector2d(36, -33), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(37, -21), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(44, -7), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(44, -46), Math.toRadians(270))
+                .afterTime(0, new SequentialAction(
+                        new InstantAction(() -> externTele.lext.setPosition(0.05)),
+                        new InstantAction(() -> externTele.rext.setPosition(0.05)),
+                        new InstantAction(() -> externTele.primary.setPosition(0.34)),
+                        new InstantAction(() -> externTele.rotation.setPosition(0.48)),
+                        new InstantAction(() -> externTele.lsecondary.setPosition(0.41)),
+                        new InstantAction(() -> externTele.rsecondary.setPosition(0.41)),
+                        new SleepAction(0.3),
+                        new InstantAction(() -> turret.setTargetPosition(-1250))
+                ))
 
                 //second specimen
-                .splineToConstantHeading(new Vector2d(44, -28), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(46, -20), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(56, -17), Math.toRadians(270))
-                .splineToConstantHeading(new Vector2d(56, -55), Math.toRadians(270))
-                .waitSeconds(0.3)
+                .splineToConstantHeading(new Vector2d(40, -28), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(42, -20), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(53, -12), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(53, -49), Math.toRadians(270))
 
 
                 //third specimen
@@ -113,27 +125,44 @@ public class blueSpecimen extends LinearOpMode {
 //                .splineToConstantHeading(new Vector2d(64, -13), Math.toRadians(270))
 //                .splineToConstantHeading(new Vector2d(67, -59), Math.toRadians(270))
 //                .waitSeconds(0.4)
-//                .splineToConstantHeading(new Vector2d(43, -45), Math.toRadians(270), slower)
-//                .afterTime(0, new SequentialAction(
-//                        chain.grabPositionAuto()
-//                ))
-//                .waitSeconds(3.5)
-//                .splineToConstantHeading(new Vector2d(43, -56.5), Math.toRadians(270), slower)
-//                .afterTime(1.5,
-//                        new SequentialAction(
-//                                new InstantAction(() -> externTele.claw.setPosition(0.42)),
-//                                chain.scorePositionAuto()
-//                        ))
-//                .waitSeconds(4)
-//                .splineToConstantHeading(new Vector2d(8, -40.3), Math.toRadians(90), slower)
-//                .splineToConstantHeading(new Vector2d(8, -38), Math.toRadians(90), slower)
-//                .afterTime(2, new SequentialAction(
-//                        chain.scoreSpecimen()
-//                ))
+
+                .splineToConstantHeading(new Vector2d(53, -40), Math.toRadians(270))
+                .afterTime(0, new SequentialAction(
+                        new InstantAction(() -> lift.setTargetPosition(0)),
+                        new InstantAction(() -> externTele.rotation.setPosition(0.48)),
+                        new InstantAction(() -> externTele.lsecondary.setPosition(0.155)),
+                        new InstantAction(() -> externTele.rsecondary.setPosition(0.155)),
+                        new InstantAction(() -> externTele.primary.setPosition(0.6))
+
+                ))
+
+
+                .splineToConstantHeading(new Vector2d(53, -52), Math.toRadians(270))
+                .waitSeconds(1)
+                .afterTime(0.5,
+                        new SequentialAction(
+                                new InstantAction(() -> externTele.claw.setPosition(0.58)),
+                                new SleepAction(0.3),
+                                chain.scorePositionAuto()
+                        ))
+                .waitSeconds(2)
+                //.splineToConstantHeading(new Vector2d(4, -35), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(4, -35, Math.toRadians(110)), Math.toRadians(90))
+                .afterTime(0.3, new SequentialAction(
+                        chain.scoreSpecimen(),
+                        new InstantAction(() -> externTele.lext.setPosition(0.05)),
+                        new InstantAction(() -> externTele.rext.setPosition(0.05)),
+                        new InstantAction(() -> externTele.primary.setPosition(0.34)),
+                        new InstantAction(() -> externTele.rotation.setPosition(0.48)),
+                        new InstantAction(() -> externTele.lsecondary.setPosition(0.41)),
+                        new InstantAction(() -> externTele.rsecondary.setPosition(0.41)),
+                        new SleepAction(0.3),
+                        new InstantAction(() -> turret.setTargetPosition(-1250))
+                ))
 //
 //
 //
-////                //second score
+////                //third score
 //                .splineToConstantHeading(new Vector2d(43, -45), Math.toRadians(270), slower)
 //                .afterTime(1.5, new SequentialAction(
 //                        chain.grabPositionAuto()

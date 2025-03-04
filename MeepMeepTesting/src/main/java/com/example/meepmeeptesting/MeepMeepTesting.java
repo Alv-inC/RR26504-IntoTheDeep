@@ -81,15 +81,15 @@ public class MeepMeepTesting {
 //                        chain.grabPositionAuto()
 //                ))
 //                .waitSeconds(3.5)
-//                .splineToConstantHeading(new Vector2d(43, -56.5), Math.toRadians(270), slower)
+                .splineToConstantHeading(new Vector2d(43, -56.5), Math.toRadians(270))
 //                .afterTime(1.5,
 //                        new SequentialAction(
 //                                new InstantAction(() -> externTele.claw.setPosition(0.42)),
 //                                chain.scorePositionAuto()
 //                        ))
-//                .waitSeconds(4)
-//                .splineToConstantHeading(new Vector2d(8, -40.3), Math.toRadians(90), slower)
-//                .splineToConstantHeading(new Vector2d(8, -38), Math.toRadians(90), slower)
+                .waitSeconds(4)
+                .splineToConstantHeading(new Vector2d(8, -40.3), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(8, -38), Math.toRadians(90))
 //                .afterTime(2, new SequentialAction(
 //                        chain.scoreSpecimen()
 //                ))

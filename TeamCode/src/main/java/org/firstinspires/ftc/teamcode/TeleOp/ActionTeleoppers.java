@@ -190,7 +190,7 @@ public class ActionTeleoppers extends ActionOpMode {
                         -gamepad1.left_stick_x
                 ),
                 -gamepad1.right_stick_x
-        ), 1.5);
+        ), 1.3);
 
         drive.updatePoseEstimate();
 
@@ -205,9 +205,9 @@ public class ActionTeleoppers extends ActionOpMode {
             if(turret.getCurrentPosition() > -100 && turret.getCurrentPosition() < 100){
                 runningActions.add(new SequentialAction(
                         new InstantAction(() -> lift.setTargetPosition(0)),
-                        new InstantAction(() -> externTele.rotation.setPosition(0.47)),
-                        new InstantAction(() -> externTele.lsecondary.setPosition(0.2)),
-                        new InstantAction(() -> externTele.rsecondary.setPosition(0.2)),
+                        new InstantAction(() -> externTele.rotation.setPosition(0.48)),
+                        new InstantAction(() -> externTele.lsecondary.setPosition(0.165)),
+                        new InstantAction(() -> externTele.rsecondary.setPosition(0.165)),
                         new InstantAction(() -> externTele.primary.setPosition(0.6))
                 ));
             }else{
