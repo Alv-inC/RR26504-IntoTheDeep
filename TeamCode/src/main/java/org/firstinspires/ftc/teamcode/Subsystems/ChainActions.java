@@ -74,7 +74,7 @@ public Action rotate2(MecanumDrive drive, int angle){
                 new InstantAction(() -> externTele.lext.setPosition(0.05)),
                 new InstantAction(() -> externTele.rext.setPosition(0.05)),
                 new InstantAction(() -> externTele.rotation.setPosition(0.47)),
-                new InstantAction(() -> externTele.primary.setPosition(0.28)),
+                new InstantAction(() -> externTele.primary.setPosition(0.33)),
                 new SleepAction(0.5) ,
                 new InstantAction(() -> externTele.lsecondary.setPosition(0.34)),
                 new InstantAction(() -> externTele.rsecondary.setPosition(0.34)),
@@ -149,8 +149,8 @@ public Action rotate2(MecanumDrive drive, int angle){
                 new InstantAction(() -> turret.setTargetPosition(0)),
                 new SleepAction(1.7),
                 new InstantAction(() -> externTele.rotation.setPosition(0.47)),
-                new InstantAction(() -> externTele.lsecondary.setPosition(0.28)),
-                new InstantAction(() -> externTele.rsecondary.setPosition(0.28)),
+                new InstantAction(() -> externTele.lsecondary.setPosition(0.2)),
+                new InstantAction(() -> externTele.rsecondary.setPosition(0.2)),
                 new InstantAction(() -> externTele.primary.setPosition(0.6))
 
         );
@@ -258,8 +258,8 @@ public Action rotate2(MecanumDrive drive, int angle){
             new SleepAction(0.5),
                 new InstantAction(() ->externTele.rotation.setPosition(0.47+processor.getServoAdjustment())),
             new SleepAction(0.3),
-                new InstantAction(() ->externTele.lsecondary.setPosition(0.145)),
-                new InstantAction(() ->externTele.rsecondary.setPosition(0.145)),
+                new InstantAction(() ->externTele.lsecondary.setPosition(0.19)),
+                new InstantAction(() ->externTele.rsecondary.setPosition(0.19)),
             new SleepAction(0.3),
                 new InstantAction(() ->externTele.claw.setPosition(0.4))
         );
