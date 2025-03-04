@@ -34,7 +34,7 @@ public class Lift {
         public static double liftMass = 0.3;
         public static double gravity = 9.81;
         public static double armLength = 0.4;
-        public static double feedforwardScale = 0.015;
+        public static double feedforwardScale = 0.3;
         //may need to increase
 
 

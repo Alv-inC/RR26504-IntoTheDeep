@@ -135,7 +135,7 @@ public class ActionTeleoppers extends ActionOpMode {
         externTele = new InitializeTeleOp();
         externTele.initialize(hardwareMap);
         turret.setTargetPosition(0);
-        lift.setTargetPosition(30);
+        lift.setTargetPosition(0);
 
         // Re-initialize the variables to reset their values
         liftPositionState = 0; // Lift states: 0 = lowest, 1 = mid, 2 = highest
@@ -190,7 +190,7 @@ public class ActionTeleoppers extends ActionOpMode {
                         -gamepad1.left_stick_x
                 ),
                 -gamepad1.right_stick_x
-        ), 1);
+        ), 1.5);
 
         drive.updatePoseEstimate();
 
@@ -204,10 +204,10 @@ public class ActionTeleoppers extends ActionOpMode {
         if (gamepad1.x) {
             if(turret.getCurrentPosition() > -100 && turret.getCurrentPosition() < 100){
                 runningActions.add(new SequentialAction(
-                        new InstantAction(() -> lift.setTargetPosition(30)),
+                        new InstantAction(() -> lift.setTargetPosition(0)),
                         new InstantAction(() -> externTele.rotation.setPosition(0.47)),
-                        new InstantAction(() -> externTele.lsecondary.setPosition(0.25)),
-                        new InstantAction(() -> externTele.rsecondary.setPosition(0.25)),
+                        new InstantAction(() -> externTele.lsecondary.setPosition(0.2)),
+                        new InstantAction(() -> externTele.rsecondary.setPosition(0.2)),
                         new InstantAction(() -> externTele.primary.setPosition(0.6))
                 ));
             }else{
@@ -227,11 +227,11 @@ public class ActionTeleoppers extends ActionOpMode {
 
 
         if(gamepad1.left_bumper){
-            externTele.claw.setPosition(0.5);  // Open the claw
+            externTele.claw.setPosition(0.8);  // Open the claw
         }
 
         if(gamepad1.right_bumper){
-            externTele.claw.setPosition(0.4);  // Close the claw
+            externTele.claw.setPosition(0.58);  // Close the claw
             if(externTele.lsecondary.getPosition() > 0.16 && externTele.rsecondary.getPosition() > 0.16){
                 runningActions.add(new SequentialAction(
                         chain.scorePosition()
@@ -275,7 +275,7 @@ public class ActionTeleoppers extends ActionOpMode {
                     new InstantAction(() ->externTele.lsecondary.setPosition(0.16)),
                     new InstantAction(() ->externTele.rsecondary.setPosition(0.16)),
                     new SleepAction(0.3),
-                    new InstantAction(() ->externTele.claw.setPosition(0.42))
+                    new InstantAction(() ->externTele.claw.setPosition(0.58))
             ));
         }
         previousButtonState1a = gamepad2.a;

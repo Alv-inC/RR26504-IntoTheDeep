@@ -65,15 +65,15 @@ public class basketAuto extends LinearOpMode {
         if (isStopRequested()) return;
 
         TrajectoryActionBuilder trajectory = drive.actionBuilder(startPose)
-                .waitSeconds(3)
 
 
 //get ready to score & after time, score
 // robot rotates to get new sample after 'scoring', may need to rotate turret to correct for incorrect angle
 
                 .afterTime(0, new SequentialAction(
-                  chain.scorePosition(),
-                  new SleepAction(1.5),
+                  chain.startPosition(false),
+                  chain.scorePositionSample(),
+                  new SleepAction(3),
                   chain.readyGrabAuto()
                 ))
                 .splineToLinearHeading(new Pose2d(-58, -47, Math.toRadians(65)), Math.toRadians(140))
@@ -86,7 +86,7 @@ public class basketAuto extends LinearOpMode {
 //                        //SCORE AFTER, RAISE LIFT AND DROP SECONDARY
 //                ))
 
-                .waitSeconds(1.5) //score after
+                .waitSeconds(6) //score after
 
                 //SCORE
                 .splineToLinearHeading(new Pose2d(-55, -40, Math.toRadians(65)), Math.toRadians(90))

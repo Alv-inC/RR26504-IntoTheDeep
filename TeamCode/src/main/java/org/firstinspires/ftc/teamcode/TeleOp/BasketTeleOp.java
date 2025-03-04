@@ -235,13 +235,7 @@ public class BasketTeleOp extends ActionOpMode {
 
         if(gamepad2.left_bumper){
             runningActions.add(new SequentialAction(
-                        new InstantAction(()->turret.setTargetPosition(-1250)),
-                        new SleepAction(1.5),
-                        new InstantAction(()->lift.setTargetPosition(2100)),
-                        new InstantAction(()->externTele.lsecondary.setPosition(0.37)),
-                        new InstantAction(()->externTele.rsecondary.setPosition(0.37)),
-                        new SleepAction(1.5),
-                        new InstantAction(()->externTele.primary.setPosition(0.45))
+                       chain.scorePositionSample()
                 ));
         }
 
