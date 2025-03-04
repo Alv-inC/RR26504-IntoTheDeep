@@ -31,29 +31,21 @@ import java.util.List;
 @Config
 @Autonomous
 public class servoTest extends LinearOpMode {
-    public static boolean go, rotAdjust, extAdjust, turretAdjust, specimenAdjust, slidesGo, turretGo, ADJUST, sway = false;
-    boolean again = true;
-    public static double pext, ppri, psec, pclaw, prot, ptrans, pout, slidespos, turretpos;
-    public static double width, height = 0;
-    public static double kp = 0;
-    public static boolean MASK_TOGGLE = true;
-    public static double rotpos = 0.5;
-    public double turretCorrection;
-    public static boolean go1, go2, go3, go4, goTogether, goLift = false;
+    public static boolean go1, go2, go3, go4, go5, turretGo, goTogether, goLift = false;
     public static boolean servo2Reverse = false;
-    public static double pos1, pos2, pos3, pos4, liftpos = 0.5;
+    public static double pos1, pos2, pos3, pos4, pos5, liftpos, turretpos = 0.5;
     public Lift lift;
     Turret turret;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        pext = 0.15; ppri = 0.67; psec = 0.28; pclaw = 0.45; prot = 0.47; ptrans= 0.05; pout=0.67; slidespos=0; turretpos=0;
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         Servo servo1 = hardwareMap.get(Servo.class, "rsecondary");
         Servo servo2 = hardwareMap.get(Servo.class, "lsecondary");
         Servo servo3 = hardwareMap.get(Servo.class, "primary");
         Servo claw = hardwareMap.get(Servo.class, "claw");
+        Servo rotation = hardwareMap.get(Servo.class, "rotation");
         servo2.setDirection(Servo.Direction.REVERSE);
 
         lift = new Lift(hardwareMap);
@@ -76,6 +68,10 @@ public class servoTest extends LinearOpMode {
             if(go4){
                 go4 = false;
                 claw.setPosition(pos4);
+            }
+            if(go5){
+                go5 = false;
+                rotation.setPosition(pos5);
             }
             if(goLift) {
                 goLift = false;
