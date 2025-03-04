@@ -39,9 +39,9 @@ public class servoTest extends LinearOpMode {
     public static boolean MASK_TOGGLE = true;
     public static double rotpos = 0.5;
     public double turretCorrection;
-    public static boolean go1, go2, go3, goTogether, goLift = false;
+    public static boolean go1, go2, go3, go4, goTogether, goLift = false;
     public static boolean servo2Reverse = false;
-    public static double pos1, pos2, pos3, liftpos = 0.5;
+    public static double pos1, pos2, pos3, pos4, liftpos = 0.5;
     public Lift lift;
     Turret turret;
 
@@ -53,6 +53,7 @@ public class servoTest extends LinearOpMode {
         Servo servo1 = hardwareMap.get(Servo.class, "rsecondary");
         Servo servo2 = hardwareMap.get(Servo.class, "lsecondary");
         Servo servo3 = hardwareMap.get(Servo.class, "primary");
+        Servo claw = hardwareMap.get(Servo.class, "claw");
         servo2.setDirection(Servo.Direction.REVERSE);
 
         lift = new Lift(hardwareMap);
@@ -71,6 +72,10 @@ public class servoTest extends LinearOpMode {
             if(go3) {
                 go3 = false;
                 servo3.setPosition(pos3);
+            }
+            if(go4){
+                go4 = false;
+                claw.setPosition(pos4);
             }
             if(goLift) {
                 goLift = false;
