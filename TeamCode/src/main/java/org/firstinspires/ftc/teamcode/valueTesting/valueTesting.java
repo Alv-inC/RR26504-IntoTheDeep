@@ -31,9 +31,9 @@ import java.util.List;
 @Config
 @Autonomous
 public class valueTesting extends LinearOpMode {
-    public static boolean go, rotAdjust, extAdjust, turretAdjust, specimenAdjust, slidesGo, turretGo, ADJUST, sway = false;
+    public static boolean go, rotAdjust, extAdjust, turretAdjust, specimenAdjust, slidesGo, turretGo, ADJUST, newTEST, sway = false;
     boolean again = true;
-    public static double pext, ppri, psec, pclaw, prot, ptrans, pout, slidespos, turretpos;
+    public static double pext, ppri, psec, pclaw, prot, ptrans, pout, slidespos, turretpos, AAA;
     public static double width, height = 0;
     public static double kp = 0;
     public static boolean MASK_TOGGLE = true;
@@ -81,6 +81,10 @@ public class valueTesting extends LinearOpMode {
                 FtcDashboard.getInstance().sendImage(processor.getLastFrame());
             }
 
+            if(newTEST){
+                newTEST = false;
+                claw.setPosition(AAA);
+            }
             if(go){
                 go = false;
                 lext.setPosition(pext);

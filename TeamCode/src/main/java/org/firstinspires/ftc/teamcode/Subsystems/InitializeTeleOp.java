@@ -41,7 +41,6 @@ public class InitializeTeleOp {
         rext.setPosition(0.05);
 
         claw = hardwareMap.get(Servo.class, "claw");
-        claw.setPosition(0.5);
 
     }
     public void waitWithoutStoppingRobotcc(double milliseconds) {

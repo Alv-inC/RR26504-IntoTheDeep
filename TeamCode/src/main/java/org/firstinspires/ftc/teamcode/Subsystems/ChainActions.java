@@ -70,7 +70,7 @@ public Action rotate2(MecanumDrive drive, int angle){
     public Action startPosition(boolean pause){
         return pause? new SequentialAction(
                 //add the chain of commands here
-
+                new InstantAction(() -> externTele.claw.setPosition(0.8)),
                 new InstantAction(() -> externTele.lext.setPosition(0.05)),
                 new InstantAction(() -> externTele.rext.setPosition(0.05)),
                 new InstantAction(() -> externTele.rotation.setPosition(0.48)),
@@ -94,6 +94,8 @@ public Action rotate2(MecanumDrive drive, int angle){
 
                 );
     }
+
+
 
     //
     public Action scorePosition(){
@@ -129,7 +131,7 @@ public Action rotate2(MecanumDrive drive, int angle){
     public Action scoreSpecimen(){
         return new SequentialAction(
                 new InstantAction(() -> lift.setTargetPosition(280)),
-                new SleepAction(0.8),
+                new SleepAction(0.7),
                 new InstantAction(() -> externTele.claw.setPosition(0.8))
         );
     }

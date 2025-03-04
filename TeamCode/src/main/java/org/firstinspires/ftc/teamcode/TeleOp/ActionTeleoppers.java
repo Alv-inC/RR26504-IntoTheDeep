@@ -136,6 +136,7 @@ public class ActionTeleoppers extends ActionOpMode {
         externTele.initialize(hardwareMap);
         turret.setTargetPosition(0);
         lift.setTargetPosition(0);
+        externTele.claw.setPosition(0.8);
 
         // Re-initialize the variables to reset their values
         liftPositionState = 0; // Lift states: 0 = lowest, 1 = mid, 2 = highest
