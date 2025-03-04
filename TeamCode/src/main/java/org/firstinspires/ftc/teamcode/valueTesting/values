@@ -16,8 +16,6 @@ rotation: mid 0.47
 
 init: secondary 0.3, primary 0
 grabSpecimen position: mid- secondary 0.24, primary 0.6; bottom- secondary 0.19
-j
-
 
 MOTORS:
 turret: 1250 180 degrees
