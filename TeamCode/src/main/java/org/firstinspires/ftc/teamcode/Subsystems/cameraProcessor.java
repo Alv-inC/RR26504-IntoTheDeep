@@ -184,7 +184,7 @@ public class cameraProcessor implements VisionProcessor, CameraStreamSource {
         result = (result*0.1)/8;
         double error = (5*0.1)/8;
         if(result<0) result += error;
-        else result += error/2.4;
+        else result += error/2.1;
         return result;
     }
 
