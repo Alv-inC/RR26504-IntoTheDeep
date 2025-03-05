@@ -31,11 +31,12 @@ import java.util.List;
 @Config
 @Autonomous
 public class servoTest extends LinearOpMode {
-    public static boolean go1, go2, go3, go4, go5, turretGo, goTogether, goLift = false;
+    public static boolean go1, go2, go3, go4, go5, turretGo, goTogether, goLift, ADJUST, adjPosition, goExt = false;
     public static boolean servo2Reverse = false;
-    public static double pos1, pos2, pos3, pos4, pos5, liftpos, turretpos = 0.5;
+    public static double pos1, pos2, pos3, pos4, pos5, liftpos, turretpos, posExt = 0.5;
     public Lift lift;
     Turret turret;
+    cameraProcessor processor = new cameraProcessor(new Scalar(100, 0, 0,0), new Scalar(255, 5, 230,255), false);
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -47,12 +48,22 @@ public class servoTest extends LinearOpMode {
         Servo claw = hardwareMap.get(Servo.class, "claw");
         Servo rotation = hardwareMap.get(Servo.class, "rotation");
         servo2.setDirection(Servo.Direction.REVERSE);
+        Servo lext = hardwareMap.get(Servo.class, "lext");
+        Servo rext = hardwareMap.get(Servo.class, "rext");
+        rext.setDirection(Servo.Direction.REVERSE);
+        lift = new Lift(hardwareMap, 1.5);
+        turret = new Turret(hardwareMap, 0.5);
+        double constant = 1;
 
-        lift = new Lift(hardwareMap);
-        turret = new Turret(hardwareMap);
+        new VisionPortal.Builder()
+                .addProcessor(processor)
+                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
+                .build();
         waitForStart();
 
         while(opModeIsActive()){
+            FtcDashboard.getInstance().sendImage(processor.getMaskedFrameBitmap());
+
             if(go1) {
                 go1 = false;
                 servo1.setPosition(pos1);
@@ -60,6 +71,11 @@ public class servoTest extends LinearOpMode {
             if(go2) {
                 go2 = false;
                 servo2.setPosition(pos2);
+            }
+            if(goExt){
+                goExt = false;
+                lext.setPosition(posExt);
+                rext.setPosition(posExt);
             }
             if(go3) {
                 go3 = false;
@@ -86,10 +102,32 @@ public class servoTest extends LinearOpMode {
                 turretGo = false;
                 turret.setTargetPosition(turretpos);
             }
-
-            telemetry.addData("servo1 pos", servo1.getPosition());
-            telemetry.addData("servo2 pos", servo2.getPosition());
-            telemetry.addData("lift pos", lift.getPosition());
+            if(adjPosition){
+                turret.setTargetPosition(0);
+                adjPosition = false;
+                lext.setPosition(0.15);
+                rext.setPosition(0.15);
+                lift.setTargetPosition(600);
+                servo1.setPosition(0.12);
+                servo2.setPosition(0.12);
+                servo3.setPosition(0.97);
+                claw.setPosition(0.7);
+                rotation.setPosition(0.47);
+            }
+            double rotAdjust = processor.getServoAdjustment();
+            double turAdjust = processor.getTurretAdjustment();
+            double extAdjust = processor.getExtensionAdjustment();
+            if(ADJUST){
+                ADJUST = false;
+                //lift.setTargetPosition(0);
+                turret.setTargetPosition(turAdjust);
+//                lext.setPosition(lext.getPosition()+extAdjust);
+//                rext.setPosition(lext.getPosition()+extAdjust);
+//                rotation.setPosition(rotation.getPosition()+rotAdjust);
+            }
+            telemetry.addData("rot", rotAdjust);
+            telemetry.addData("ext", extAdjust);
+            telemetry.addData("tur", turAdjust);
 
             telemetry.update();
             lift.update();

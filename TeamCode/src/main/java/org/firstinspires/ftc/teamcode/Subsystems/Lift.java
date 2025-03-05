@@ -36,10 +36,12 @@ public class Lift {
         public static double armLength = 0.4;
         public static double feedforwardScale = 0.3;
         //may need to increase
+        public static double divide;
 
 
     //the max is 2700
-        public Lift(HardwareMap hardwareMap){
+        public Lift(HardwareMap hardwareMap, double divid){
+            divide = divid;
             liftPID = new PIDController(p, i, d);
             liftPID.setPID(p,i,d);
             lift1 = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "lift1"), 0.005);
@@ -67,8 +69,8 @@ public class Lift {
 //            telemetry.addData("Current Position", pos);
 //            telemetry.update();
             power = Math.max(-0.8, Math.min(0.8, power));
-            lift1.setPower(power + feedforward);
-            lift2.setPower(power + feedforward);
+            lift1.setPower((power + feedforward)/divide);
+            lift2.setPower((power + feedforward)/divide);
         }
 
         public void setTargetPosition(double targetPosition){
