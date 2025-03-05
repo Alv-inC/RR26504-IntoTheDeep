@@ -111,15 +111,15 @@ public class ActionTeleoppers extends ActionOpMode {
     private MecanumDrive drive;
 
     cameraProcessor processor;
-
+    boolean previousButtonState2a = false;
 
 
 
     @Override
     public void init() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        lift = new Lift(hardwareMap);
-        turret = new Turret(hardwareMap);
+        lift = new Lift(hardwareMap, 1);
+        turret = new Turret(hardwareMap,1);
         chain = new ChainActions(hardwareMap);
         //initialize motors
         //init cameras
@@ -184,13 +184,24 @@ public class ActionTeleoppers extends ActionOpMode {
 
         ///PLAYER 1 CODE
         //drivetrain code
-        drive.setDrivePowers(new PoseVelocity2d(
-                new Vector2d(
-                        -gamepad1.left_stick_y,
-                        -gamepad1.left_stick_x
-                ),
-                -gamepad1.right_stick_x
-        ), 1);
+        if(gamepad1.left_trigger>0||gamepad2.left_trigger>0) {
+            drive.setDrivePowers(new PoseVelocity2d(
+                    new Vector2d(
+                            -gamepad1.left_stick_y,
+                            -gamepad1.left_stick_x
+                    ),
+                    -gamepad1.right_stick_x
+            ), 2);
+        }
+        else{
+            drive.setDrivePowers(new PoseVelocity2d(
+                    new Vector2d(
+                            -gamepad1.left_stick_y,
+                            -gamepad1.left_stick_x
+                    ),
+                    -gamepad1.right_stick_x
+            ), 1);
+        }
 
         drive.updatePoseEstimate();
 
@@ -227,11 +238,11 @@ public class ActionTeleoppers extends ActionOpMode {
 
 
         if(gamepad1.left_bumper){
-            externTele.claw.setPosition(0.5);  // Open the claw
+            externTele.claw.setPosition(0.8);  // Open the claw
         }
 
         if(gamepad1.right_bumper){
-            externTele.claw.setPosition(0.4);  // Close the claw
+            externTele.claw.setPosition(0.55);  // Close the claw
             if(externTele.lsecondary.getPosition() > 0.16 && externTele.rsecondary.getPosition() > 0.16){
                 runningActions.add(new SequentialAction(
                         chain.scorePosition()
@@ -249,36 +260,20 @@ public class ActionTeleoppers extends ActionOpMode {
             externTele.hang.setPower(-gamepad1.left_trigger);
         }
 
-
-
-
-
-
 /// PLAYER 2 CODE
         if(gamepad2.dpad_down){
             runningActions.add(new SequentialAction(
-                   chain.grabPosition()
+                   chain.intakePosition()
             ));
         }
 
-        boolean previousButtonState1a = false; // Stores the previous state of the button
-
-        if (gamepad2.a && !previousButtonState1a) {
+ // Stores the previous state of the button
+        if (gamepad2.a && !previousButtonState2a) {
             runningActions.add(new SequentialAction(
-                    new InstantAction(() ->turret.setTargetPosition(turret.getCurrentPosition()+ processor.getTurretAdjustment()*-1)),
-                    new SleepAction(1.5),
-                    new InstantAction(() ->externTele.lext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
-                    new InstantAction(() ->externTele.rext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
-                    new SleepAction(0.5),
-                    new InstantAction(() ->externTele.rotation.setPosition(externTele.rotation.getPosition()+processor.getServoAdjustment())),
-                    new SleepAction(0.3),
-                    new InstantAction(() ->externTele.lsecondary.setPosition(0.16)),
-                    new InstantAction(() ->externTele.rsecondary.setPosition(0.16)),
-                    new SleepAction(0.3),
-                    new InstantAction(() ->externTele.claw.setPosition(0.42))
+                chain.intake(processor)
             ));
         }
-        previousButtonState1a = gamepad2.a;
+        previousButtonState2a = gamepad2.a;
 
 
 

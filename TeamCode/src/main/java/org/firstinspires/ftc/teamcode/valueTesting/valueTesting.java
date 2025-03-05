@@ -50,7 +50,7 @@ public class valueTesting extends LinearOpMode {
                 .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
                 .build();
 
-        Turret turret = new Turret(hardwareMap);
+        Turret turret = new Turret(hardwareMap, 1);
         Servo lext = hardwareMap.get(Servo.class, "lext");
         Servo rext = hardwareMap.get(Servo.class, "rext");
         lext.setDirection(Servo.Direction.REVERSE);
@@ -63,7 +63,7 @@ public class valueTesting extends LinearOpMode {
         Servo primary = hardwareMap.get(Servo.class, "primary");
         Servo claw = hardwareMap.get(Servo.class, "claw");
         claw.setDirection(Servo.Direction.REVERSE);
-        Lift lift = new Lift(hardwareMap);
+        Lift lift = new Lift(hardwareMap, 1);
         DcMotor fr, fl, br, bl;
         fr = hardwareMap.get(DcMotor.class, "rightFront");
         fl = hardwareMap.get(DcMotor.class, "leftFront");
