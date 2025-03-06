@@ -227,7 +227,7 @@ public class ActionTeleoppers extends ActionOpMode {
                 ));
             }
         }
-        if(gamepad1.dpad_up) lift.setTargetPosition(800);
+        if(gamepad1.dpad_up) lift.setTargetPosition(945);
 
 //        //hang go forward
 //        if(gamepad1.right_trigger > 0){
