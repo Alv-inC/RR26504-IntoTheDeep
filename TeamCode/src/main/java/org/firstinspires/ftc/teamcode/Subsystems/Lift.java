@@ -83,7 +83,7 @@ public class Lift {
 
             return lift1.getCurrentPosition();
         }
-
+        //
 
         public Action setTargetPositionAction(double targetPosition){
             return t -> {
