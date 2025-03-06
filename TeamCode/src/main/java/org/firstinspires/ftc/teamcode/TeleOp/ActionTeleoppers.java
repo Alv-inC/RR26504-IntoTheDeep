@@ -111,15 +111,16 @@ public class ActionTeleoppers extends ActionOpMode {
     private MecanumDrive drive;
 
     cameraProcessor processor;
-
+    boolean flag = false;
+    boolean previousButtonState2a = false;
 
 
 
     @Override
     public void init() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        lift = new Lift(hardwareMap);
-        turret = new Turret(hardwareMap);
+        lift = new Lift(hardwareMap, 1);
+        turret = new Turret(hardwareMap, 1);
         chain = new ChainActions(hardwareMap);
         //initialize motors
         //init cameras
@@ -185,39 +186,28 @@ public class ActionTeleoppers extends ActionOpMode {
 
         ///PLAYER 1 CODE
         //drivetrain code
-        drive.setDrivePowers(new PoseVelocity2d(
-                new Vector2d(
-                        -gamepad1.left_stick_y,
-                        -gamepad1.left_stick_x
-                ),
-                -gamepad1.right_stick_x
-        ), 1.3);
+            drive.setDrivePowers(new PoseVelocity2d(
+                    new Vector2d(
+                            -gamepad1.left_stick_y * turret.getCurrentPosition()==0? 1 : -1,
+                            -gamepad1.left_stick_x * turret.getCurrentPosition()==0? 1 : -1
+                    ),
+                    -gamepad1.right_stick_x * turret.getCurrentPosition()==0? 1 : -1
+            ), gamepad2.left_trigger>0 || gamepad1.left_trigger>0 || lift.getPosition()>0 ? 2.3 : 1.3);
+
 
         drive.updatePoseEstimate();
 
-
-        TrajectoryActionBuilder turnBot = drive.actionBuilder(new Pose2d(0, 0, 0))
-                .turnTo(Math.toRadians(90))
-                .endTrajectory();
-        Action trajectoryAction = turnBot.build();
-
         // Trigger actions when gamepad1.x is pressed
         if (gamepad1.x) {
-            if(turret.getCurrentPosition() > -100 && turret.getCurrentPosition() < 100){
+                flag = true;
                 runningActions.add(new SequentialAction(
                         new InstantAction(() -> lift.setTargetPosition(0)),
                         new InstantAction(() -> externTele.rotation.setPosition(0.48)),
                         new InstantAction(() -> externTele.lsecondary.setPosition(0.165)),
                         new InstantAction(() -> externTele.rsecondary.setPosition(0.165)),
-                        new InstantAction(() -> externTele.primary.setPosition(0.6))
+                        new InstantAction(() -> externTele.primary.setPosition(0.6)),
+                        new InstantAction(() -> turret.setTargetPosition(-1250))
                 ));
-            }else{
-                runningActions.add(new SequentialAction(
-                        //taking account of the barrier
-                        chain.grabPosition()
-                ));
-            }
-
         }
 
         if(gamepad1.y){
@@ -226,29 +216,28 @@ public class ActionTeleoppers extends ActionOpMode {
             ));
         }
 
-
-        if(gamepad1.left_bumper){
-            externTele.claw.setPosition(0.8);  // Open the claw
-        }
+        if(gamepad1.left_bumper) externTele.claw.setPosition(0.8);  // Open the claw
 
         if(gamepad1.right_bumper){
-            externTele.claw.setPosition(0.58);  // Close the claw
-            if(externTele.lsecondary.getPosition() > 0.16 && externTele.rsecondary.getPosition() > 0.16){
+            externTele.claw.setPosition(0.55);  // Close the claw
+            if(flag){
+                flag = false;
                 runningActions.add(new SequentialAction(
-                        chain.scorePosition()
+                        chain.scorePositionTeleop()
                 ));
             }
         }
+        if(gamepad1.dpad_up) lift.setTargetPosition(945);
 
-        //hang go forward
-        if(gamepad1.right_trigger > 0){
-            externTele.hang.setPower(gamepad1.right_trigger);
-        }
-
-        //hang go backward
-        if(gamepad1.left_trigger > 0){
-            externTele.hang.setPower(-gamepad1.left_trigger);
-        }
+//        //hang go forward
+//        if(gamepad1.right_trigger > 0){
+//            externTele.hang.setPower(gamepad1.right_trigger);
+//        }
+//
+//        //hang go backward
+//        if(gamepad1.left_trigger > 0){
+//            externTele.hang.setPower(-gamepad1.left_trigger);
+//        }
 
 
 
@@ -258,36 +247,27 @@ public class ActionTeleoppers extends ActionOpMode {
 /// PLAYER 2 CODE
         if(gamepad2.dpad_down){
             runningActions.add(new SequentialAction(
-                   chain.grabPosition()
+                   chain.intakePosition()
             ));
         }
-
-        boolean previousButtonState1a = false; // Stores the previous state of the button
-
-        if (gamepad2.a && !previousButtonState1a) {
-            runningActions.add(new SequentialAction(
-                    new InstantAction(() ->turret.setTargetPosition(turret.getCurrentPosition()+ processor.getTurretAdjustment()*-1)),
-                    new SleepAction(1.5),
-                    new InstantAction(() ->externTele.lext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
-                    new InstantAction(() ->externTele.rext.setPosition(externTele.lext.getPosition()+processor.getExtensionAdjustment())),
-                    new SleepAction(0.5),
-                    new InstantAction(() ->externTele.rotation.setPosition(externTele.rotation.getPosition()+processor.getServoAdjustment())),
-                    new SleepAction(0.3),
-                    new InstantAction(() ->externTele.lsecondary.setPosition(0.16)),
-                    new InstantAction(() ->externTele.rsecondary.setPosition(0.16)),
-                    new SleepAction(0.3),
-                    new InstantAction(() ->externTele.claw.setPosition(0.58))
-            ));
-        }
-        previousButtonState1a = gamepad2.a;
-
-
+        if(gamepad2.dpad_up)lift.setTargetPosition(800);
 
         if(gamepad2.right_stick_button){
             runningActions.add(new SequentialAction(
-            chain.startPosition(true)
+                    chain.startPosition(false)
             ));
         }
+        if(gamepad2.right_bumper){
+            externTele.lext.setPosition(0.15);
+            externTele.rext.setPosition(0.15);
+        }
+        if (gamepad2.a && !previousButtonState2a) {
+            runningActions.add(new SequentialAction(
+                    chain.intake(processor)
+            ));
+        }
+        previousButtonState2a = gamepad2.a;
+
 
         if(gamepad2.x){
             processor.RANGE_HIGH_1 = new Scalar(100, 150, 255, 255);
