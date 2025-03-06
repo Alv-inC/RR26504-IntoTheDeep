@@ -66,12 +66,8 @@ public class blueSpecimen extends LinearOpMode {
 
 
                 .afterTime(0, new SequentialAction(
-                        new InstantAction(() -> externTele.primary.setPosition(0.65)),
-                        new InstantAction(() -> externTele.lext.setPosition(0.15)),
-                        new InstantAction(() -> externTele.rext.setPosition(0.15)),
-                        new SleepAction(0.3),
-                        new InstantAction(() -> externTele.lext.setPosition(0)),
-                        new InstantAction(() -> externTele.rext.setPosition(0)),
+                        new InstantAction(() -> externTele.primary.setPosition(0.7)),
+                        new SleepAction(0.45),
                         new InstantAction(() -> externTele.lsecondary.setPosition(0.38)),
                         new InstantAction(() -> externTele.rsecondary.setPosition(0.38)),
                         new InstantAction(() -> externTele.rotation.setPosition(0.48)),
@@ -134,12 +130,12 @@ public class blueSpecimen extends LinearOpMode {
                         new InstantAction(() -> externTele.rotation.setPosition(0.48)),
                         new InstantAction(() -> externTele.lsecondary.setPosition(0.155)),
                         new InstantAction(() -> externTele.rsecondary.setPosition(0.155)),
-                        new InstantAction(() -> externTele.primary.setPosition(0.6))
+                        new InstantAction(() -> externTele.primary.setPosition(0.7))
 
                 ))
 
 
-                .splineToConstantHeading(new Vector2d(56, -57.5), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(56, -55), Math.toRadians(270))
                 .waitSeconds(1)
                 .afterTime(0.5,
                         new SequentialAction(
@@ -149,7 +145,7 @@ public class blueSpecimen extends LinearOpMode {
                         ))
                 .waitSeconds(2)
                 //.splineToConstantHeading(new Vector2d(4, -35), Math.toRadians(90))
-                .splineToLinearHeading(new Pose2d(2.5, -37, Math.toRadians(110)), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(2.5, -38.5, Math.toRadians(110)), Math.toRadians(90))
                 .afterTime(0.25, new SequentialAction(
                         chain.scoreSpecimen(),
                         new InstantAction(() -> externTele.lext.setPosition(0.05)),
@@ -163,18 +159,19 @@ public class blueSpecimen extends LinearOpMode {
                 ))
 
                 //3rd
-
-                .splineToConstantHeading(new Vector2d(49, -40), Math.toRadians(270))
+                .waitSeconds(0.4)
+                .splineToConstantHeading(new Vector2d(2.5, -45), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(49, -45), Math.toRadians(270))
                 .afterTime(0, new SequentialAction(
                         new InstantAction(() -> lift.setTargetPosition(0)),
                         new InstantAction(() -> externTele.rotation.setPosition(0.48)),
                         new InstantAction(() -> externTele.lsecondary.setPosition(0.155)),
                         new InstantAction(() -> externTele.rsecondary.setPosition(0.155)),
-                        new InstantAction(() -> externTele.primary.setPosition(0.6))
+                        new InstantAction(() -> externTele.primary.setPosition(0.7))
 
                 ))
                 .waitSeconds(0.2)
-                .splineToConstantHeading(new Vector2d(49, -54), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(49, -59), Math.toRadians(270))
                 .waitSeconds(1)
                 .afterTime(0.5,
                         new SequentialAction(
@@ -184,7 +181,7 @@ public class blueSpecimen extends LinearOpMode {
                         ))
                 .waitSeconds(2)
                 //.splineToConstantHeading(new Vector2d(4, -35), Math.toRadians(90))
-                .splineToLinearHeading(new Pose2d(1, -37, Math.toRadians(110)), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(0, -37, Math.toRadians(110)), Math.toRadians(90))
                 .afterTime(0.3, new SequentialAction(
                         chain.scoreSpecimen(),
                         new InstantAction(() -> externTele.lext.setPosition(0.05)),
