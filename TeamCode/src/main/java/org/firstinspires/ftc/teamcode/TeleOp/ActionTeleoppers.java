@@ -186,24 +186,14 @@ public class ActionTeleoppers extends ActionOpMode {
 
         ///PLAYER 1 CODE
         //drivetrain code
-        if(gamepad2.left_trigger>0 || gamepad1.left_trigger>0 || lift.getPosition()>0) {
             drive.setDrivePowers(new PoseVelocity2d(
                     new Vector2d(
-                            -gamepad1.left_stick_y,
-                            -gamepad1.left_stick_x
+                            -gamepad1.left_stick_y * turret.getCurrentPosition()==0? 1 : -1,
+                            -gamepad1.left_stick_x * turret.getCurrentPosition()==0? 1 : -1
                     ),
-                    -gamepad1.right_stick_x
-            ), 2.3);
-        }
-        else{
-            drive.setDrivePowers(new PoseVelocity2d(
-                    new Vector2d(
-                            -gamepad1.left_stick_y,
-                            -gamepad1.left_stick_x
-                    ),
-                    -gamepad1.right_stick_x
-            ), 1.3);
-        }
+                    -gamepad1.right_stick_x * turret.getCurrentPosition()==0? 1 : -1
+            ), gamepad2.left_trigger>0 || gamepad1.left_trigger>0 || lift.getPosition()>0 ? 2.3 : 1.3);
+
 
         drive.updatePoseEstimate();
 
@@ -215,7 +205,8 @@ public class ActionTeleoppers extends ActionOpMode {
                         new InstantAction(() -> externTele.rotation.setPosition(0.48)),
                         new InstantAction(() -> externTele.lsecondary.setPosition(0.165)),
                         new InstantAction(() -> externTele.rsecondary.setPosition(0.165)),
-                        new InstantAction(() -> externTele.primary.setPosition(0.6))
+                        new InstantAction(() -> externTele.primary.setPosition(0.6)),
+                        new InstantAction(() -> turret.setTargetPosition(-1250))
                 ));
         }
 
@@ -232,7 +223,7 @@ public class ActionTeleoppers extends ActionOpMode {
             if(flag){
                 flag = false;
                 runningActions.add(new SequentialAction(
-                        chain.scorePosition()
+                        chain.scorePositionTeleop()
                 ));
             }
         }

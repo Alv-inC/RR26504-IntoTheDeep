@@ -109,6 +109,22 @@ public Action rotate2(MecanumDrive drive, int angle){
                 new SleepAction(1.6),
                 new InstantAction(() -> externTele.primary.setPosition(0.53)),
                 new InstantAction(() -> externTele.lsecondary.setPosition(0.38)),
+                new InstantAction(() -> externTele.rsecondary.setPosition(0.38)),
+                new InstantAction(() -> lift.setTargetPosition(800))
+        );
+    }
+    public Action scorePositionTeleop(){
+        return new SequentialAction(
+                new InstantAction(() -> externTele.primary.setPosition(0.4)),
+                new InstantAction(() -> externTele.rotation.setPosition(0.47)),
+                new InstantAction(() -> externTele.lext.setPosition(0)),
+                new InstantAction(() -> externTele.rext.setPosition(0)),
+                new InstantAction(() -> externTele.lsecondary.setPosition(0.37)),
+                new InstantAction(() -> externTele.rsecondary.setPosition(0.37)),
+                new InstantAction(() -> turret.setTargetPosition(0)),
+                new SleepAction(1.6),
+                new InstantAction(() -> externTele.primary.setPosition(0.53)),
+                new InstantAction(() -> externTele.lsecondary.setPosition(0.38)),
                 new InstantAction(() -> externTele.rsecondary.setPosition(0.38))
         );
     }
