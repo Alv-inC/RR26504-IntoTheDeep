@@ -28,8 +28,8 @@ public class InitializeTeleOp {
         lsecondary = hardwareMap.get(Servo.class, "lsecondary");
         rsecondary = hardwareMap.get(Servo.class, "rsecondary");
         lsecondary.setDirection(Servo.Direction.REVERSE);
-        lsecondary.setPosition(0.27);
-        rsecondary.setPosition(0.27);
+        lsecondary.setPosition(0.3);
+        rsecondary.setPosition(0.3);
 
         primary = hardwareMap.get(Servo.class, "primary");
         primary.setPosition(0);
@@ -41,6 +41,7 @@ public class InitializeTeleOp {
         rext.setPosition(0.05);
 
         claw = hardwareMap.get(Servo.class, "claw");
+        claw.setPosition(0.55);
 
     }
     public void waitWithoutStoppingRobotcc(double milliseconds) {

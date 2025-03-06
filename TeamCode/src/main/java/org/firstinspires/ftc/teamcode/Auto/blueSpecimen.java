@@ -51,10 +51,12 @@ public class blueSpecimen extends LinearOpMode {
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(8.75, -62.75, Math.toRadians(90)));
         Pose2d startPose = new Pose2d(8.75, -62.75, Math.toRadians(90));
         externTele = new InitializeTeleOp();
-        lift = new Lift(hardwareMap);
-        turret = new Turret(hardwareMap);
+        lift = new Lift(hardwareMap, 1);
+        turret = new Turret(hardwareMap,1);
         chain = new ChainActions(hardwareMap);
-        externTele.initialize(hardwareMap);
+        externTele.primary.setPosition(0);
+        externTele.lsecondary.setPosition(0.27);
+        externTele.rsecondary.setPosition(0.27);
         externTele.lext.setPosition(0);
         externTele.rext.setPosition(0);
         externTele.claw.setPosition(0.58);

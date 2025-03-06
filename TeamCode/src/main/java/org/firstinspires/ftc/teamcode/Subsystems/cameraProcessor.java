@@ -176,33 +176,29 @@ public class cameraProcessor implements VisionProcessor, CameraStreamSource {
     }
 
     public double calculateExtensionAdjustment(RotatedRect rotatedRect) {
-        double contourY = rotatedRect.center.y;
-        double offsetY = contourY - 480/2;
-        double offsetMM = offsetY*152/480;
-        double offsetTicks = offsetMM*0.33/303;
-        offsetTicks *= -1;
-        //offsetTicks /= 2.5;
-        //offsetTicks += 0.01;
-        //if(offsetTicks< 0) offsetTicks -= 0.0225;
-//        else offsetTicks += 0.02;
-        return offsetTicks /2.5;
+        double y = rotatedRect.center.y;
+        y -= 240;
+        if(y<= 240) y *= -1;
+        double result;
+        result = (8*y)/240;
+        result = (result*0.1)/8;
+        double error = (5*0.1)/8;
+        if(result<0) result += error;
+        else result += error/2.1;
+        return result;
     }
 
     public double calculateTurretAdjustment(RotatedRect rotatedRect) {
         // Get the X-coordinate of the object's center
-        double objectX = rotatedRect.center.x;
-
-        // Calculate the horizontal offset from the center of the camera frame
-        double offsetX = objectX - (640 / 2);
-
-        // Convert the offset in pixels to an angle in degrees
-        double angleOffset = (offsetX / 640) * 78;
-
-        // Convert the angle offset to motor ticks
-        double ticksOffset = (angleOffset / 360) * (1250*2);
-
-        // Return the calculated turret adjustment in motor ticks
-        return ticksOffset/3.2;
+        double x = rotatedRect.center.x;
+        x -= 320;
+        if(x>= 320) x *= -1;
+        double y = rotatedRect.center.y;
+        y = y -= 480;
+        y *= -1;
+        double theta = Math.atan(x/(y*3));
+        double arcLength = theta * 145;
+        return ((arcLength * 1250) / 455*-1);
     }
 
     public double calculateSpecimenAdjustment(RotatedRect rotatedRect) {
