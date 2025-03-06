@@ -70,7 +70,7 @@ public Action rotate2(MecanumDrive drive, int angle){
     public Action startPosition(boolean pause){
         return pause? new SequentialAction(
                 //add the chain of commands here
-
+                new InstantAction(() -> externTele.claw.setPosition(0.8)),
                 new InstantAction(() -> externTele.lext.setPosition(0.05)),
                 new InstantAction(() -> externTele.rext.setPosition(0.05)),
                 new InstantAction(() -> externTele.rotation.setPosition(0.47)),
