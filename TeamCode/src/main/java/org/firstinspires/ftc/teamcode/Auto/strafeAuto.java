@@ -30,8 +30,8 @@ import org.opencv.core.Scalar;
 
 import java.util.Arrays;
 
-@Autonomous(name = "BASKETTTTT")
-public class basketAuto extends LinearOpMode {
+@Autonomous(name = "strafe auto")
+public class strafeAuto extends LinearOpMode {
     private Lift lift;
     private Turret turret;
     // private ChainActions chain = new ChainActions(hardwareMap);
@@ -48,7 +48,7 @@ public class basketAuto extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         processor = new cameraProcessor(new Scalar(100, 0, 0,0), new Scalar(255, 5, 230,255), true);
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(-38, -62.75, Math.toRadians(90)));
-        Pose2d startPose = new Pose2d(-38, -62.75, Math.toRadians(90));
+        Pose2d startPose = new Pose2d(drive.pose.position.x, drive.pose.position.y, Math.toRadians(90));
         externTele = new InitializeTeleOp();
         lift = new Lift(hardwareMap);
         turret = new Turret(hardwareMap);
@@ -65,66 +65,31 @@ public class basketAuto extends LinearOpMode {
         if (isStopRequested()) return;
 
         TrajectoryActionBuilder trajectory = drive.actionBuilder(startPose)
+                .waitSeconds(3)
 
 
 //get ready to score & after time, score
 // robot rotates to get new sample after 'scoring', may need to rotate turret to correct for incorrect angle
 
-                .afterTime(0, new SequentialAction(
-                  chain.startPosition(false),
-                  chain.scorePositionSample(),
-                  new SleepAction(3),
-                  chain.readyGrabAuto()
-                ))
-                .splineToLinearHeading(new Pose2d(-58, -47, Math.toRadians(65)), Math.toRadians(140))
-//                .afterTime(0, new SequentialAction(
-//                        chain.readyGrab(),
-//                        new SleepAction(0.3),
-//                        chain.grabSample(processor),
-//                        new SleepAction(1),
-//                        chain.readyGrab()
-//                        //SCORE AFTER, RAISE LIFT AND DROP SECONDARY
-//                ))
+                .afterTime(0, new SequentialAction(chain.strafeVertical(drive, 23)))
+                .afterTime(2, new SequentialAction(turret.setTargetPositionAction(0)))
+                .afterTime(1, new SequentialAction(chain.strafeVertical(drive, -23)))
+                .afterTime(2, new SequentialAction(chain.rotateBot(drive, -45)))
+                .afterTime(1, new SequentialAction(chain.rotateBot(drive, 45)))
 
-                .waitSeconds(6) //score after
+                .afterTime(0, new SequentialAction(chain.strafeVertical(drive, 23)))
+                .afterTime(2, new SequentialAction(turret.setTargetPositionAction(300)))
+                .afterTime(1, new SequentialAction(turret.setTargetPositionAction(0)))
+                .afterTime(1, new SequentialAction(chain.strafeVertical(drive, -23)))
+                .afterTime(2, new SequentialAction(chain.rotateBot(drive, -45)))
+                .afterTime(1, new SequentialAction(chain.rotateBot(drive, 45)))
 
-                //SCORE
-                .splineToLinearHeading(new Pose2d(-55, -40, Math.toRadians(65)), Math.toRadians(90))
-                //grab
-                .waitSeconds(1)
-                .splineToLinearHeading(new Pose2d(-58, -47, Math.toRadians(65)), Math.toRadians(270))
-                //score
-
-
-                //grab
-                .waitSeconds(3)
-                //new score position
-                .splineToLinearHeading(new Pose2d(-60, -40, Math.toRadians(90)), Math.toRadians(140))
-                .waitSeconds(1.5)
-                .splineToLinearHeading(new Pose2d(-58, -47, Math.toRadians(65)), Math.toRadians(140))
-                //SCORE
-
-                //grab
-                .waitSeconds(3)
-                //new score position
-                .splineToLinearHeading(new Pose2d(-60, -40, Math.toRadians(110)), Math.toRadians(140))
-                .waitSeconds(1.5)
-                .splineToLinearHeading(new Pose2d(-58, -47, Math.toRadians(65)), Math.toRadians(140))
-                .waitSeconds(3)
-                //SCORE
-
-                //grab
-
-                //grab from summersible
-                .splineToLinearHeading(new Pose2d(-25, -12, Math.toRadians(0)), Math.toRadians(0))
-                .waitSeconds(3)
-                .setReversed(true)
-                .splineToLinearHeading(new Pose2d(-58, -47, Math.toRadians(65)), Math.toRadians(180))
-
-
-
-
-
+                .afterTime(0, new SequentialAction(chain.strafeVertical(drive, 23)))
+                .afterTime(2, new SequentialAction(turret.setTargetPositionAction(-300)))
+                .afterTime(1, new SequentialAction(turret.setTargetPositionAction(0)))
+                .afterTime(1, new SequentialAction(chain.strafeVertical(drive, -23)))
+                .afterTime(2, new SequentialAction(chain.rotateBot(drive, -45)))
+                .afterTime(1, new SequentialAction(chain.rotateBot(drive, 45)))
 
                 .endTrajectory();
         Action trajectoryAction = trajectory.build();
@@ -135,4 +100,4 @@ public class basketAuto extends LinearOpMode {
                 turret.updateAction()
         ));
     }
-    }
+}

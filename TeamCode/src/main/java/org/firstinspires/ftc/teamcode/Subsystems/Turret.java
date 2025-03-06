@@ -33,11 +33,9 @@ public class Turret {
     //-1250 is the 180 position
     //negative is going clockwise direction
     private Telemetry telemetry;
-    public static double divide;
 
 
-    public Turret(HardwareMap hardwareMap, double divid){
-        divide = divid;
+    public Turret(HardwareMap hardwareMap){
         turretPID = new PIDController(p, i, d);
         turretPID.setPID(p,i,d);
         turretMotor = new CachingDcMotorEx(hardwareMap.get(DcMotorEx.class, "turret"), 0.005);
@@ -59,7 +57,7 @@ public class Turret {
 //        telemetry.addData("Target Position", targetPosition);
 //        telemetry.update();
 
-        turretMotor.setPower(power/divide);
+        turretMotor.setPower(power);
 
     }
 
