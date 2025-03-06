@@ -81,7 +81,7 @@ public class MeepMeepTesting {
 //                        chain.grabPositionAuto()
 //                ))
 //                .waitSeconds(3.5)
-                .splineToConstantHeading(new Vector2d(49, -40), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(43, -56.5), Math.toRadians(270))
 //                .afterTime(1.5,
 //                        new SequentialAction(
 //                                new InstantAction(() -> externTele.claw.setPosition(0.42)),
