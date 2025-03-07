@@ -118,8 +118,8 @@ public class BasketTeleOp extends ActionOpMode {
     @Override
     public void init() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        lift = new Lift(hardwareMap, 1);
-        turret = new Turret(hardwareMap,1);
+        lift = new Lift(hardwareMap);
+        turret = new Turret(hardwareMap);
         chain = new ChainActions(hardwareMap);
         //initialize motors
         //init cameras

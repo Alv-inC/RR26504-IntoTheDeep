@@ -46,8 +46,8 @@ VelConstraint slower = new MinVelConstraint(Arrays.asList(
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(8.75, -62.75, Math.toRadians(90)));
         Pose2d startPose = new Pose2d(8.75, -62.75, Math.toRadians(90));
         externTele = new InitializeTeleOp();
-        lift = new Lift(hardwareMap, 1);
-        turret = new Turret(hardwareMap,1);
+        lift = new Lift(hardwareMap);
+        turret = new Turret(hardwareMap);
         chain = new ChainActions(hardwareMap);
         externTele.initialize(hardwareMap);
         externTele.lext.setPosition(0);
