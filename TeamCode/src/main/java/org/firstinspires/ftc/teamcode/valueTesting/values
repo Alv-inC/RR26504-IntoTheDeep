@@ -9,15 +9,16 @@ blue: 10, 30, 140, 0; 100, 150, 255, 255
 SERVOS:
 
 horizontal extension: min 0.05, max 0.35
-primary : init 0, up 0.32 specimen score, straight 0.67, down 0.98
-secondary: init 0.3, inttake , mid 0.18, 0.24 specimen wall, 0.34 up
-claw: open 0.8, close 0.58
-rotation: mid 0.47
+primary : init 0, up 0.32 specimen score, 0.6 specimen wall, straight 0.7, down 1
+secondary: init 0.3, inttake 0.12, mid 0.16, 0.12 specimen wall, 0.31 up
+claw: open 0.9, intake 0.8, close 0.55
+rotation: mid 0.48
 
 init: secondary 0.3, primary 0
 grabSpecimen position: mid- secondary 0.24, primary 0.6; bottom- secondary 0.19
-j
-
+intake position: lift 600, turret 0, ext 0.07 or 0.15, primary 0.97, secondary 0.12, claw 0.7, rotation 0.47
+intake sequence: primary 0.32, rotation adjust, claw adjust, lift 0, turret adjust, ext adjust, PAUSE, primary 0.98, PAUSE, claw 0.58
+score position: lift 1000, secondary 0.16, primary 0.6,
 
 MOTORS:
 turret: 1250 180 degrees
