@@ -76,25 +76,7 @@ public class BasketTeleOp extends ActionOpMode {
     private ChainActions chain;
     private FtcDashboard dash = FtcDashboard.getInstance();
     private List<Action> runningActions = new ArrayList<>();
-    private DcMotor fl;
-    private DcMotor fr;
-    private DcMotor bl;
-    private DcMotor br;
-    boolean toggle = false;
-    // Declare toggle variables in your initialization method
-    // Declare the toggle states and previous states for buttons
-    boolean toggleLift = false;
-    boolean toggleArm = false;
-    boolean toggleClaw = false;
 
-//    boolean previousDpadUpState = false; // For tracking previous state of the dpad_up button
-//    boolean previousDpadLeftState = false; // For tracking previous state of the dpad_left button
-//    boolean previousDpadRightState = false; // For tracking previous state of the dpad_right button
-//    boolean previousLeftBumperState = false; // For tracking previous state of left bumper
-
-    // Declare the states of each mechanism (lift, arm, claw)
-    boolean clawOpen = false;  // State of the claw, true for open, false for closed
-    boolean previousBButtonState = false;
     int liftPositionState = 0; // Lift states: 0 = lowest, 1 = mid, 2 = highest
     int armPositionState = 0;  // Arm states: 0 = retracted, 1 = extended
     // Declare the toggle state and previous state for dpad_right
@@ -103,15 +85,11 @@ public class BasketTeleOp extends ActionOpMode {
     public static int exPositionState;
     public static boolean clawtoggle;
     public static int clawPositionState;
-    private boolean actionsRunning;
-    private boolean IDKtoggle;
-    private int IDKPositionState;
-    private boolean clawRotationToggle;
-    private int clawRotationState;
     private MecanumDrive drive;
-    boolean joystick = true;
-    cameraProcessor processor;
 
+    cameraProcessor processor;
+    boolean flag = false;
+    boolean previousButtonState2a = false;
 
 
 
@@ -119,7 +97,7 @@ public class BasketTeleOp extends ActionOpMode {
     public void init() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         lift = new Lift(hardwareMap, 1);
-        turret = new Turret(hardwareMap,1);
+        turret = new Turret(hardwareMap, 1);
         chain = new ChainActions(hardwareMap);
         //initialize motors
         //init cameras
@@ -135,7 +113,8 @@ public class BasketTeleOp extends ActionOpMode {
         externTele = new InitializeTeleOp();
         externTele.initialize(hardwareMap);
         turret.setTargetPosition(0);
-        lift.setTargetPosition(30);
+        lift.setTargetPosition(0);
+        externTele.claw.setPosition(0.8);
 
         // Re-initialize the variables to reset their values
         liftPositionState = 0; // Lift states: 0 = lowest, 1 = mid, 2 = highest
@@ -146,11 +125,6 @@ public class BasketTeleOp extends ActionOpMode {
         exPositionState = 0;
         clawtoggle = false;
         clawPositionState = 0;
-        IDKtoggle = false;
-        IDKPositionState = 0;
-        clawRotationToggle = false;
-        clawRotationState = 0;
-
     }
 
     @Override
@@ -172,94 +146,80 @@ public class BasketTeleOp extends ActionOpMode {
         }
         runningActions = newActions;
 
+        ///PLAYER 1 CODE
         //drivetrain code
-        if(joystick) {
-            if (gamepad1.left_trigger > 0) {
-                drive.setDrivePowers(new PoseVelocity2d(
-                        new Vector2d(
-                                -gamepad1.left_stick_y,
-                                -gamepad1.left_stick_x
-                        ),
-                        -gamepad1.right_stick_x
-                ), 3);
-            } else {
-                drive.setDrivePowers(new PoseVelocity2d(
-                        new Vector2d(
-                                -gamepad1.left_stick_y,
-                                -gamepad1.left_stick_x
-                        ),
-                        -gamepad1.right_stick_x
-                ), 1.5);
-            }
+        if(turret.getCurrentPosition()>=0 && turret.getCurrentPosition()<=50){
+            drive.setDrivePowers(new PoseVelocity2d(
+                    new Vector2d(
+                            -gamepad1.left_stick_y,
+                            -gamepad1.left_stick_x
+                    ),
+                    -gamepad1.right_stick_x
+            ), gamepad2.left_trigger>0 || gamepad1.left_trigger>0 || lift.getPosition()>50 ? 2.3 : 1.3);
         }
         else {
-            if (gamepad1.dpad_down) runningActions.add(chain.rotateBot(drive, -45));
-            else if (gamepad1.dpad_up) runningActions.add(chain.rotateBot(drive, 45));
-            else if (gamepad1.dpad_right) runningActions.add(chain.rotateBot(drive, -90));
-            else if (gamepad1.dpad_left) runningActions.add(chain.rotateBot(drive, 90));
-            //else if (gamepad2.dpad_left) runningActions.add(chain.rotate2(drive, 45));
-            else if(gamepad2.dpad_down) runningActions.add(chain.strafeHorizontal(drive, -60));
-            else if(gamepad2.dpad_up) runningActions.add(chain.strafeHorizontal(drive, 60));
-            else if(gamepad2.dpad_right) runningActions.add(chain.strafeVertical(drive, -25));
-            else if(gamepad2.dpad_left) runningActions.add(chain.strafeVertical(drive, 25));
-
+            drive.setDrivePowers(new PoseVelocity2d(
+                    new Vector2d(
+                            gamepad1.left_stick_y,
+                            gamepad1.left_stick_x
+                    ),
+                    gamepad1.right_stick_x
+            ), gamepad2.left_trigger > 0 || gamepad1.left_trigger > 0 || lift.getPosition() > 50 ? 2.3 : 1.3);
         }
+
         drive.updatePoseEstimate();
 
-        if (gamepad1.left_stick_button) joystick = true;
-        if(gamepad1.right_stick_button) joystick = false;
-
-        if(gamepad1.left_bumper){
-            externTele.claw.setPosition(0.5);  // Open the claw
-        }
-
-        if(gamepad1.right_bumper){
-            externTele.claw.setPosition(0.4);  // Close the claw
-//            if(externTele.lsecondary.getPosition() > 0.16 && externTele.rsecondary.getPosition() > 0.16){
-//                runningActions.add(new SequentialAction(
-//                        chain.scorePosition()
-//                ));
-//            }
-        }
-
-//        //hang go forward
-//        if(gamepad1.right_trigger > 0){
-//            externTele.hang.setPower(gamepad1.right_trigger);
-//        }
-//
-//        //hang go backward
-//        if(gamepad1.left_trigger > 0){
-//            externTele.hang.setPower(-gamepad1.left_trigger);
-//        }
-        if(gamepad2.right_trigger>0)runningActions.add(chain.startPosition(false));
-
-        if(gamepad2.left_bumper){
+        // Trigger actions when gamepad1.x is pressed
+        if (gamepad1.x) {
+            flag = true;
             runningActions.add(new SequentialAction(
-                       chain.scorePositionSample()
-                ));
+                    new InstantAction(() -> externTele.lsecondary.setPosition(0.34)),
+                    new InstantAction(() -> externTele.rsecondary.setPosition(0.34)),
+                    new InstantAction(() -> externTele.primary.setPosition(0.7)),
+                    new InstantAction(() -> externTele.lext.setPosition(0)),
+                    new InstantAction(() -> externTele.rext.setPosition(0)),
+                    new InstantAction(() -> externTele.rotation.setPosition(0.48)),
+                    new InstantAction(() -> lift.setTargetPosition(0)),
+                    new SleepAction(0.5),
+                    new InstantAction(() -> turret.setTargetPosition(-1250))
+            ));
         }
 
-        if(gamepad2.right_stick_button){
+        if(gamepad1.y){
+            runningActions.add(new SequentialAction(
+                    chain.scoreLowBasket()
+            ));
+        }
+
+        if(gamepad1.left_bumper) externTele.claw.setPosition(0.8);  // Open the claw
+        if(gamepad1.right_bumper)externTele.claw.setPosition(0.55);  // Close the claw
+
+        if(gamepad1.dpad_up) lift.setTargetPosition(945);
+
+/// PLAYER 2 CODE
+        if(gamepad2.dpad_down){
             runningActions.add(new SequentialAction(
                     chain.intakePosition()
             ));
         }
+        if(gamepad2.dpad_up)lift.setTargetPosition(800);
 
-        boolean previousButtonState2a = false; // Stores the previous state of the button
+        if(gamepad2.right_stick_button){
+            runningActions.add(new SequentialAction(
+                    chain.startPosition(false)
+            ));
+        }
+        if(gamepad2.right_bumper){
+            externTele.lext.setPosition(0.15);
+            externTele.rext.setPosition(0.15);
+        }
         if (gamepad2.a && !previousButtonState2a) {
             runningActions.add(new SequentialAction(
-                chain.intake(processor)
+                    chain.intake(processor)
             ));
         }
         previousButtonState2a = gamepad2.a;
 
-        if(gamepad2.right_bumper) externTele.claw.setPosition(0.5);  // Open the claw
-
-        else if(gamepad2.left_stick_button){
-            runningActions.add(new SequentialAction(
-                    chain.startPosition(true)
-            ));
-        }
 
         if(gamepad2.x){
             processor.RANGE_HIGH_1 = new Scalar(100, 150, 255, 255);
@@ -273,7 +233,8 @@ public class BasketTeleOp extends ActionOpMode {
             processor.yellow = true;
         }
 
-
+        boolean buttonState2a = false;
+        buttonState2a = gamepad2.left_stick_button;
 
         turret.update();
         lift.update();
@@ -283,6 +244,7 @@ public class BasketTeleOp extends ActionOpMode {
         telemetry.addData("turret adjustment", processor.getTurretAdjustment());
         telemetry.addData("extension adjustment", processor.getExtensionAdjustment());
     }
+
 
 
 }

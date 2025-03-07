@@ -184,7 +184,7 @@ public class cameraProcessor implements VisionProcessor, CameraStreamSource {
         result = (result*0.1)/8;
         double error = (5*0.1)/8;
         if(result<0) result += error;
-        else result += error/2.1;
+        else result += error;
         return result;
     }
 
@@ -193,12 +193,16 @@ public class cameraProcessor implements VisionProcessor, CameraStreamSource {
         double x = rotatedRect.center.x;
         x -= 320;
         if(x>= 320) x *= -1;
+        x /= 4.5;
         double y = rotatedRect.center.y;
         y = y -= 480;
+        y/=2;
         y *= -1;
+        y = 80;
         double theta = Math.atan(x/(y*3));
         double arcLength = theta * 145;
-        return ((arcLength * 1250) / 455*-1);
+        double result = ((arcLength * 1250) / 455*-1);
+        return result <150 && result > -150 ? result : 0;
     }
 
     public double calculateSpecimenAdjustment(RotatedRect rotatedRect) {
