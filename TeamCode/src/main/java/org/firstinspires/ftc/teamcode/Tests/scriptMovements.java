@@ -27,8 +27,8 @@ public class scriptMovements extends ActionOpMode {
 
     @Override
     public void init() {
-        turret = new Turret(hardwareMap);
-        lift = new Lift(hardwareMap);
+        turret = new Turret(hardwareMap, 1);
+        lift = new Lift(hardwareMap, 1);
         externTele = new InitializeTeleOp();
         externTele.initialize(hardwareMap);
         externTele.initialize(hardwareMap);

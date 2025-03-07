@@ -66,7 +66,7 @@ public class blueSpecimen extends LinearOpMode {
 
 
                 .afterTime(0, new SequentialAction(
-                        new InstantAction(() -> externTele.primary.setPosition(0.7)),
+                        new InstantAction(() -> externTele.primary.setPosition(0.71)),
                         new SleepAction(0.45),
                         new InstantAction(() -> externTele.lsecondary.setPosition(0.38)),
                         new InstantAction(() -> externTele.rsecondary.setPosition(0.38)),
@@ -130,12 +130,12 @@ public class blueSpecimen extends LinearOpMode {
                         new InstantAction(() -> externTele.rotation.setPosition(0.48)),
                         new InstantAction(() -> externTele.lsecondary.setPosition(0.155)),
                         new InstantAction(() -> externTele.rsecondary.setPosition(0.155)),
-                        new InstantAction(() -> externTele.primary.setPosition(0.7))
+                        new InstantAction(() -> externTele.primary.setPosition(0.71))
 
                 ))
 
 
-                .splineToConstantHeading(new Vector2d(56, -54), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(56, -55.3), Math.toRadians(270))
                 .waitSeconds(1)
                 .afterTime(0.5,
                         new SequentialAction(
@@ -145,7 +145,7 @@ public class blueSpecimen extends LinearOpMode {
                         ))
                 .waitSeconds(2)
                 //.splineToConstantHeading(new Vector2d(4, -35), Math.toRadians(90))
-                .splineToLinearHeading(new Pose2d(2.5, -37.5, Math.toRadians(100)), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(2.5, -34, Math.toRadians(100)), Math.toRadians(90))
                 .afterTime(0.25, new SequentialAction(
                         chain.scoreSpecimen(),
                         new InstantAction(() -> externTele.lext.setPosition(0.05)),
@@ -167,11 +167,11 @@ public class blueSpecimen extends LinearOpMode {
                         new InstantAction(() -> externTele.rotation.setPosition(0.48)),
                         new InstantAction(() -> externTele.lsecondary.setPosition(0.155)),
                         new InstantAction(() -> externTele.rsecondary.setPosition(0.155)),
-                        new InstantAction(() -> externTele.primary.setPosition(0.7))
+                        new InstantAction(() -> externTele.primary.setPosition(0.71))
 
                 ))
                 .waitSeconds(0.2)
-                .splineToConstantHeading(new Vector2d(49, -58.5), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(49, -60), Math.toRadians(270))
                 .waitSeconds(1)
                 .afterTime(0.5,
                         new SequentialAction(
@@ -181,8 +181,8 @@ public class blueSpecimen extends LinearOpMode {
                         ))
                 .waitSeconds(2)
                 //.splineToConstantHeading(new Vector2d(4, -35), Math.toRadians(90))
-                .splineToLinearHeading(new Pose2d(0, -38.5, Math.toRadians(100)), Math.toRadians(90))
-                .afterTime(0.3, new SequentialAction(
+                .splineToLinearHeading(new Pose2d(-2, -36, Math.toRadians(100)), Math.toRadians(90))
+                .afterTime(0.1, new SequentialAction(
                         chain.scoreSpecimen(),
                         new InstantAction(() -> externTele.lext.setPosition(0.05)),
                         new InstantAction(() -> externTele.rext.setPosition(0.05)),
@@ -194,7 +194,8 @@ public class blueSpecimen extends LinearOpMode {
                         new InstantAction(() -> turret.setTargetPosition(-1250))
                 ))
                 .waitSeconds(0.3)
-                .splineToLinearHeading(new Pose2d(55, -55, Math.toRadians(100)), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(0, -50, Math.toRadians(100)), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(63, -63, Math.toRadians(100)), Math.toRadians(90))
 
 
 //

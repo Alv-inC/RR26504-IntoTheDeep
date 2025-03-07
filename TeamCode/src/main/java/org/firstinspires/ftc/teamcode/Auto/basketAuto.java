@@ -50,8 +50,8 @@ public class basketAuto extends LinearOpMode {
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(-38, -62.75, Math.toRadians(90)));
         Pose2d startPose = new Pose2d(-38, -62.75, Math.toRadians(90));
         externTele = new InitializeTeleOp();
-        lift = new Lift(hardwareMap);
-        turret = new Turret(hardwareMap);
+        lift = new Lift(hardwareMap, 1);
+        turret = new Turret(hardwareMap, 1);
         chain = new ChainActions(hardwareMap);
         externTele.initialize(hardwareMap);
         externTele.lext.setPosition(0);

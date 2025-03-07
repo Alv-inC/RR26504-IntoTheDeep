@@ -152,47 +152,36 @@ public class ActionTeleoppers extends ActionOpMode {
 
         ///PLAYER 1 CODE
         //drivetrain code
-        if(!turretFlag){
+
             drive.setDrivePowers(new PoseVelocity2d(
                     new Vector2d(
                             -gamepad1.left_stick_y,
                             -gamepad1.left_stick_x
                     ),
-                    gamepad1.right_stick_x
-            ), gamepad2.left_trigger>0 || gamepad1.left_trigger>0 || lift.getPosition()>50 ? 2.3 : 1.3);
-        }
-        else {
-            drive.setDrivePowers(new PoseVelocity2d(
-                    new Vector2d(
-                            gamepad1.left_stick_y,
-                            gamepad1.left_stick_x
-                    ),
                     -gamepad1.right_stick_x
-            ), gamepad2.left_trigger > 0 || gamepad1.left_trigger > 0 || lift.getPosition() > 50 ? 2.3 : 1.3);
-        }
+            ), 1);
+
+
 
         drive.updatePoseEstimate();
 
         // Trigger actions when gamepad1.x is pressed
         if (gamepad1.x) {
-                flag = true;
-                turretFlag = true;
+            if(turret.getCurrentPosition() > -100 && turret.getCurrentPosition() < 100){
                 runningActions.add(new SequentialAction(
-                        new InstantAction(() -> externTele.lsecondary.setPosition(0.3)),
-                        new InstantAction(() -> externTele.rsecondary.setPosition(0.3)),
-                        new InstantAction(() -> externTele.primary.setPosition(0.85)),
-                        new InstantAction(() -> externTele.rotation.setPosition(0.48)),
-                        new SleepAction(0.5),
-                        new InstantAction(() -> externTele.lext.setPosition(0)),
-                        new InstantAction(() -> externTele.rext.setPosition(0)),
                         new InstantAction(() -> lift.setTargetPosition(0)),
-                        new SleepAction(0.7),
-                        new InstantAction(() -> turret.setTargetPosition(-1250)),
-                        new SleepAction(0.5),
-                        new InstantAction(() -> externTele.primary.setPosition(0.7)),
-                        new InstantAction(() -> externTele.lsecondary.setPosition(0.16)),
-                        new InstantAction(() -> externTele.rsecondary.setPosition(0.16))
+                        new InstantAction(() -> externTele.rotation.setPosition(0.48)),
+                        new InstantAction(() -> externTele.lsecondary.setPosition(0.155)),
+                        new InstantAction(() -> externTele.rsecondary.setPosition(0.155)),
+                        new InstantAction(() -> externTele.primary.setPosition(0.7))
                 ));
+            }else{
+                runningActions.add(new SequentialAction(
+                        //taking account of the barrier
+                        chain.grabPosition()
+                ));
+            }
+
         }
 
         if(gamepad1.y){
@@ -200,20 +189,22 @@ public class ActionTeleoppers extends ActionOpMode {
                     chain.scoreSpecimen()
             ));
         }
-
-        if(gamepad1.left_bumper) externTele.claw.setPosition(0.9);  // Open the claw
+        if(gamepad1.left_bumper){
+            externTele.claw.setPosition(0.9);  // Open the claw
+        }
 
         if(gamepad1.right_bumper){
-            externTele.claw.setPosition(0.55);  // Close the claw
-            if(flag){
-                flag = false;
-                turretFlag = false;
+            externTele.claw.setPosition(0.58);  // Close the claw
+            if(externTele.lsecondary.getPosition() > 0.15 && externTele.rsecondary.getPosition() > 0.15){
                 runningActions.add(new SequentialAction(
-                        chain.scorePositionTeleop()
+                        chain.scorePosition()
                 ));
             }
         }
-        if(gamepad1.dpad_up) lift.setTargetPosition(945);
+        if(gamepad1.dpad_up) {
+            externTele.lext.setPosition(0.2);
+            externTele.rext.setPosition(0.2);
+        }
 
 /// PLAYER 2 CODE
         if(gamepad2.dpad_down){

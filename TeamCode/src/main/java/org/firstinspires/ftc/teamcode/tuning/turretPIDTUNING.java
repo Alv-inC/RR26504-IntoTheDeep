@@ -14,7 +14,7 @@ public class turretPIDTUNING extends OpMode {
 
     @Override
     public void init() {
-        turret = new Turret(hardwareMap);
+        turret = new Turret(hardwareMap, 1);
     }
 
     @Override
