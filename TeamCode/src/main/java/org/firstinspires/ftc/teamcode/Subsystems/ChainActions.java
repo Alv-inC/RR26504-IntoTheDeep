@@ -226,7 +226,7 @@ public Action rotate2(MecanumDrive drive, int angle){
                 new InstantAction(() ->externTele.lsecondary.setPosition(0.16)),
                 new InstantAction(() ->externTele.rsecondary.setPosition(0.16)),
                 new SleepAction(0.4),
-                new InstantAction(() ->externTele.claw.setPosition(0.58))
+                new InstantAction(() ->externTele.claw.setPosition(0.55))
         );
     }
 
@@ -276,7 +276,7 @@ public Action rotate2(MecanumDrive drive, int angle){
                 new InstantAction(() ->externTele.lsecondary.setPosition(0.19)),
                 new InstantAction(() ->externTele.rsecondary.setPosition(0.19)),
             new SleepAction(0.3),
-                new InstantAction(() ->externTele.claw.setPosition(0.58))
+                new InstantAction(() ->externTele.claw.setPosition(0.55))
         );
     }
 
