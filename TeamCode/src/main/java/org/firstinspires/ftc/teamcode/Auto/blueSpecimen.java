@@ -52,7 +52,7 @@ public class blueSpecimen extends LinearOpMode {
         externTele.initialize(hardwareMap);
         externTele.lext.setPosition(0);
         externTele.rext.setPosition(0);
-        externTele.claw.setPosition(0.55);
+        externTele.claw.setPosition(0.53);
         externTele.rotation.setPosition(1);
         turret.setTargetPosition(0);
         lift.setTargetPosition(30);
@@ -71,12 +71,12 @@ public class blueSpecimen extends LinearOpMode {
                         new InstantAction(() -> externTele.lsecondary.setPosition(0.38)),
                         new InstantAction(() -> externTele.rsecondary.setPosition(0.38)),
                         new InstantAction(() -> externTele.rotation.setPosition(0.48)),
-                        new InstantAction(() -> lift.setTargetPosition(945)),
+                        new InstantAction(() -> lift.setTargetPosition(960)),
                         new SleepAction(1.4),
                         chain.scoreSpecimen()
                 ))
 
-                .strafeTo(new Vector2d(8.75, -35))
+                .strafeTo(new Vector2d(8.75, -34))
 
                 .waitSeconds(1.3)
 

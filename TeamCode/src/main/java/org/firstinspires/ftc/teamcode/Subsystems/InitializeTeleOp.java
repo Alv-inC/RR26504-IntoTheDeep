@@ -23,7 +23,7 @@ public class InitializeTeleOp {
         hang = hardwareMap.get(DcMotorEx.class, "hang");
         // Initialize servos
         rotation = hardwareMap.get(Servo.class, "rotation");
-        rotation.setPosition(0.47);
+        rotation.setPosition(0.48);
 
         lsecondary = hardwareMap.get(Servo.class, "lsecondary");
         rsecondary = hardwareMap.get(Servo.class, "rsecondary");
