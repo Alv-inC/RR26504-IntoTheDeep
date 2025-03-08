@@ -215,7 +215,7 @@ public Action rotate2(MecanumDrive drive, int angle){
                 new InstantAction(() -> lift.setTargetPosition(600)),
                 new InstantAction(() -> externTele.claw.setPosition(0.95)),
                 new InstantAction(() -> externTele.lext.setPosition(0.04)),
-                new InstantAction(() -> externTele.rext.setPosition(0.0)),
+                new InstantAction(() -> externTele.rext.setPosition(0.04)),
                 new InstantAction(() -> externTele.primary.setPosition(1)),
                 new InstantAction(() -> externTele.rotation.setPosition(0.47)),
                 new InstantAction(() -> externTele.lsecondary.setPosition(0.09)),
