@@ -72,29 +72,37 @@ public class basketAuto extends LinearOpMode {
 
                 .afterTime(0, new SequentialAction(
                   chain.startPosition(false),
-                  chain.scorePositionSample(),
+                        new InstantAction(() -> turret.setTargetPosition(-1250)),
+                  chain.lowBasketPosition(),
                   new SleepAction(3),
-                  chain.readyGrabAuto()
+                  chain.scoreBasket(),
+                        new InstantAction(() -> turret.setTargetPosition(0)),
+                  chain.intakePosition()
                 ))
                 .splineToLinearHeading(new Pose2d(-58, -47, Math.toRadians(65)), Math.toRadians(140))
-//                .afterTime(0, new SequentialAction(
-//                        chain.readyGrab(),
-//                        new SleepAction(0.3),
-//                        chain.grabSample(processor),
-//                        new SleepAction(1),
-//                        chain.readyGrab()
-//                        //SCORE AFTER, RAISE LIFT AND DROP SECONDARY
-//                ))
+
 
                 .waitSeconds(6) //score after
 
                 //SCORE
                 .splineToLinearHeading(new Pose2d(-55, -40, Math.toRadians(65)), Math.toRadians(90))
                 //grab
-                .waitSeconds(1)
+
+
+                .afterTime(0, new SequentialAction(
+                        chain.intake(processor, false)
+                ))
+                .waitSeconds(3)
                 .splineToLinearHeading(new Pose2d(-58, -47, Math.toRadians(65)), Math.toRadians(270))
                 //score
-
+                .afterTime(0, new SequentialAction(
+                        new InstantAction(() -> turret.setTargetPosition(-1250)),
+                        chain.lowBasketPosition(),
+                        new SleepAction(3),
+                        chain.scoreBasket(),
+                        new InstantAction(() -> turret.setTargetPosition(0)),
+                        chain.intakePosition()
+                ))
 
                 //grab
                 .waitSeconds(3)
