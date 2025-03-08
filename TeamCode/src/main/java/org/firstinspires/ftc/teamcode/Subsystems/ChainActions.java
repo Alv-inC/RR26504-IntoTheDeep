@@ -157,8 +157,8 @@ public Action rotate2(MecanumDrive drive, int angle){
 
     public Action grabPosition(){
         return new SequentialAction(
-                new InstantAction(() -> externTele.lext.setPosition(0.05)),
-                new InstantAction(() -> externTele.rext.setPosition(0.05)),
+                new InstantAction(() -> externTele.lext.setPosition(0)),
+                new InstantAction(() -> externTele.rext.setPosition(0)),
                 new InstantAction(() -> externTele.primary.setPosition(0.34)),
                 new InstantAction(() -> externTele.rotation.setPosition(0.48)),
                 new InstantAction(() -> externTele.lsecondary.setPosition(0.41)),
@@ -335,6 +335,7 @@ public Action rotate2(MecanumDrive drive, int angle){
         double rotAdjust = processor.getServoAdjustment();
         double turAdjust = processor.getTurretAdjustment();
         double extAdjust = processor.getExtensionAdjustment();
+
         return flag ? new SequentialAction(
                 new InstantAction(() ->externTele.rotation.setPosition(0.48+rotAdjust)),
                 new InstantAction(() -> externTele.lsecondary.setPosition(0.09)),

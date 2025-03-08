@@ -177,14 +177,14 @@ public class ActionTeleoppers extends ActionOpMode {
             }
 
         }
-        if(gamepad1.a || gamepad2.right_stick_button) {
-            runningActions.add(new SequentialAction(
-            new InstantAction(() -> externTele.rotation.setPosition(0.48)),
-                    new InstantAction(() -> externTele.lsecondary.setPosition(0.155)),
-                    new InstantAction(() -> externTele.rsecondary.setPosition(0.155)),
-                    new InstantAction(() -> externTele.primary.setPosition(0.7))
-            ));
-        }
+//        if(gamepad1.a || gamepad2.right_stick_button) {
+//            runningActions.add(new SequentialAction(
+//            new InstantAction(() -> externTele.rotation.setPosition(0.48)),
+//                    new InstantAction(() -> externTele.lsecondary.setPosition(0.155)),
+//                    new InstantAction(() -> externTele.rsecondary.setPosition(0.155)),
+//                    new InstantAction(() -> externTele.primary.setPosition(0.7))
+//            ));
+//        }
 
         if(gamepad1.b){
             runningActions.add(new SequentialAction(
