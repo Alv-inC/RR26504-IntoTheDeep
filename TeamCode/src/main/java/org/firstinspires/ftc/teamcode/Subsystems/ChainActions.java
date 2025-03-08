@@ -237,9 +237,9 @@ public class ChainActions {
         return new SequentialAction(
                 new InstantAction(() -> turret.setTargetPosition(0)),
                 new InstantAction(() -> lift.setTargetPosition(600)),
-                new InstantAction(() -> externTele.claw.setPosition(0.95)),
-                new InstantAction(() -> externTele.lext.setPosition(0.04)),
-                new InstantAction(() -> externTele.rext.setPosition(0.04)),
+                new InstantAction(() -> externTele.claw.setPosition(0.85)),
+                new InstantAction(() -> externTele.lext.setPosition(0)),
+                new InstantAction(() -> externTele.rext.setPosition(0)),
                 new InstantAction(() -> externTele.primary.setPosition(1)),
                 new InstantAction(() -> externTele.rotation.setPosition(0.47)),
                 new InstantAction(() -> externTele.lsecondary.setPosition(0.09)),
@@ -362,6 +362,7 @@ public class ChainActions {
 
         return flag ? new SequentialAction(
                 new InstantAction(() ->externTele.rotation.setPosition(0.48+rotAdjust)),
+                new SleepAction(0.5),
                 new InstantAction(() -> externTele.lsecondary.setPosition(0.09)),
                 new InstantAction(() -> externTele.rsecondary.setPosition(0.09)),
                 new SleepAction(1),

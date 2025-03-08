@@ -56,8 +56,8 @@ import page.j5155.expressway.ftc.actions.ActionOpMode;
 import org.firstinspires.ftc.teamcode.Subsystems.cameraProcessor;
 
 
-@TeleOp(name = "Specimen Pray")
-public class ActionTeleoppers extends ActionOpMode {
+@TeleOp(name = "Test Boundaries")
+public class boundaryTest extends ActionOpMode {
     public static boolean clawgo, rotationgo, extensiongo, secondarygo = false;
     public static double width, height = 0;
     public static boolean MASK_TOGGLE = true;
@@ -84,7 +84,6 @@ public class ActionTeleoppers extends ActionOpMode {
     boolean flag = false;
     boolean previousButtonState2a = false;
     boolean turretFlag = true;
-    boolean intakeFlag = false;
 
 
 
@@ -153,121 +152,50 @@ public class ActionTeleoppers extends ActionOpMode {
 
         ///PLAYER 1 CODE
         //drivetrain code
-            if(intakeFlag){
-                drive.setDrivePowers(new PoseVelocity2d(
-                        new Vector2d(
-                                -gamepad2.left_stick_y,
-                                -gamepad2.left_stick_x
-                        ),
-                        -gamepad2.right_stick_x
-                ), gamepad1.left_trigger>0 || gamepad2.left_trigger>0 ? 2.8 : 1.2);
-            }
-            else {
-                drive.setDrivePowers(new PoseVelocity2d(
-                        new Vector2d(
-                                -gamepad1.left_stick_y,
-                                -gamepad1.left_stick_x
-                        ),
-                        -gamepad1.right_stick_x
-                ), gamepad1.left_trigger > 0 || gamepad2.left_trigger > 0 ? 2.8 : 1.2);
-            }
+
+        drive.setDrivePowers(new PoseVelocity2d(
+                new Vector2d(
+                        -gamepad1.left_stick_y,
+                        -gamepad1.left_stick_x
+                ),
+                -gamepad1.right_stick_x
+        ), gamepad1.left_trigger>0 || gamepad2.right_stick_y!=0 ? 2.8 : 1.2);
+
 
 
         drive.updatePoseEstimate();
-
-        // Trigger actions when gamepad1.x is pressed
-        if (gamepad1.x || gamepad2.y) {
-            intakeFlag = false;
-            if(turret.getCurrentPosition() > -100 && turret.getCurrentPosition() < 100){
-                runningActions.add(chain.intakeToGrab());
-            }else{
-                runningActions.add(new SequentialAction(
-                        //taking account of the barrier
-                        chain.grabPosition()
-                ));
-            }
-
-        }
-//        if(gamepad1.a || gamepad2.right_stick_button) {
-//            runningActions.add(new SequentialAction(
-//            new InstantAction(() -> externTele.rotation.setPosition(0.48)),
-//                    new InstantAction(() -> externTele.lsecondary.setPosition(0.155)),
-//                    new InstantAction(() -> externTele.rsecondary.setPosition(0.155)),
-//                    new InstantAction(() -> externTele.primary.setPosition(0.7))
-//            ));
-//        }
-
         if(gamepad1.b){
             runningActions.add(new SequentialAction(
-                    chain.scoreSpecimen()
+            chain.startPosition(false)
             ));
         }
-        if(gamepad1.left_bumper){
-            externTele.claw.setPosition(0.9);  // Open the claw
-        }
+       if(gamepad1.x){
+           runningActions.add(new SequentialAction(
+                   chain.grabPositionBound()
+           ));
+       }
 
-        if(gamepad1.right_bumper){
-            externTele.claw.setPosition(0.53);  // Close the claw
-            if(externTele.lsecondary.getPosition() > 0.15 && externTele.rsecondary.getPosition() > 0.15){
-                runningActions.add(new SequentialAction(
-                        chain.scorePosition()
-                ));
-            }
-        }
-
-/// PLAYER 2 CODE
-        if(gamepad2.dpad_down){
-            if(turretFlag){
-                turretFlag = false;
-                runningActions.add(new SequentialAction(
-                        new InstantAction(() -> externTele.lsecondary.setPosition(0.3)),
-                        new InstantAction(() -> externTele.rsecondary.setPosition(0.3)),
-                        new InstantAction(() -> externTele.primary.setPosition(0.85)),
-                        new InstantAction(() -> turret.setTargetPosition(0)),
-                        new SleepAction(0.7)
-                ));
-            }
-            intakeFlag = true;
-            runningActions.add(new SequentialAction(
-                   chain.intakePosition()
-            ));
-        }
-        if(gamepad2.dpad_up){
-            flag = true;
-            externTele.lsecondary.setPosition(0.25);
-            externTele.rsecondary.setPosition(0.25);
-            externTele.primary.setPosition(1);
-            externTele.rotation.setPosition(0.48);
-        }
-
-        if(gamepad2.right_stick_button){
-            turretFlag = false;
-            runningActions.add(new SequentialAction(
-                    chain.startPosition(false)
-            ));
-        }
-        if(gamepad2.left_bumper){
-            externTele.lext.setPosition(0.115);
-            externTele.rext.setPosition(0.115);
-        }
-        if(gamepad2.right_bumper){
-            externTele.lext.setPosition(0.18);
-            externTele.rext.setPosition(0.18);
-        }
-        if (gamepad2.a && !previousButtonState2a) {
-            if(!flag) {
-                runningActions.add(new SequentialAction(
-                        chain.intake(processor, false)
-                ));
-            }
-            else{
-                flag = false;
-                runningActions.add(new SequentialAction(
-                        chain.intake(processor, true)
-                ));
-            }
-        }
-        previousButtonState2a = gamepad2.a;
+       if(gamepad1.a){
+           runningActions.add(new SequentialAction(
+                   new InstantAction(() -> externTele.lext.setPosition(0)),
+                   new InstantAction(() -> externTele.rext.setPosition(0)),
+                   new InstantAction(() -> externTele.primary.setPosition(0.34)),
+                   new InstantAction(() -> externTele.rotation.setPosition(0.48)),
+                   new InstantAction(() -> externTele.lsecondary.setPosition(0.41)),
+                   new InstantAction(() -> externTele.rsecondary.setPosition(0.41)),
+                   new SleepAction(2),
+                   new InstantAction(() -> turret.setTargetPosition(0)),
+                   new InstantAction(() -> lift.setTargetPosition(600)),
+                   new SleepAction(2),
+                   new InstantAction(() -> externTele.claw.setPosition(0.95)),
+                   new InstantAction(() -> externTele.lext.setPosition(0.34)),
+                   new InstantAction(() -> externTele.rext.setPosition(0.34)),
+                   new InstantAction(() -> externTele.primary.setPosition(1)),
+                   new InstantAction(() -> externTele.rotation.setPosition(0.47)),
+                   new InstantAction(() -> externTele.lsecondary.setPosition(0.09)),
+                   new InstantAction(() -> externTele.rsecondary.setPosition(0.09))
+           ));
+       }
 
 
         if(gamepad2.x){
@@ -278,6 +206,9 @@ public class ActionTeleoppers extends ActionOpMode {
             processor.RANGE_HIGH_1 = new Scalar(255, 5, 230,255);
             processor.RANGE_LOW_1 = new Scalar(150, 0, 0,0);
         }
+
+        if(gamepad2.right_trigger>0) externTele.hang.setPower(gamepad2.right_trigger);
+        else if (gamepad2.left_trigger>0) externTele.hang.setPower(-gamepad2.left_trigger);
 
         boolean buttonState2a = false;
         buttonState2a = gamepad2.left_stick_button;
