@@ -36,7 +36,7 @@ public class Lift {
     public static double armLength = 0.4;
     public static double feedforwardScale = 0.3;
     //may need to increase
-    public static double divide;
+    public double divide;
 
 
     //the max is 2700

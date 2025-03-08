@@ -41,7 +41,6 @@ public class InitializeTeleOp {
         rext.setPosition(0.05);
 
         claw = hardwareMap.get(Servo.class, "claw");
-
     }
     public void waitWithoutStoppingRobotcc(double milliseconds) {
         ElapsedTime timer = new ElapsedTime(); // Create a timer instance

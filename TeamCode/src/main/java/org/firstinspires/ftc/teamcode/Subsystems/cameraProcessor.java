@@ -182,10 +182,10 @@ public class cameraProcessor implements VisionProcessor, CameraStreamSource {
         double result;
         result = (8*y)/240;
         result = (result*0.1)/8;
-        double error = (5*0.1)/8;
+        double error = (5.4*0.1)/8;
         if(result<0) result += error;
         else result += error;
-        return result;
+        return result > 0.155 ? 0.16 : result;
     }
 
     public double calculateTurretAdjustment(RotatedRect rotatedRect) {

@@ -10,6 +10,7 @@ import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -33,7 +34,7 @@ import java.util.List;
 
 
 @Config
-@Autonomous
+@TeleOp
 public class servoTest extends LinearOpMode {
     public static boolean go1, go2, go3, go4, go5, turretGo, goTogether, goLift, ADJUST, adjPosition, goExt = false;
     public static boolean servo2Reverse = false;
@@ -128,7 +129,7 @@ public class servoTest extends LinearOpMode {
             if(ADJUST){
                 ADJUST = false;
                 //turret.setTargetPosition(turAdjust);
-                runningActions.add(chain.intake(processor));
+                runningActions.add(chain.intake(processor, false));
             }
             telemetry.addData("rot", rotAdjust);
             telemetry.addData("ext", extAdjust);

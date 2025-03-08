@@ -70,7 +70,7 @@ public Action rotate2(MecanumDrive drive, int angle){
     public Action startPosition(boolean pause){
         return pause? new SequentialAction(
                 //add the chain of commands here
-                new InstantAction(() -> externTele.claw.setPosition(0.8)),
+                new InstantAction(() -> externTele.claw.setPosition(0.95)),
                 new InstantAction(() -> externTele.lext.setPosition(0.05)),
                 new InstantAction(() -> externTele.rext.setPosition(0.05)),
                 new InstantAction(() -> externTele.rotation.setPosition(0.47)),
@@ -111,7 +111,7 @@ public Action rotate2(MecanumDrive drive, int angle){
                 new InstantAction(() -> externTele.primary.setPosition(0.71)),
                 new InstantAction(() -> externTele.lsecondary.setPosition(0.38)),
                 new InstantAction(() -> externTele.rsecondary.setPosition(0.38)),
-                new InstantAction(() -> lift.setTargetPosition(945))
+                new InstantAction(() -> lift.setTargetPosition(1035))
         );
     }
     public Action scorePositionTeleop(){
@@ -171,22 +171,55 @@ public Action rotate2(MecanumDrive drive, int angle){
                 new InstantAction(() -> externTele.lsecondary.setPosition(0.155)),
                 new InstantAction(() -> externTele.rsecondary.setPosition(0.155)),
                 new InstantAction(() -> externTele.primary.setPosition(0.71)),
-                new InstantAction(() -> externTele.claw.setPosition(0.9))
+                new InstantAction(() -> externTele.claw.setPosition(0.95))
 
 
         );
     }
+    public Action intakeToGrab(){
+        lift.divide = 1.3;
+        return new SequentialAction(
+                new InstantAction(() -> externTele.lext.setPosition(0)),
+                new InstantAction(() -> externTele.rext.setPosition(0)),
+                new InstantAction(() -> lift.setTargetPosition(0)),
+                new SleepAction(0.2),
+                new InstantAction(() -> externTele.lsecondary.setPosition(0.3)),
+                new InstantAction(() -> externTele.rsecondary.setPosition(0.3)),
+                new InstantAction(() -> externTele.primary.setPosition(0.85)),
+                new InstantAction(() -> externTele.rotation.setPosition(0.48)),
+                new SleepAction(2),
+                new InstantAction(() -> externTele.lsecondary.setPosition(0.155)),
+                new InstantAction(() -> externTele.rsecondary.setPosition(0.155)),
+                new InstantAction(() -> externTele.primary.setPosition(0.7))
+        );
+    }
+    public Action intakeToBasket(){
+        lift.divide = 1.3;
+        return new SequentialAction(
+                new InstantAction(() -> externTele.lext.setPosition(0)),
+                new InstantAction(() -> externTele.rext.setPosition(0)),
+                new InstantAction(() -> lift.setTargetPosition(0)),
+                new SleepAction(0.2),
+                new InstantAction(() -> externTele.lsecondary.setPosition(0.32)),
+                new InstantAction(() -> externTele.rsecondary.setPosition(0.32)),
+                new InstantAction(() -> externTele.primary.setPosition(0.85)),
+                new InstantAction(() -> externTele.rotation.setPosition(0.48)),
+                new SleepAction(2),
+                new InstantAction(() -> externTele.primary.setPosition(0.3))
+        );
+    }
     public Action intakePosition(){
+        lift.divide = 1.7;
         return new SequentialAction(
                 new InstantAction(() -> turret.setTargetPosition(0)),
                 new InstantAction(() -> lift.setTargetPosition(600)),
-                new InstantAction(() -> externTele.claw.setPosition(0.9)),
-                new InstantAction(() -> externTele.lext.setPosition(0.07)),
-                new InstantAction(() -> externTele.rext.setPosition(0.07)),
+                new InstantAction(() -> externTele.claw.setPosition(0.95)),
+                new InstantAction(() -> externTele.lext.setPosition(0.04)),
+                new InstantAction(() -> externTele.rext.setPosition(0.0)),
                 new InstantAction(() -> externTele.primary.setPosition(1)),
                 new InstantAction(() -> externTele.rotation.setPosition(0.47)),
-                new InstantAction(() -> externTele.lsecondary.setPosition(0.11)),
-                new InstantAction(() -> externTele.rsecondary.setPosition(0.11))
+                new InstantAction(() -> externTele.lsecondary.setPosition(0.09)),
+                new InstantAction(() -> externTele.rsecondary.setPosition(0.09))
         );
     }
 
@@ -263,27 +296,59 @@ public Action rotate2(MecanumDrive drive, int angle){
                 new InstantAction(() -> externTele.rotation.setPosition(0.47))
         );
     }
-    public Action scoreLowBasket(){
+    public Action scoreBasket(){
         return new SequentialAction(
+                new InstantAction(() -> externTele.claw.setPosition(0.9)),
+                new SleepAction(0.3),
+                new InstantAction(() -> externTele.primary.setPosition(0.3)),
+                new InstantAction(() -> externTele.lext.setPosition(0)),
+                new InstantAction(() -> externTele.rext.setPosition(0)),
+                new SleepAction(0.7),
+                new InstantAction(() -> lift.setTargetPosition(0))
+                );
+    }
+    public Action highBasketPosition(){
+        lift.divide = 1.5;
+        return new SequentialAction(
+                new InstantAction(() -> lift.setTargetPosition(2250)),
                 new SleepAction(1),
-                new InstantAction(() -> turret.setTargetPosition(937.5))
+                new InstantAction(() -> externTele.primary.setPosition(0.5)),
+                new SleepAction(0.3),
+                new InstantAction(() -> externTele.lext.setPosition(0.15)),
+                new InstantAction(() -> externTele.rext.setPosition(0.15))
         );
     }
-    public Action intake(cameraProcessor processor){
+    public Action lowBasketPosition(){
+        lift.divide = 1.5;
+        return new SequentialAction(
+                new InstantAction(() -> lift.setTargetPosition(1200)),
+                new SleepAction(1),
+                new InstantAction(() -> externTele.primary.setPosition(0.65)),
+                new SleepAction(0.3),
+                new InstantAction(() -> externTele.lext.setPosition(0.1)),
+                new InstantAction(() -> externTele.rext.setPosition(0.1))
+        );
+    }
+    public Action intake(cameraProcessor processor, boolean flag){
         intakePosition();
-        turret.divide = 0.5;
+        lift.divide = 2;
         double rotAdjust = processor.getServoAdjustment();
         double turAdjust = processor.getTurretAdjustment();
         double extAdjust = processor.getExtensionAdjustment();
-        return new SequentialAction(
-                new InstantAction(() ->turret.setTargetPosition(turAdjust)),
+        return flag ? new SequentialAction(
+                new InstantAction(() ->externTele.rotation.setPosition(0.47+rotAdjust)),
+                new InstantAction(() -> externTele.lsecondary.setPosition(0.09)),
+                new InstantAction(() -> externTele.rsecondary.setPosition(0.09)),
                 new SleepAction(1),
+                new InstantAction(() ->externTele.claw.setPosition(0.55))
+        ) : new SequentialAction(
+                new InstantAction(() ->turret.setTargetPosition(turAdjust)),
                 new InstantAction(() ->externTele.lext.setPosition(externTele.lext.getPosition()+extAdjust)),
                 new InstantAction(() ->externTele.rext.setPosition(externTele.lext.getPosition()+extAdjust)),
-                new SleepAction(1),
+                new SleepAction(0.5),
                 new InstantAction(() ->externTele.rotation.setPosition(0.47+rotAdjust)),
                 new InstantAction(() -> lift.setTargetPosition(0)),
-                new SleepAction(1),
+                new SleepAction(0.5),
                 new InstantAction(() ->externTele.claw.setPosition(0.55))
         );
     }

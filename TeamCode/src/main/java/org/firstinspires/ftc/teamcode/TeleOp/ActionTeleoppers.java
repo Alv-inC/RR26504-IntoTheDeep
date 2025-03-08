@@ -108,7 +108,7 @@ public class ActionTeleoppers extends ActionOpMode {
         externTele.initialize(hardwareMap);
         turret.setTargetPosition(0);
         lift.setTargetPosition(0);
-        externTele.claw.setPosition(0.8);
+        externTele.claw.setPosition(0.9);
 
         // Re-initialize the variables to reset their values
         liftPositionState = 0; // Lift states: 0 = lowest, 1 = mid, 2 = highest
@@ -159,7 +159,7 @@ public class ActionTeleoppers extends ActionOpMode {
                             -gamepad1.left_stick_x
                     ),
                     -gamepad1.right_stick_x
-            ), 1);
+            ), gamepad1.left_trigger>0 || gamepad2.right_stick_y!=0 ? 2.5 : 1.2);
 
 
 
@@ -168,13 +168,7 @@ public class ActionTeleoppers extends ActionOpMode {
         // Trigger actions when gamepad1.x is pressed
         if (gamepad1.x) {
             if(turret.getCurrentPosition() > -100 && turret.getCurrentPosition() < 100){
-                runningActions.add(new SequentialAction(
-                        new InstantAction(() -> lift.setTargetPosition(0)),
-                        new InstantAction(() -> externTele.rotation.setPosition(0.48)),
-                        new InstantAction(() -> externTele.lsecondary.setPosition(0.155)),
-                        new InstantAction(() -> externTele.rsecondary.setPosition(0.155)),
-                        new InstantAction(() -> externTele.primary.setPosition(0.7))
-                ));
+                runningActions.add(chain.intakeToGrab());
             }else{
                 runningActions.add(new SequentialAction(
                         //taking account of the barrier
@@ -183,8 +177,16 @@ public class ActionTeleoppers extends ActionOpMode {
             }
 
         }
+        if(gamepad1.a || gamepad2.right_stick_button) {
+            runningActions.add(new SequentialAction(
+            new InstantAction(() -> externTele.rotation.setPosition(0.48)),
+                    new InstantAction(() -> externTele.lsecondary.setPosition(0.155)),
+                    new InstantAction(() -> externTele.rsecondary.setPosition(0.155)),
+                    new InstantAction(() -> externTele.primary.setPosition(0.7))
+            ));
+        }
 
-        if(gamepad1.y){
+        if(gamepad1.b){
             runningActions.add(new SequentialAction(
                     chain.scoreSpecimen()
             ));
@@ -194,16 +196,12 @@ public class ActionTeleoppers extends ActionOpMode {
         }
 
         if(gamepad1.right_bumper){
-            externTele.claw.setPosition(0.58);  // Close the claw
+            externTele.claw.setPosition(0.53);  // Close the claw
             if(externTele.lsecondary.getPosition() > 0.15 && externTele.rsecondary.getPosition() > 0.15){
                 runningActions.add(new SequentialAction(
                         chain.scorePosition()
                 ));
             }
-        }
-        if(gamepad1.dpad_up) {
-            externTele.lext.setPosition(0.2);
-            externTele.rext.setPosition(0.2);
         }
 
 /// PLAYER 2 CODE
@@ -222,7 +220,13 @@ public class ActionTeleoppers extends ActionOpMode {
                    chain.intakePosition()
             ));
         }
-        if(gamepad2.dpad_up)lift.setTargetPosition(1000);
+        if(gamepad2.dpad_up){
+            flag = true;
+            externTele.lsecondary.setPosition(0.25);
+            externTele.rsecondary.setPosition(0.25);
+            externTele.primary.setPosition(1);
+            externTele.rotation.setPosition(0.48);
+        }
 
         if(gamepad2.right_stick_button){
             turretFlag = false;
@@ -231,17 +235,25 @@ public class ActionTeleoppers extends ActionOpMode {
             ));
         }
         if(gamepad2.left_bumper){
-            externTele.lext.setPosition(0);
-            externTele.rext.setPosition(0);
+            externTele.lext.setPosition(0.115);
+            externTele.rext.setPosition(0.115);
         }
         if(gamepad2.right_bumper){
-            externTele.lext.setPosition(0.15);
-            externTele.rext.setPosition(0.15);
+            externTele.lext.setPosition(0.18);
+            externTele.rext.setPosition(0.18);
         }
         if (gamepad2.a && !previousButtonState2a) {
-            runningActions.add(new SequentialAction(
-                    chain.intake(processor)
-            ));
+            if(!flag) {
+                runningActions.add(new SequentialAction(
+                        chain.intake(processor, false)
+                ));
+            }
+            else{
+                flag = false;
+                runningActions.add(new SequentialAction(
+                        chain.intake(processor, true)
+                ));
+            }
         }
         previousButtonState2a = gamepad2.a;
 
@@ -254,9 +266,9 @@ public class ActionTeleoppers extends ActionOpMode {
             processor.RANGE_HIGH_1 = new Scalar(255, 5, 230,255);
             processor.RANGE_LOW_1 = new Scalar(150, 0, 0,0);
         }
-        if(gamepad2.y){
-            processor.yellow = true;
-        }
+
+        if(gamepad2.right_trigger>0) externTele.hang.setPower(gamepad2.right_trigger);
+        else if (gamepad2.left_trigger>0) externTele.hang.setPower(-gamepad2.left_trigger);
 
         boolean buttonState2a = false;
         buttonState2a = gamepad2.left_stick_button;

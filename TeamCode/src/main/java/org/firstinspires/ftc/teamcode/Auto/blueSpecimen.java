@@ -154,7 +154,7 @@ public class blueSpecimen extends LinearOpMode {
                         new InstantAction(() -> externTele.rotation.setPosition(0.48)),
                         new InstantAction(() -> externTele.lsecondary.setPosition(0.41)),
                         new InstantAction(() -> externTele.rsecondary.setPosition(0.41)),
-                        new SleepAction(0.3),
+                        new SleepAction(0.6),
                         new InstantAction(() -> turret.setTargetPosition(-1250))
                 ))
 
@@ -190,8 +190,7 @@ public class blueSpecimen extends LinearOpMode {
                         new InstantAction(() -> externTele.rotation.setPosition(0.48)),
                         new InstantAction(() -> externTele.lsecondary.setPosition(0.41)),
                         new InstantAction(() -> externTele.rsecondary.setPosition(0.41)),
-                        new SleepAction(0.3),
-                        new InstantAction(() -> turret.setTargetPosition(-1250))
+                        new SleepAction(0.3)
                 ))
                 .waitSeconds(0.3)
                 .splineToLinearHeading(new Pose2d(0, -50, Math.toRadians(100)), Math.toRadians(90))
