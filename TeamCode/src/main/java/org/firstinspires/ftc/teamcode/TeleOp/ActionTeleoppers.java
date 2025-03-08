@@ -159,14 +159,14 @@ public class ActionTeleoppers extends ActionOpMode {
                             -gamepad1.left_stick_x
                     ),
                     -gamepad1.right_stick_x
-            ), gamepad1.left_trigger>0 || gamepad2.right_stick_y!=0 ? 2.5 : 1.2);
+            ), gamepad1.left_trigger>0 || gamepad2.right_stick_y!=0 ? 2.8 : 1.2);
 
 
 
         drive.updatePoseEstimate();
 
         // Trigger actions when gamepad1.x is pressed
-        if (gamepad1.x) {
+        if (gamepad1.x || gamepad2.y) {
             if(turret.getCurrentPosition() > -100 && turret.getCurrentPosition() < 100){
                 runningActions.add(chain.intakeToGrab());
             }else{
