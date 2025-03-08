@@ -135,8 +135,8 @@ public class blueSpecimen extends LinearOpMode {
                 ))
 
 
-                .splineToConstantHeading(new Vector2d(56, -58.5), Math.toRadians(270))
-                .splineToConstantHeading(new Vector2d(56, -55.5), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(56, -57), Math.toRadians(270), slower)
+                .splineToConstantHeading(new Vector2d(56, -54.5), Math.toRadians(270))
                 .waitSeconds(1)
                 .afterTime(0.5,
                         new SequentialAction(

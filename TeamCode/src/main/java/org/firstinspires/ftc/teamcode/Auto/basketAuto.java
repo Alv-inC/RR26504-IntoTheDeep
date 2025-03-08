@@ -116,7 +116,6 @@ public class basketAuto extends LinearOpMode {
                 .splineToLinearHeading(new Pose2d(-54.5, -52, Math.toRadians(65)), Math.toRadians(270))
                 //score
                 .afterTime(0, new SequentialAction(
-
                         new InstantAction(() -> externTele.lext.setPosition(0)),
                         new InstantAction(() -> externTele.rext.setPosition(0)),
                         new InstantAction(()-> externTele.rotation.setPosition(0.48)),
@@ -135,8 +134,10 @@ public class basketAuto extends LinearOpMode {
                         new InstantAction(() -> externTele.rsecondary.setPosition(0.34)),
                         new InstantAction(() -> externTele.primary.setPosition(0.71)),
                         new InstantAction(() -> turret.setTargetPosition(0)),
-                        chain.intakePosition()
-                ))
+                        new InstantAction(() -> lift.setTargetPosition(0))
+
+
+                        ))
 
                 //grab
                 .waitSeconds(5)
