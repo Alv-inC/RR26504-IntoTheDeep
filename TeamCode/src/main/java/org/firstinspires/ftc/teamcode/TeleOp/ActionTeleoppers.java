@@ -172,7 +172,6 @@ public class ActionTeleoppers extends ActionOpMode {
                 ), gamepad1.left_trigger > 0 || gamepad2.left_trigger > 0 ? 2.8 : 1.2);
             }
 
-
         drive.updatePoseEstimate();
 
         // Trigger actions when gamepad1.x is pressed
@@ -233,6 +232,7 @@ public class ActionTeleoppers extends ActionOpMode {
             ));
         }
         if(gamepad2.dpad_up){
+            intakeFlag = true;
             flag = true;
             externTele.lsecondary.setPosition(0.25);
             externTele.rsecondary.setPosition(0.25);

@@ -25,7 +25,7 @@ import java.util.List;
 import page.j5155.expressway.ftc.actions.ActionOpMode;
 import org.firstinspires.ftc.teamcode.Subsystems.cameraProcessor;
 
-//
+
 @TeleOp(name = "Low Basket TeleOp")
 public class lowBasketTeleop extends ActionOpMode {
     public static boolean clawgo, rotationgo, extensiongo, secondarygo = false;
@@ -58,7 +58,7 @@ public class lowBasketTeleop extends ActionOpMode {
     private MecanumDrive drive;
 
     cameraProcessor processor;
-    boolean flag = false;
+    boolean flag, intakeFlag = false;
     boolean previousButtonState2a = false;
 
 
@@ -118,19 +118,30 @@ public class lowBasketTeleop extends ActionOpMode {
 
         ///PLAYER 1 CODE
         //drivetrain code
-        drive.setDrivePowers(new PoseVelocity2d(
-                new Vector2d(
-                        -gamepad1.left_stick_y,
-                        -gamepad1.left_stick_x
-                ),
-                -gamepad1.right_stick_x
-        ), gamepad1.left_trigger>0 || gamepad2.right_stick_y!=0 || lift.getPosition()>100 ? 2.5 : 1.2);
-
+        if(intakeFlag){
+            drive.setDrivePowers(new PoseVelocity2d(
+                    new Vector2d(
+                            -gamepad2.left_stick_y,
+                            -gamepad2.left_stick_x
+                    ),
+                    -gamepad2.right_stick_x
+            ), gamepad1.left_trigger>0 || gamepad2.left_trigger>0 ? 2.8 : 1.2);
+        }
+        else {
+            drive.setDrivePowers(new PoseVelocity2d(
+                    new Vector2d(
+                            -gamepad1.left_stick_y,
+                            -gamepad1.left_stick_x
+                    ),
+                    -gamepad1.right_stick_x
+            ), gamepad1.left_trigger > 0 || gamepad2.left_trigger > 0 ? 2.8 : 1.2);
+        }
 
         drive.updatePoseEstimate();
 
         // Trigger actions when gamepad1.x is pressed
         if (gamepad1.x) {
+            intakeFlag = false;
             runningActions.add(chain.intakeToBasket());
 
         }
@@ -154,11 +165,13 @@ public class lowBasketTeleop extends ActionOpMode {
 
 /// PLAYER 2 CODE
         if(gamepad2.dpad_down){
+            intakeFlag = true;
             runningActions.add(new SequentialAction(
                     chain.intakePosition()
             ));
         }
         if(gamepad2.dpad_up){
+            intakeFlag = true;
             flag = true;
             externTele.lsecondary.setPosition(0.25);
             externTele.rsecondary.setPosition(0.25);
